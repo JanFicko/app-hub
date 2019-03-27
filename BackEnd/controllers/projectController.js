@@ -3,8 +3,8 @@ const Project = mongoose.model('Project');
 
 class ProjectController {
 
-    static getProjects() {
-        return Project.find();
+    static async getProjects() {
+        return Project.find().select(['-job.downloadLimit.downloadPassword']);
     }
 
     static getProjectById(id) {
@@ -17,8 +17,18 @@ class ProjectController {
             });
     }
 
-    static getJobsById(projectId) {
+    static getJobByJobId(jobId) {
+        return Project.find()
+            .where('job.jobId')
+            .in([jobId])
+            .then( (job) => {
+                console.log(job)
+            })
+    }
+
+    static getJobsByProjectId(projectId) {
         return Project.findOne({ projectId: projectId })
+            .select(['-job.downloadLimit.downloadPassword'])
             .then((project) => {
                 return project.job
             })
@@ -52,10 +62,9 @@ class ProjectController {
         await Project.findOne({ projectId: projectId})
             .then(async (project) => {
 
+                project.job = [];
 
-                await Project.findOne({ jobId: id })
-
-                /*for (let i = 0; i < jobs.length; i++) {
+                for (let i = 0; i < jobs.length; i++) {
 
                     project.job.push({
                         jobId: jobs[i].id,
@@ -65,18 +74,49 @@ class ProjectController {
                     });
                 }
 
-                await project.save().then(() => {
-                    console.log("success");
-                }).catch((err) => {
-                    console.log(err);
-                });*/
+                await project.save();
             }).catch((err) => {
                 console.log(err);
             });
     }
 
-    static async downloadArtifact(id, userId) {
+    static downloadArtifact(jobId, userId, password) {
 
+        return Project.find({
+            'job.jobId': jobId
+        })
+        .then(async (project) => {
+            for (let i = 0; i < project[0].job.length; i++) {
+                if (project[0].job[i].jobId === jobId) {
+                    if (project[0].job[i].downloadLimit.downloadPassword != null) {
+
+                        if (project[0].job[i].downloadLimit.downloadPassword !== password) {
+                            throw "Incorrect password"
+                        }
+                    }
+
+                    if (project[0].job[i].downloadLimit.downloadNumberLimit !== -1) {
+
+                        if (project[0].job[i].downloadLimit.downloadNumberLimit === 0) {
+                            throw "Number of downloads exceeded"
+                        } else {
+
+                            project[0].job[i].downloadLimit.downloadNumberLimit--;
+                            await project[0].save();
+                        }
+                    }
+
+                    project[0] = project[0].toObject();
+                    delete project[0].job[i].downloadLimit["downloadPassword"];
+
+                    return project[0].job[i]
+                }
+            }
+            throw "Job not found"
+        })
+        .catch((err) => {
+            return { success: false, status: err }
+        });
     }
 
 }
