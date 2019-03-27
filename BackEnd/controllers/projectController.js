@@ -4,7 +4,7 @@ const Project = mongoose.model('Project');
 class ProjectController {
 
     static async getProjects() {
-        return Project.find().select(['-job.downloadLimit.downloadPassword']);
+        return Project.find().select(['-downloadPassword', '-job']);
     }
 
     static getProjectById(id) {
@@ -17,20 +17,51 @@ class ProjectController {
             });
     }
 
-    static getJobByJobId(jobId) {
-        return Project.find()
-            .where('job.jobId')
-            .in([jobId])
-            .then( (job) => {
-                console.log(job)
+    static async updateProjectPassword(projectId, downloadPassword) {
+        return await Project.findOne({ projectId: projectId })
+            .then( async (project) => {
+
+                if (downloadPassword != null) {
+                    project.downloadPassword = downloadPassword;
+
+                    await project.save();
+
+                    return { success: true, status: "Data updated" }
+                } else {
+                    return { success: false, status: "Data not updated" }
+                }
+
             })
+            .catch((err) => {
+                return { success: false, status: "Project not found" }
+            });
     }
+
+    /*static async updateJob(jobId, changeLog) {
+        return await Project.find({ projectId: projectId })
+            .then( async (project) => {
+
+                if (downloadPassword != null) {
+                    project.downloadPassword = downloadPassword;
+
+                    await project.save();
+
+                    return { success: true, status: "Data updated" }
+                } else {
+                    return { success: false, status: "Data not updated" }
+                }
+
+            })
+            .catch((err) => {
+                return { success: false, status: "Project not found" }
+            });
+    }*/
 
     static getJobsByProjectId(projectId) {
         return Project.findOne({ projectId: projectId })
-            .select(['-job.downloadLimit.downloadPassword'])
+            .select(['-downloadPassword'])
             .then((project) => {
-                return project.job
+                return project
             })
             .catch((err) => {
                 return { success: false, status: "Project not found" }
@@ -80,7 +111,7 @@ class ProjectController {
             });
     }
 
-    static downloadArtifact(jobId, userId, password) {
+    static downloadArtifact(jobId, userId, downloadPassword) {
 
         return Project.find({
             'job.jobId': jobId
@@ -88,28 +119,14 @@ class ProjectController {
         .then(async (project) => {
             for (let i = 0; i < project[0].job.length; i++) {
                 if (project[0].job[i].jobId === jobId) {
-                    if (project[0].job[i].downloadLimit.downloadPassword != null) {
+                    if (project.downloadPassword != null) {
 
-                        if (project[0].job[i].downloadLimit.downloadPassword !== password) {
+                        if (project.downloadPassword !== downloadPassword) {
                             throw "Incorrect password"
                         }
                     }
 
-                    if (project[0].job[i].downloadLimit.downloadNumberLimit !== -1) {
-
-                        if (project[0].job[i].downloadLimit.downloadNumberLimit === 0) {
-                            throw "Number of downloads exceeded"
-                        } else {
-
-                            project[0].job[i].downloadLimit.downloadNumberLimit--;
-                            await project[0].save();
-                        }
-                    }
-
-                    project[0] = project[0].toObject();
-                    delete project[0].job[i].downloadLimit["downloadPassword"];
-
-                    return project[0].job[i]
+                    return project[0]
                 }
             }
             throw "Job not found"

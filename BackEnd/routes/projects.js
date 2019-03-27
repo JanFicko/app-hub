@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const rp = require('request-promise');
 const config = require('../config');
+const fs = require('fs');
 const ProjectController = require('../controllers/projectController');
 
 router.route("/:platform").get(async (req, res, next) => {
@@ -58,48 +59,61 @@ router.route("/jobs/:projectId").get(async (req, res, next) => {
     });
 });
 
+router.route("/:projectId").put(async (req, res, next) => {
+
+    const { downloadPassword } = req.body;
+
+    res.status(200).send(await ProjectController.updateProjectPassword(req.params.projectId, downloadPassword));
+});
+
 router.route("/download").post(async (req, res, next) => {
 
-    const { platform, path, jobId, userId, password } = req.body;
+    const { platform, path, jobId, userId, downloadPassword } = req.body;
 
-    const job = await ProjectController.downloadArtifact(jobId, userId, password);
+    const project = await ProjectController.downloadArtifact(jobId, userId, downloadPassword);
 
-    res.status(200).send(job);
+    const filePath = './public/' + jobId + '.zip';
 
-    /*const filePath = './public/' + req.params.jobId + '.zip';
+    if (project.downloadPassword != null && project.downloadPassword == downloadPassword) {
+        if (!fs.existsSync(filePath)) {
+            rp({
+                uri: config.GITLAB_IP.replace(config.GITLAB_IP_SUFFIX, "") + platform + "/" + path + "/-/jobs/" + jobId + '/artifacts/download',
+                qs: {
+                    scope: 'success'
+                },
+                encoding: 'binary',
+                headers: {
+                    'PRIVATE-TOKEN': config.GITLAB_PRIVATE_TOKEN,
+                    'Content-Type': 'application/zip'
+                }
+            })
+                .then(async (bodyResponse) => {
 
-    if (!fs.existsSync(filePath)) {
-        rp({
-            uri: config.GITLAB_IP.replace(config.GITLAB_IP_SUFFIX, "") + platform + "/" + path + "/-/jobs/" + jobId + '/artifacts/download',
-            qs: {
-                scope: 'success'
-            },
-            encoding: 'binary',
-            headers: {
-                'PRIVATE-TOKEN': config.GITLAB_PRIVATE_TOKEN,
-                'Content-Type': 'application/zip'
-            }
-        })
-        .then(async (bodyResponse) => {
+                    let writeStream = fs.createWriteStream(filePath);
+                    writeStream.write(bodyResponse, 'binary');
+                    writeStream.on('finish', () => {
+                        // TODO: Unzip
+                        res.download(filePath);
+                    });
+                    writeStream.on('error', (err) => {
+                        res.status(406).send({ success: false, err: "Something went wrong" });
+                    });
 
-            let writeStream = fs.createWriteStream(filePath);
-            writeStream.write(bodyResponse, 'binary');
-            writeStream.on('finish', () => {
-                res.download(filePath);
-            });
-            writeStream.on('error', (err) => {
-                res.status(406).send({ success: false, err: "Something went wrong" });
-            });
+                    writeStream.end();
 
-            writeStream.end();
-
-        })
-        .catch(function (err) {
-            res.status(406).send({ success: false, err: "Something went wrong" });
-        });
+                })
+                .catch(function (err) {
+                    res.status(406).send({ success: false, err: "Something went wrong" });
+                });
+        } else {
+            // TODO: Unzip
+            res.download(filePath);
+        }
     } else {
-        res.download(filePath);
-    }*/
+        res.status(406).send({ success: false, err: "Wrong password" });
+    }
+
+
 
 });
 

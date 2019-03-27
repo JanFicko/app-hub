@@ -7,6 +7,7 @@ const ProjectSchema = new Schema({
     path: { type: String, required: true  },
     platform: { type: String, required: true  },
     icon: String,
+    downloadPassword: { type: String, default: null },
     job: [{
         jobId: { type: Number, required: true  },
         finishTime: Date,
@@ -16,11 +17,7 @@ const ProjectSchema = new Schema({
         downloadActivity: [{
             user_uuid: { type: String, required: true  },
             downloadTime: { type: Date, default: Date.now }
-        }],
-        downloadLimit: {
-            downloadPassword: { type: String, default: null },
-            downloadNumberLimit: { type: Number, default: -1 }
-        }
+        }]
     }],
     allowedUserAccess: [{
         user_uuid: { type: String, required : true },
