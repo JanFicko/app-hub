@@ -70,7 +70,7 @@ class ProjectController {
             });
     }
 
-    static async updateJob(jobId, changeLog) {
+    static async updateJob(jobId, changeLog, version) {
         return await Project.find()
             .where("job.jobId")
             .in([jobId])
@@ -82,13 +82,15 @@ class ProjectController {
 
                         if (changeLog != null) {
                             project[0].job[i].changeLog = changeLog;
-
-                            await project[0].save();
-
-                            return { success: true, status: "Data updated" }
-                        } else {
-                            return { success: false, status: "Data not updated" }
                         }
+
+                        if (version != null) {
+                            project[0].job[i].title = version;
+                        }
+
+                        await project[0].save();
+
+                        return { success: true, status: "Data updated" }
                     }
                 }
 
@@ -146,7 +148,7 @@ class ProjectController {
                         }
                     }
 
-                    if(!doesExist) {
+                    if(!doesExist && jobs[i].artifacts_file != null) {
                         project.job.push({
                             jobId: jobs[i].id,
                             finishTime: jobs[i].finished_at,

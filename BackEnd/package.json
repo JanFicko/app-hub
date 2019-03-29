@@ -15,6 +15,9 @@
     "mongoose": "^5.4.17",
     "morgan": "~1.9.0",
     "request": "^2.88.0",
-    "request-promise": "^4.2.4"
+    "request-promise": "^4.2.4",
+    "rimraf": "^2.6.3",
+    "unzipper": "^0.9.11",
+    "xmlbuilder": "^11.0.1"
   }
 }

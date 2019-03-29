@@ -3,6 +3,9 @@ const router = express.Router();
 const rp = require('request-promise');
 const config = require('../config');
 const fs = require('fs');
+const unzipper = require('unzipper');
+const rimraf = require("rimraf");
+const xmlbuilder = require("xmlbuilder");
 const ProjectController = require('../controllers/projectController');
 
 router.route("/:platform").get(async (req, res, next) => {
@@ -117,8 +120,6 @@ router.route("/download").post(async (req, res, next) => {
 
     const project = await ProjectController.downloadArtifact(ip, jobId, userId, downloadPassword);
 
-    console.log(project);
-
     const filePath = './public/' + jobId + '.zip';
 
     if (project.success == null) {
@@ -139,9 +140,79 @@ router.route("/download").post(async (req, res, next) => {
                     let writeStream = fs.createWriteStream(filePath);
                     writeStream.write(bodyResponse, 'binary');
                     writeStream.on('finish', () => {
-                        // TODO: Unzip
-                        res.download(filePath);
+
+                        let unzip = fs.createReadStream(filePath).pipe(unzipper.Extract({ path: 'public/' }));
+
+                        if (platform === "android") {
+
+                            unzip.on('finish', () => {
+                                fs.rename('./public/app/build/outputs/apk/debug/', './public/' + jobId, function (err) {
+                                    if (err == null) {
+
+                                        rimraf('./public/app/', async (err) => {
+
+                                            const output = JSON.parse(fs.readFileSync('./public/66/output.json', 'utf8'));
+
+                                            ProjectController.updateJob(jobId, null, 'v'+output[0].apkInfo.versionName);
+
+                                            res.download('./public/'+ jobId + '/' + output[0].apkInfo.outputFile);
+                                        });
+
+                                    }
+                                });
+                            });
+                        } else if (platform === "ios") {
+                            unzip.on('finish', () => {
+
+                                const ipaFile = fs.readdirSync('./public/build/')[0];
+
+                                fs.rename('./public/build/' + ipaFile + '/', './public/' + jobId, function (err) {
+                                    if (err == null) {
+
+                                        rimraf('./public/build/', async (err) => {
+
+                                            fs.unlink('./public/'+jobId+'/Packaging.log', (err) => {
+                                                if(err) console.log(err);
+
+                                            });
+                                            fs.unlink('./public/'+jobId+'/ExportOptions.plist', (err) => {
+                                                if(err) console.log(err);
+                                            });
+                                            fs.unlink('./public/'+jobId+'/DistributionSummary.plist', (err) => {
+                                                if(err) console.log(err);
+                                            });
+
+                                            let xml = xmlbuilder.create(
+                                                'plist',
+                                                { version: '1.0', encoding: 'UTF-8' },
+                                                { pubID: '//Apple//DTD PLIST 1.0//EN', sysID: 'http://www.apple.com/DTDs/PropertyList-1.0.dtd' })
+                                                .ele('dict')
+                                                .ele('key', 'assets')
+                                                .att('array')
+                                                .end({ pretty: true});
+
+
+                                            console.log(xml);
+
+
+                                            res.download('./public/'+ jobId + '/' + ipaFile);
+                                        });
+
+                                    }
+                                });
+                            });
+
+
+                        }
+
+                        unzip.on('error', (err) => {
+                            console.log(err);
+                            res.status(406).send({ success: false, err: "Something went wrong" });
+                        });
+
                     });
+
+
                     writeStream.on('error', (err) => {
                         res.status(406).send({ success: false, err: "Something went wrong" });
                     });
@@ -150,11 +221,19 @@ router.route("/download").post(async (req, res, next) => {
 
                 })
                 .catch(function (err) {
+                    console.log(err);
                     res.status(406).send({ success: false, err: "Something went wrong" });
                 });
         } else {
-            // TODO: Unzip
-            res.download(filePath);
+
+            if (platform === "android") {
+                const output = JSON.parse(fs.readFileSync('./public/66/output.json', 'utf8'));
+                res.download('./public/'+ jobId + '/' + output[0].apkInfo.outputFile);
+            } else if (platform === "ios") {
+                const ipaFile = fs.readdirSync('./public/'  + jobId)[0];
+                res.download('./public/'+ jobId + '/' + ipaFile);
+            }
+
         }
     } else {
         res.status(406).send({ success: false, err: "Something went wrong" });
