@@ -63,18 +63,65 @@ router.route("/:projectId").put(async (req, res, next) => {
 
     const { downloadPassword } = req.body;
 
-    res.status(200).send(await ProjectController.updateProjectPassword(req.params.projectId, downloadPassword));
+    if (!downloadPassword) {
+        res.status(400).send({ success: false, status: "Data not received" });
+    } else {
+        const createProjectResponse = await ProjectController.updateProjectPassword(req.params.projectId, downloadPassword);
+        if(!createProjectResponse.success){
+            res.status(406);
+        } else {
+            res.status(200);
+        }
+        res.send(createProjectResponse)
+    }
 });
+
+router.route("/job/:jobId").put(async (req, res, next) => {
+
+    const { changeLog } = req.body;
+
+    if (!changeLog) {
+        res.status(400).send({ success: false, status: "Data not received" });
+    } else {
+        const createProjectResponse = await ProjectController.updateJob(req.params.jobId, changeLog);
+        if(!createProjectResponse.success){
+            res.status(406);
+        } else {
+            res.status(200);
+        }
+        res.send(createProjectResponse)
+    }
+
+});
+
+router.route("/userAccess").post(async (req, res, next) => {
+    const { userId, projectId, privilegeType } = req.body;
+
+    if (!userId || !projectId || !privilegeType) {
+        res.status(400).send({ success: false, status: "Data not received" });
+    } else {
+        const createProjectResponse = await ProjectController.updateProjectAccess(projectId, userId, privilegeType);
+        if(!createProjectResponse.success){
+            res.status(406);
+        } else {
+            res.status(200);
+        }
+        res.send(createProjectResponse)
+    }
+});
+
 
 router.route("/download").post(async (req, res, next) => {
 
-    const { platform, path, jobId, userId, downloadPassword } = req.body;
+    const { ip, platform, path, jobId, userId, downloadPassword } = req.body;
 
-    const project = await ProjectController.downloadArtifact(jobId, userId, downloadPassword);
+    const project = await ProjectController.downloadArtifact(ip, jobId, userId, downloadPassword);
+
+    console.log(project);
 
     const filePath = './public/' + jobId + '.zip';
 
-    if (project.downloadPassword != null && project.downloadPassword == downloadPassword) {
+    if (project.success == null) {
         if (!fs.existsSync(filePath)) {
             rp({
                 uri: config.GITLAB_IP.replace(config.GITLAB_IP_SUFFIX, "") + platform + "/" + path + "/-/jobs/" + jobId + '/artifacts/download',
@@ -110,7 +157,7 @@ router.route("/download").post(async (req, res, next) => {
             res.download(filePath);
         }
     } else {
-        res.status(406).send({ success: false, err: "Wrong password" });
+        res.status(406).send({ success: false, err: "Something went wrong" });
     }
 
 

@@ -15,13 +15,14 @@ const ProjectSchema = new Schema({
         filename: { type: String, required: true  },
         changeLog: String,
         downloadActivity: [{
+            ip: String,
             user_uuid: { type: String, required: true  },
             downloadTime: { type: Date, default: Date.now }
         }]
     }],
     allowedUserAccess: [{
         user_uuid: { type: String, required : true },
-        privilegeType: { type: String, enum: ['Full, Latest']}
+        privilegeType: { type: String, enum: ['Full', 'Latest']}
     }]
 });
 
