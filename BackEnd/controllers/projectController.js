@@ -50,13 +50,23 @@ class ProjectController {
             });
     }
 
-    static async updateProjectPassword(projectId, downloadPassword) {
+    static async updateProject(projectId, downloadPassword, bundleIdentifier) {
         return await Project.findOne({ projectId: projectId })
             .then( async (project) => {
 
+                let updated = false;
+
                 if (downloadPassword != null) {
                     project.downloadPassword = downloadPassword;
+                    updated = true;
+                }
 
+                if (bundleIdentifier != null) {
+                    updated = true;
+                    project.bundleIdentifier = bundleIdentifier;
+                }
+
+                if (updated) {
                     await project.save();
 
                     return { success: true, status: "Data updated" }
