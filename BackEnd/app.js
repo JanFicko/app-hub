@@ -2,11 +2,14 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var logger = require('morgan');
+const jwt = require('./helpers/jwt');
 
 require('./models/user');
 require('./models/project');
 
 var app = express();
+
+app.use(jwt());
 
 app.use(logger('dev'));
 app.use(express.json());

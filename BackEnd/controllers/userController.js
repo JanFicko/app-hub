@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
+const config = require('../config');
 const User = mongoose.model('User');
 
 class UserController {
@@ -63,7 +65,7 @@ class UserController {
                     return { success: false, status: err.errmsg }
                 });
             }).catch((err) => {
-                return { success: false, err: 'Something went wrong' }
+                return { success: false, err: err }
             });
     }
 
@@ -83,13 +85,14 @@ class UserController {
                 user = user.toObject();
                 delete user['password'];
 
+                const token = jwt.sign({ sub: user._id }, config.JWT_SECRET);
                 if (isMatch) {
-                    return { success: true, user: user }
+                    return { success: true, token: token, user: user }
                 } else {
                     return { success: false, err: "Wrong password" }
                 }
             }).catch((err) => {
-                return { success: false, err: 'Something went wrong' }
+                return { success: false, err: err }
             });
     }
 
