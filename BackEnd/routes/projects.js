@@ -113,7 +113,7 @@ router.route("/userAccess").post(async (req, res, next) => {
 
 router.route("/download").post(async (req, res, next) => {
 
-    const { ip, platform, path, jobId, userId, downloadPassword } = req.body;
+    const { ip, jobId, userId, downloadPassword } = req.body;
 
     const project = await ProjectController.downloadArtifact(ip, jobId, userId, downloadPassword);
 
@@ -121,12 +121,12 @@ router.route("/download").post(async (req, res, next) => {
 
     if (project.success == null) {
 
-        if (platform === 'ios' && project.bundleIdentifier == null) {
+        if (project.platform === 'ios' && project.bundleIdentifier == null) {
             res.status(417).send({ success: false, err: "Bundle identifier is empty" });
         } else {
             if (!fs.existsSync(filePath)) {
                 rp({
-                    uri: config.GITLAB_IP.replace(config.GITLAB_IP_SUFFIX, "") + platform + "/" + path + "/-/jobs/" + jobId + '/artifacts/download',
+                    uri: config.GITLAB_IP.replace(config.GITLAB_IP_SUFFIX, "") + project.platform + "/" + project.path + "/-/jobs/" + jobId + '/artifacts/download',
                     qs: {
                         scope: 'success'
                     },
@@ -144,7 +144,7 @@ router.route("/download").post(async (req, res, next) => {
 
                             let unzip = fs.createReadStream(filePath).pipe(unzipper.Extract({ path: 'public/' }));
 
-                            if (platform === "android") {
+                            if (project.platform === "android") {
 
                                 unzip.on('finish', () => {
                                     fs.rename('./public/app/build/outputs/apk/debug/', './public/' + jobId, function (err) {
@@ -156,10 +156,10 @@ router.route("/download").post(async (req, res, next) => {
 
                                                 ProjectController.updateJob(jobId, null, 'v' + output[0].apkInfo.versionName);
 
-                                                const apkFile = output[0].apkInfo.outputFile;
+                                                const apkFile = './public/'+ jobId + '/' + output[0].apkInfo.outputFile;
 
-                                                if (fs.existsSync(plistFile)) {
-                                                    res.download('./public/'+ jobId + '/' + apkFile);
+                                                if (fs.existsSync(apkFile)) {
+                                                    res.download(apkFile);
                                                 } else {
                                                     res.status(406).send({ success: false, err: "APK file not found" });
                                                 }
@@ -168,7 +168,7 @@ router.route("/download").post(async (req, res, next) => {
                                         }
                                     });
                                 });
-                            } else if (platform === "ios") {
+                            } else if (project.platform === "ios") {
                                 unzip.on('finish', () => {
 
                                     const ipaFile = fs.readdirSync('./public/build/')[0];
@@ -261,17 +261,17 @@ router.route("/download").post(async (req, res, next) => {
                     });
             } else {
 
-                if (platform === "android") {
+                if (project.platform === "android") {
                     const output = JSON.parse(fs.readFileSync('./public/66/output.json', 'utf8'));
 
-                    const apkFile = output[0].apkInfo.outputFile
+                    const apkFile = './public/'+ jobId + '/' + output[0].apkInfo.outputFile;
 
                     if (fs.existsSync(apkFile)) {
-                        res.download('./public/'+ jobId + '/' + apkFile);
+                        res.download(apkFile);
                     } else {
                         res.status(406).send({ success: false, err: "APK file not found" });
                     }
-                } else if (platform === "ios") {
+                } else if (project.platform === "ios") {
 
                     const ipaFile = fs.readdirSync('./public/'  + jobId)[0];
                     const plistFile = './public/'+ jobId + '/' + ipaFile.replace(".ipa", "") + '.plist';
@@ -290,8 +290,6 @@ router.route("/download").post(async (req, res, next) => {
     } else {
         res.status(406).send({ success: false, err: "Something went wrong" });
     }
-
-
 
 });
 
