@@ -6,14 +6,14 @@ const User = mongoose.model('User');
 class UserController {
 
     static getUsers() {
-        return User.find();
+        return { code: 0, users: User.find() };
     }
 
     static getUserById(id) {
         return User.findOne({ _id: id }).then((user) => {
-            return user;
+            return { code: 0, users: user };
         }).catch((err) => {
-            return { success: false, status: "User not found" }
+            return { code: -1, description: err.errmsg }
         });
     }
 
@@ -25,9 +25,9 @@ class UserController {
         });
 
         return user.save().then(() => {
-            return { success: true }
+            return { code: 0 }
         }).catch((err) => {
-            return { success: false, status: err.errmsg }
+            return { code: -1, description: err.errmsg }
         })
     }
 
@@ -60,16 +60,16 @@ class UserController {
                 }
 
                 return user.save().then(() => {
-                    return { success: true }
+                    return { code: 0 }
                 }).catch((err) => {
-                    return { success: false, status: err.errmsg }
+                    return { code: -1, description: err.errmsg }
                 });
             }).catch((err) => {
-                return { success: false, err: err }
+                return { code: -1, description: err.errmsg }
             });
     }
 
-    static login(email, password, ip) {
+    static login(email, password, ip, device) {
         return User.findOne({ email: email }).select('+password')
             .then(async (user) => {
 
@@ -78,7 +78,8 @@ class UserController {
                 user.userActivity.push({
                     ip: ip,
                     activity: "login",
-                    activityType: isMatch
+                    activityType: isMatch,
+                    device: device
                 });
                 user.save();
 
@@ -87,12 +88,12 @@ class UserController {
 
                 const token = jwt.sign({ sub: user._id }, config.JWT_SECRET);
                 if (isMatch) {
-                    return { success: true, token: token, user: user }
+                    return { code: 0, token: token, user: user }
                 } else {
-                    return { success: false, err: "Wrong password" }
+                    return { code: -1, description: "Wrong password" }
                 }
             }).catch((err) => {
-                return { success: false, err: err }
+                return { code: -1, description: err.errmsg }
             });
     }
 
