@@ -6,7 +6,12 @@ const User = mongoose.model('User');
 class UserController {
 
     static getUsers() {
-        return { code: 0, users: User.find() };
+        return User.find()
+            .then((user) => {
+                return { code: 0, users: user };
+            }).catch((err) => {
+                return { code: -1, description: err.errmsg }
+            });
     }
 
     static getUserById(id) {
@@ -46,7 +51,7 @@ class UserController {
                     user.isAdmin = isAdmin;
                     user.userActivity.push({
                         ip: ip,
-                        activity: "Admin type",
+                        activity: "Admin",
                         activityType: isAdmin
                     });
                 }
@@ -60,7 +65,7 @@ class UserController {
                 }
 
                 return user.save().then(() => {
-                    return { code: 0 }
+                    return { code: 0, description: "Data updated" }
                 }).catch((err) => {
                     return { code: -1, description: err.errmsg }
                 });

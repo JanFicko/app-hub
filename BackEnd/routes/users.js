@@ -3,9 +3,7 @@ const router = express.Router();
 const UserController = require('../controllers/userController');
 
 router.route("/").get(async (req, res, next) => {
-  res.status(200).send(
-      await UserController.getUsers()
-  );
+  res.status(200).send(await UserController.getUsers());
 });
 
 router.route("/:id").get(async (req, res, next) => {

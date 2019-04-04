@@ -9,7 +9,7 @@ const ProjectSchema = new Schema({
     platform: { type: String, required: true  },
     icon: String,
     downloadPassword: { type: String, default: null },
-    job: [{
+    jobs: [{
         jobId: { type: Number, required: true  },
         finishTime: Date,
         title: { type: String, default: "No version" },
@@ -23,7 +23,7 @@ const ProjectSchema = new Schema({
     }],
     allowedUserAccess: [{
         user_uuid: { type: String, required : true },
-        privilegeType: { type: String, enum: ['Full', 'Latest']}
+        privilegeType: { type: String, enum: ['Full', 'Latest'], default: 'Latest'}
     }]
 });
 

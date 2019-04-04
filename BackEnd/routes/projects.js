@@ -8,58 +8,70 @@ const rimraf = require("rimraf");
 const xmlbuilder = require("xmlbuilder");
 const ProjectController = require('../controllers/projectController');
 
-router.route("/:platform").get(async (req, res, next) => {
+router.route("/").post(async (req, res, next) => {
 
-    let platform = "";
+    const { platform, userId } = req.body;
 
-    if (req.params.platform === "android") {
-        platform = config.ANDROID_GROUP;
-    } else if (req.params.platform === "ios") {
-        platform = config.IOS_GROUP
+    if (!platform || !userId) {
+        res.status(400).send({ code: -1, description: "Data not received" });
+    } else {
+        let platformType = "";
+
+        if (platform === "android") {
+            platformType = config.ANDROID_GROUP;
+        } else if (platform === "ios") {
+            platformType = config.IOS_GROUP
+        }
+
+        rp({
+            uri: config.GITLAB_IP + platformType + '/projects',
+            qs: {
+                per_page: '100'
+            },
+            headers: {
+                'PRIVATE-TOKEN': config.GITLAB_PRIVATE_TOKEN
+            },
+            json: true
+        })
+            .then(async (bodyResponse) => {
+                await ProjectController.addProjects(bodyResponse, platform);
+
+                res.status(200).send(await ProjectController.getUsersProjects(userId));
+            })
+            .catch((err) => {
+                res.status(406).send({code: -1, description: err.errmsg});
+            });
     }
-
-    rp({
-        uri: config.GITLAB_IP + platform +'/projects',
-        qs: {
-            per_page: '100'
-        },
-        headers: {
-            'PRIVATE-TOKEN': config.GITLAB_PRIVATE_TOKEN
-        },
-        json: true
-    })
-    .then(async (bodyResponse) => {
-      await ProjectController.addProjects(bodyResponse, req.params.platform);
-
-      res.status(200).send(await ProjectController.getProjects());
-    })
-    .catch( (err) => {
-      res.status(406).send({ success: false, err: "Something went wrong" });
-    });
-
 
 });
 
-router.route("/jobs/:projectId").get(async (req, res, next) => {
+router.route("/jobs").post(async (req, res, next) => {
 
-    rp({
-        uri: config.GITLAB_IP + 'projects/' + req.params.projectId + '/jobs',
-        qs: {
-            scope: 'success'
-        },
-        headers: {
-            'PRIVATE-TOKEN': config.GITLAB_PRIVATE_TOKEN
-        },
-        json: true
-    })
-    .then(async (bodyResponse) => {
-        await ProjectController.addJobs(req.params.projectId, bodyResponse);
+    const { projectId, userId } = req.body;
 
-        res.status(200).send(await ProjectController.getJobsByProjectId(req.params.projectId));
-    })
-    .catch((err) => {
-        res.status(406).send({ success: false, err: "Something went wrong" });
-    });
+    if (!projectId || !userId) {
+        res.status(400).send({ success: false, status: "Data not received" });
+    } else {
+        rp({
+            uri: config.GITLAB_IP + 'projects/' + projectId + '/jobs',
+            qs: {
+                scope: 'success'
+            },
+            headers: {
+                'PRIVATE-TOKEN': config.GITLAB_PRIVATE_TOKEN
+            },
+            json: true
+        })
+            .then(async (bodyResponse) => {
+                await ProjectController.addJobs(projectId, bodyResponse);
+
+                res.status(200).send(await ProjectController.getJobsByProjectId(projectId, userId));
+            })
+            .catch((err) => {
+                console.log(err);
+                res.status(406).send({ success: false, err: err.message });
+            });
+    }
 });
 
 router.route("/:projectId").put(async (req, res, next) => {
@@ -101,12 +113,7 @@ router.route("/userAccess").post(async (req, res, next) => {
         res.status(400).send({ success: false, status: "Data not received" });
     } else {
         const createProjectResponse = await ProjectController.updateProjectAccess(projectId, userId, privilegeType);
-        if(!createProjectResponse.success){
-            res.status(406);
-        } else {
-            res.status(200);
-        }
-        res.send(createProjectResponse)
+        res.status(200).send(createProjectResponse)
     }
 });
 
