@@ -82,7 +82,7 @@ class ProjectController {
 
                 if (bundleIdentifier != null) {
                     updated = true;
-                    project.bundleIdentifier = bundleIdentifier;
+                    project.package = bundleIdentifier;
                 }
 
                 if (updated) {
@@ -140,7 +140,6 @@ class ProjectController {
                 let privilege;
                 let jobs = [];
 
-
                 for (let i = 0; i < project.jobs.length; i++) {
                     for (let j = 0; j < project.allowedUserAccess.length; j++) {
                         if (project.allowedUserAccess[j].user_uuid === userId) {
@@ -169,8 +168,9 @@ class ProjectController {
                     }
                 }
 
+                project.jobs = jobs;
 
-                return { code: 0, jobs: jobs }
+                return { code: 0, project: project }
             })
             .catch((err) => {
                 return { code: -1, description: err.message }
@@ -228,10 +228,16 @@ class ProjectController {
                     }
 
                     if(!doesExist && jobs[i].artifacts_file != null) {
+                        let title = jobs[i].commit.message;
+
+                        if (title.includes("v")) {
+
+                        }
+
                         project.jobs.push({
                             jobId: jobs[i].id,
                             finishTime: jobs[i].finished_at,
-                            title: jobs[i].commit.message,
+                            title: title,
                             filename: jobs[i].artifacts_file.filename
                         });
 
@@ -287,8 +293,27 @@ class ProjectController {
             throw "Job not found"
         })
         .catch((err) => {
-            console.log(err);
-            return { code: -1, description: err.errmsg }
+            return { code: -1, description: err.message }
+        });
+    }
+
+    static getAndroidArtifacts(jobId) {
+
+        return Project.find({
+            'jobs.jobId': jobId,
+            'platform': 'android'
+        })
+        .then(async (project) => {
+            for (let i = 0; i < project[0].jobs.length; i++) {
+                if (project[0].jobs[i].jobId === jobId) {
+
+                    return project[0];
+                }
+            }
+            throw "Job not found"
+        })
+        .catch((err) => {
+            return { code: -1, description: err.message }
         });
     }
 
