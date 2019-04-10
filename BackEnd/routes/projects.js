@@ -63,6 +63,7 @@ router.route("/jobs").post(async (req, res, next) => {
             json: true
         })
             .then(async (bodyResponse) => {
+
                 await ProjectController.addJobs(projectId, bodyResponse);
 
                 res.status(200).send(await ProjectController.getJobsByProjectId(projectId, userId));
@@ -145,6 +146,9 @@ router.route("/androidArtifacts").post(async (req, res, next) => {
                                     if (err == null) {
 
                                         fs.readdir(outputPath, function(err, directories) {
+                                            for (let i = 0; i < directories.length; i++) {
+                                                directories[i] = directories[i] + "/" + JSON.parse(fs.readFileSync(outputPath + '/' + directories[i] +'/output.json', 'utf8'))[0].apkInfo.outputFile;
+                                            }
                                             res.status(200).send({ code: '0', outputs: directories});
                                         });
 
@@ -171,6 +175,9 @@ router.route("/androidArtifacts").post(async (req, res, next) => {
             if (fs.existsSync(outputPath)) {
 
                 fs.readdir(outputPath, function(err, directories) {
+                    for (let i = 0; i < directories.length; i++) {
+                        directories[i] = directories[i] + "/" + JSON.parse(fs.readFileSync(outputPath + '/' + directories[i] +'/output.json', 'utf8'))[0].apkInfo.outputFile;
+                    }
                     res.status(200).send({ code: '0', outputs: directories});
                 });
 
@@ -185,6 +192,9 @@ router.route("/androidArtifacts").post(async (req, res, next) => {
 
                                 if (err == null) {
                                     fs.readdir(outputPath, function(err, directories) {
+                                        for (let i = 0; i < directories.length; i++) {
+                                            directories[i] = directories[i] + "/" + JSON.parse(fs.readFileSync(outputPath + '/' + directories[i] +'/output.json', 'utf8'))[0].apkInfo.outputFile;
+                                        }
                                         res.status(200).send({ code: '0', outputs: directories});
                                     });
                                 } else {
@@ -209,25 +219,25 @@ router.route("/androidArtifacts").post(async (req, res, next) => {
 
 });
 
-router.route("/download").post(async (req, res, next) => {
+router.route("/download/:jobId/:userId/:output").get(async (req, res, next) => {
 
-    const { jobId, userId, output, ip, downloadPassword } = req.body;
+    const { downloadPassword } = req.body;
 
     let apkOutput;
 
-    if (output == null) {
+    if (req.params.output == null) {
         apkOutput = "debug";
     } else {
-        apkOutput = output;
+        apkOutput = req.params.output;
     }
 
-    if (!jobId || !userId) {
+    if (!req.params.jobId || !req.params.userId) {
         res.status(400).send({ code: -1, description: "Data not received" });
     } else {
 
-        const project = await ProjectController.downloadArtifact(ip, jobId, userId, downloadPassword);
+        const project = await ProjectController.downloadArtifact(req.ip, req.params.jobId, req.params.userId, downloadPassword);
 
-        const filePath = './public/' + jobId + '.zip';
+        const filePath = './public/' + req.params.jobId + '.zip';
 
         if (project.code !== -1) {
 
@@ -236,7 +246,7 @@ router.route("/download").post(async (req, res, next) => {
             } else {
                 if (!fs.existsSync(filePath)) {
                     rp({
-                        uri: config.GITLAB_IP.replace(config.GITLAB_IP_SUFFIX, "") + project.platform + "/" + project.path + "/-/jobs/" + jobId + '/artifacts/download',
+                        uri: config.GITLAB_IP.replace(config.GITLAB_IP_SUFFIX, "") + project.platform + "/" + project.path + "/-/jobs/" + req.params.jobId + '/artifacts/download',
                         qs: {
                             scope: 'success'
                         },
@@ -256,16 +266,16 @@ router.route("/download").post(async (req, res, next) => {
                                 if (project.platform === "android") {
 
                                     unzip.on('finish', () => {
-                                        fs.rename('./public/app/build/outputs/apk/', './public/' + jobId, function (err) {
+                                        fs.rename('./public/app/build/outputs/apk/', './public/' + req.params.jobId, function (err) {
                                             if (err == null) {
 
                                                 rimraf('./public/app/', async (err) => {
 
-                                                    const output = JSON.parse(fs.readFileSync('./public/' + jobId + '/' + apkOutput +'/output.json', 'utf8'));
+                                                    const output = JSON.parse(fs.readFileSync('./public/' + req.params.jobId + '/' + apkOutput +'/output.json', 'utf8'));
 
-                                                    ProjectController.updateJob(jobId, null, 'v' + output[0].apkInfo.versionName);
+                                                    ProjectController.updateJob(req.params.jobId, null, 'v' + output[0].apkInfo.versionName);
 
-                                                    const apkFile = './public/'+ jobId + '/' + apkOutput + '/' + output[0].apkInfo.outputFile;
+                                                    const apkFile = './public/'+ req.params.jobId + '/' + apkOutput + '/' + output[0].apkInfo.outputFile;
 
                                                     if (fs.existsSync(apkFile)) {
                                                         res.download(apkFile);
@@ -282,19 +292,19 @@ router.route("/download").post(async (req, res, next) => {
 
                                         const ipaFile = fs.readdirSync('./public/build/')[0];
 
-                                        fs.rename('./public/build/' + ipaFile + '/', './public/' + jobId, function (err) {
+                                        fs.rename('./public/build/' + ipaFile + '/', './public/' + req.params.jobId, function (err) {
                                             if (err == null) {
 
                                                 rimraf('./public/build/', async (err) => {
 
-                                                    fs.unlink('./public/'+jobId+'/Packaging.log', (err) => {
+                                                    fs.unlink('./public/' + req.params.jobId + '/Packaging.log', (err) => {
                                                         if(err) console.log(err);
 
                                                     });
-                                                    fs.unlink('./public/'+jobId+'/ExportOptions.plist', (err) => {
+                                                    fs.unlink('./public/' + req.params.jobId + '/ExportOptions.plist', (err) => {
                                                         if(err) console.log(err);
                                                     });
-                                                    fs.unlink('./public/'+jobId+'/DistributionSummary.plist', (err) => {
+                                                    fs.unlink('./public/' + req.params.jobId + '/DistributionSummary.plist', (err) => {
                                                         if(err) console.log(err);
                                                     });
 
@@ -317,7 +327,7 @@ router.route("/download").post(async (req, res, next) => {
                                                     array2.ele('key', 'kind');
                                                     array2.ele('string', 'software-package');
                                                     array2.ele('key', 'url');
-                                                    array2.ele('string', 'https://' + config.DOMAIN_NAME + '/' + jobId + '/' + ipaFile);
+                                                    array2.ele('string', 'https://' + config.DOMAIN_NAME + '/' + req.params.jobId + '/' + ipaFile);
 
                                                     array1.ele('key', 'metadata');
 
@@ -331,7 +341,7 @@ router.route("/download").post(async (req, res, next) => {
 
                                                     root = root.end({ pretty: true});
 
-                                                    const plistFile = './public/'+ jobId + '/' + ipaFile.replace(".ipa", "") + '.plist';
+                                                    const plistFile = './public/'+ req.params.jobId + '/' + ipaFile.replace(".ipa", "") + '.plist';
 
                                                     fs.writeFile(plistFile, root, (err) => {
                                                         if (fs.existsSync(plistFile)) {
@@ -369,9 +379,9 @@ router.route("/download").post(async (req, res, next) => {
                 } else {
 
                     if (project.platform === "android") {
-                        const output = JSON.parse(fs.readFileSync('./public/'+ jobId + '/' + apkOutput + '/output.json', 'utf8'));
+                        const output = JSON.parse(fs.readFileSync('./public/'+ req.params.jobId + '/' + apkOutput + '/output.json', 'utf8'));
 
-                        const apkFile = './public/'+ jobId + '/' + apkOutput + '/' + output[0].apkInfo.outputFile;
+                        const apkFile = './public/'+ req.params.jobId + '/' + apkOutput + '/' + output[0].apkInfo.outputFile;
 
                         if (fs.existsSync(apkFile)) {
                             res.download(apkFile);
@@ -380,8 +390,8 @@ router.route("/download").post(async (req, res, next) => {
                         }
                     } else if (project.platform === "ios") {
 
-                        const ipaFile = fs.readdirSync('./public/'  + jobId)[0];
-                        const plistFile = './public/'+ jobId + '/' + ipaFile.replace(".ipa", "") + '.plist';
+                        const ipaFile = fs.readdirSync('./public/'  + req.params.jobId)[0];
+                        const plistFile = './public/'+ req.params.jobId + '/' + ipaFile.replace(".ipa", "") + '.plist';
 
                         if (fs.existsSync(plistFile)) {
                             res.download(plistFile);
@@ -395,7 +405,7 @@ router.route("/download").post(async (req, res, next) => {
 
             }
         } else {
-            res.status(406).send({ code: -1, description: "Something went wrong" });
+            res.status(406).send({ code: -1, description: project.description });
         }
 
     }

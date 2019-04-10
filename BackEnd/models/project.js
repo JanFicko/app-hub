@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const config = require('../config');
 
 const ProjectSchema = new Schema({
     projectId: { type: Number, unique: true, required: true  },
@@ -12,7 +13,7 @@ const ProjectSchema = new Schema({
     jobs: [{
         jobId: { type: Number, required: true  },
         finishTime: Date,
-        title: { type: String, default: "No version" },
+        title: { type: String, default: config.NO_VERSION_TEXT },
         filename: { type: String, required: true  },
         changeLog: String,
         downloadActivity: [{

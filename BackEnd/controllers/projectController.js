@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Project = mongoose.model('Project');
 const User = mongoose.model('User');
+const config = require('../config');
 
 class ProjectController {
 
@@ -168,6 +169,8 @@ class ProjectController {
                     }
                 }
 
+                jobs.sort((a, b) => parseFloat(b.jobId) - parseFloat(a.jobId));
+
                 project.jobs = jobs;
 
                 return { code: 0, project: project }
@@ -230,8 +233,8 @@ class ProjectController {
                     if(!doesExist && jobs[i].artifacts_file != null) {
                         let title = jobs[i].commit.message;
 
-                        if (title.includes("v")) {
-
+                        if (!title.match(config.VERSION_REGEX)) {
+                            title = config.NO_VERSION_TEXT;
                         }
 
                         project.jobs.push({
@@ -261,9 +264,10 @@ class ProjectController {
         })
         .then(async (project) => {
             for (let i = 0; i < project[0].jobs.length; i++) {
-                if (project[0].jobs[i].jobId === jobId) {
+                if (project[0].jobs[i].jobId == jobId) {
 
-                    if (project[0].downloadPassword != null) {
+                    // TODO: Temporary disabled
+                    /*if (project[0].downloadPassword != null) {
 
                         if (project[0].downloadPassword != downloadPassword) {
                             throw "Incorrect password"
@@ -277,7 +281,7 @@ class ProjectController {
 
                             return project[0]
                         }
-                    } else {
+                    } else {*/
                         project[0].jobs[i].downloadActivity.push({
                             ip: ip,
                             user_uuid: userId
@@ -286,14 +290,15 @@ class ProjectController {
                         await project[0].save();
 
                         return project[0]
-                    }
+                    //}
 
                 }
             }
             throw "Job not found"
         })
         .catch((err) => {
-            return { code: -1, description: err.message }
+            console.log(err);
+            return { code: -1, description: "Project not found" }
         });
     }
 
