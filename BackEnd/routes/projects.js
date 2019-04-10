@@ -221,7 +221,7 @@ router.route("/androidArtifacts").post(async (req, res, next) => {
 
 router.route("/download/:jobId/:userId/:output").get(async (req, res, next) => {
 
-    const { downloadPassword } = req.body;
+    const { downloadPassword } = req.header;
 
     let apkOutput;
 
