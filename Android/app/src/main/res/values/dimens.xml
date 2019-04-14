@@ -2,6 +2,7 @@
 <resources>
     <dimen name="toolbar_height">56dp</dimen>
     <dimen name="corner_radius">4dp</dimen>
+    <dimen name="login_logo_square_size">150dp</dimen>
 
     <dimen name="text_size_small">16sp</dimen>
     <dimen name="text_size_medium">20sp</dimen>

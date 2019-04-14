@@ -4,6 +4,7 @@ import org.koin.androidx.viewmodel.ext.sharedViewModel
 import org.koin.androidx.viewmodel.ext.viewModel
 import org.koin.core.KoinComponent
 import org.koin.core.inject
+import xyz.janficko.apphub.common.ErrorCodes
 import xyz.janficko.apphub.common.Keys
 import xyz.janficko.apphub.data.local.shared_preferences.SharedPreferencesContract
 import xyz.janficko.apphub.data.remote.request.GetProjectsRequest
@@ -53,6 +54,18 @@ class DashboardViewModel constructor(
 
                 override fun onError(code: Int) {
                     postScreenState(DashboardState.ShowError(code))
+                }
+
+                override fun onNoInternet() {
+                    postScreenState(DashboardState.ShowError(ErrorCodes.NO_INTERNET))
+                }
+
+                override fun onNoServer() {
+                    postScreenState(DashboardState.ShowError(ErrorCodes.NO_SERVER))
+                }
+
+                override fun onUnknownError() {
+                    postScreenState(DashboardState.ShowError(ErrorCodes.UNKNOWN_ERROR))
                 }
             }
         )

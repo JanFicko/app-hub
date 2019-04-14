@@ -12,7 +12,8 @@
     <string name="error_no_projects">Ni projektov za prikaz</string>
     <string name="error_no_versions">Ta aplikacija še nima verzij</string>
     <string name="error_no_artifacts">Ta verzija še nima datotek</string>
-    <string name="error_no_connection">Napaka pri povezavi s strežnikom</string>
+    <string name="error_no_server_connection">Napaka pri povezavi s strežnikom</string>
+    <string name="error_no_internet_connection">Problem z internetno povezavo</string>
     <string name="error_not_correct_email">Nepravilen email</string>
     <string name="error_not_logged_in">Napaka ob prijavi</string>
     <string name="error_field_empty">Polje je prazno</string>

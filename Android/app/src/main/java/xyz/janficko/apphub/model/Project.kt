@@ -30,4 +30,4 @@ data class Project(
     @SerializedName("jobs")
     @Expose
     val jobs : MutableList<Job>
-) : BaseResponse()
+)

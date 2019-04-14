@@ -28,4 +28,4 @@ data class Job(
     @SerializedName("finishTime")
     @Expose
     val finishTime : Date
-) : BaseResponse()
+)

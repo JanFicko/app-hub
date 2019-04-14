@@ -102,7 +102,7 @@ class MainActivity : BaseViewModelActivity<MainState, MainViewModel>(), View.OnC
             ErrorCodes.UNKNOWN_ERROR -> {
                 tv_error.visibility = View.VISIBLE
                 iv_refresh.visibility = View.GONE
-                tv_error.text = getString(R.string.error_no_connection)
+                tv_error.text = getString(R.string.error_no_server_connection)
             }
         }
     }

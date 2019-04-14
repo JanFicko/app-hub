@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_dashboard.*
+import kotlinx.android.synthetic.main.fragment_login.*
 import org.koin.androidx.viewmodel.ext.sharedViewModel
 import org.koin.androidx.viewmodel.ext.viewModel
 import xyz.janficko.apphub.R
@@ -71,9 +72,20 @@ class DashboardFragment :
 
     private fun showError(code : Int) {
         when (code) {
-            ErrorCodes.UNKNOWN_ERROR -> {
-                srl_container_apps.snack(R.string.error_unknown)
+            ErrorCodes.UNKNOWN_ERROR -> srl_container_apps.snack(R.string.error_unknown)
+            ErrorCodes.NO_INTERNET -> {
+                projectAdapter?.clearAdapter()
+
+                baseActivity?.tv_error?.visibility = View.VISIBLE
+                baseActivity?.tv_error?.text = getString(R.string.error_no_internet_connection)
             }
+            ErrorCodes.NO_SERVER -> {
+                projectAdapter?.clearAdapter()
+
+                baseActivity?.tv_error?.visibility = View.VISIBLE
+                baseActivity?.tv_error?.text = getString(R.string.error_no_server_connection)
+            }
+
         }
     }
 
