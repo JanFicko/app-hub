@@ -1,13 +1,29 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const logger = require('morgan');
 const jwt = require('./helpers/jwt');
+const mongoose = require('mongoose');
+const config = require('./config');
 
 require('./models/user');
 require('./models/project');
 
 var app = express();
+
+/**
+ * Connect to MongoDB database server.
+ */
+// sudo mongo app-hub --eval "db.dropDatabase()"
+mongoose.connect(
+    'mongodb://' + config.MONGODB_IP + ':'+ config.MONGODB_PORT +'/'+ config.MONGODB_DATABASE_NAME,
+    {
+      useCreateIndex: true,
+      useNewUrlParser: true
+    });
+mongoose.Promise = global.Promise;
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 app.use(jwt());
 

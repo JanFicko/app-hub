@@ -1,3 +1,10 @@
+# Webstorm
+*.iml
+.idea
+.idea/workspace.xml
+.idea/libraries
+/.idea/workspace.xml
+/.idea/libraries
 
 # Created by https://www.gitignore.io/api/node,bower,webstorm,visualstudio,visualstudiocode,sublimetext,netbeans,sass
 
