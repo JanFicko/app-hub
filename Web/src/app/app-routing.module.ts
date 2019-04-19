@@ -8,16 +8,20 @@ import { UserCreateComponent } from './components/user-create/user-create.compon
 import { UserEditComponent } from './components/user-edit/user-edit.component';
 import { UserListComponent } from './components/user-list/user-list.component';
 import { LoginComponent } from './components/login/login.component';
+import {AuthGuard} from './guards/auth.guard';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent, data: { title: 'Login' } },
-  { path: '', component: DashboardComponent, data: { title: 'Dashboard' } },
-  { path: 'activity-log', component: ActivityLogComponent, data: { title: 'Activity Log' } },
-  { path: 'profile', component: ProfileComponent, data: { title: 'Profile' } },
-  { path: 'project', component: ProjectComponent, data: { title: 'Project name' } },
-  { path: 'user-create', component: UserCreateComponent, data: { title: 'Create user' } },
-  { path: 'user-edit', component: UserEditComponent, data: { title: 'User edit' } },
-  { path: 'users', component: UserListComponent, data: { title: 'Users' } }
+  { path: '', component: DashboardComponent, data: { title: 'Dashboard' }, canActivate: [AuthGuard] },
+  { path: 'activity-log', component: ActivityLogComponent, data: { title: 'Activity Log' }, canActivate: [AuthGuard] },
+  { path: 'profile', component: ProfileComponent, data: { title: 'Profile' }, canActivate: [AuthGuard] },
+  { path: 'project', component: ProjectComponent, data: { title: 'Project name' }, canActivate: [AuthGuard] },
+  { path: 'user-create', component: UserCreateComponent, data: { title: 'Create user' }, canActivate: [AuthGuard] },
+  { path: 'user-edit', component: UserEditComponent, data: { title: 'User edit' }, canActivate: [AuthGuard] },
+  { path: 'users', component: UserListComponent, data: { title: 'Users' }, canActivate: [AuthGuard] },
+
+  // If path doesn't exist redirect to dashboard.
+  { path: '**', redirectTo: '' }
 ];
 
 @NgModule({

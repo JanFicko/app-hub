@@ -17,7 +17,7 @@
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item active">
-      <a class="nav-link" routerLink="/">
+      <a class="nav-link" [routerLink]="['/']">
         <i class="fas fa-fw fa-tachometer-alt"></i>
         <span>Dashboard</span></a>
     </li>
@@ -38,11 +38,11 @@
       </a>
       <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
-          <a class="collapse-item" routerLink="/project">Urbana</a>
-          <a class="collapse-item" routerLink="/project">Študentska prehrana</a>
-          <a class="collapse-item" routerLink="/project">Valu</a>
-          <a class="collapse-item" routerLink="/project">Nomago</a>
-          <a class="collapse-item" routerLink="/project">Moje kartice</a>
+          <a class="collapse-item" [routerLink]="['/project']">Urbana</a>
+          <a class="collapse-item" [routerLink]="['/project']">Študentska prehrana</a>
+          <a class="collapse-item" [routerLink]="['/project']">Valu</a>
+          <a class="collapse-item" [routerLink]="['/project']">Nomago</a>
+          <a class="collapse-item" [routerLink]="['/project']">Moje kartice</a>
         </div>
       </div>
     </li>
@@ -55,10 +55,10 @@
       </a>
       <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
-          <a class="collapse-item" routerLink="/project">Študentska prehrana</a>
-          <a class="collapse-item" routerLink="/project">Valu</a>
-          <a class="collapse-item" routerLink="/project">Nomago</a>
-          <a class="collapse-item" routerLink="/project">Moje kartice</a>
+          <a class="collapse-item" [routerLink]="['/project']">Študentska prehrana</a>
+          <a class="collapse-item" [routerLink]="['/project']">Valu</a>
+          <a class="collapse-item" [routerLink]="['/project']">Nomago</a>
+          <a class="collapse-item" [routerLink]="['/project']">Moje kartice</a>
         </div>
       </div>
     </li>
@@ -72,14 +72,14 @@
     </div>
 
     <li class="nav-item">
-      <a class="nav-link" routerLink="/users">
+      <a class="nav-link" [routerLink]="['/users']">
         <i class="fas fa-fw fa-users"></i>
         <span>Users</span>
       </a>
     </li>
 
     <li class="nav-item">
-      <a class="nav-link" routerLink="/activity-log">
+      <a class="nav-link" [routerLink]="['/activity-log']">
         <i class="fas fa-fw fa-chart-bar"></i>
         <span>Activity Log</span>
       </a>
@@ -155,7 +155,7 @@
             </a>
             <!-- Dropdown - User Information -->
             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-              <a class="dropdown-item" routerLink="/profile">
+              <a class="dropdown-item" [routerLink]="['/profile']">
                 <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                 Profile
               </a>
@@ -200,7 +200,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+        <h5 class="modal-title">Ready to Leave?</h5>
         <button class="close" type="button" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">×</span>
         </button>
@@ -208,7 +208,7 @@
       <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
       <div class="modal-footer">
         <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-        <a class="btn btn-primary" routerLink="/login">Logout</a>
+        <a class="btn btn-primary" [routerLink]="['/login']">Logout</a>
       </div>
     </div>
   </div>
