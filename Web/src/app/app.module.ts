@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
@@ -22,6 +21,7 @@ import { ErrorInterceptor } from './helpers/error.interceptor';
 @NgModule({
   declarations: [
     AppComponent,
+    NavigationComponent,
     DashboardComponent,
     ActivityLogComponent,
     LoginComponent,
@@ -29,8 +29,7 @@ import { ErrorInterceptor } from './helpers/error.interceptor';
     ProjectComponent,
     UserCreateComponent,
     UserEditComponent,
-    UserListComponent,
-    NavigationComponent
+    UserListComponent
   ],
   imports: [
     BrowserModule,
@@ -45,6 +44,6 @@ import { ErrorInterceptor } from './helpers/error.interceptor';
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [ AppComponent ]
 })
 export class AppModule { }

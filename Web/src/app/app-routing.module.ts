@@ -8,24 +8,24 @@ import { UserCreateComponent } from './components/user-create/user-create.compon
 import { UserEditComponent } from './components/user-edit/user-edit.component';
 import { UserListComponent } from './components/user-list/user-list.component';
 import { LoginComponent } from './components/login/login.component';
-import {AuthGuard} from './guards/auth.guard';
+import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
-  { path: 'login', component: LoginComponent, data: { title: 'Login' } },
-  { path: '', component: DashboardComponent, data: { title: 'Dashboard' }, canActivate: [AuthGuard] },
-  { path: 'activity-log', component: ActivityLogComponent, data: { title: 'Activity Log' }, canActivate: [AuthGuard] },
-  { path: 'profile', component: ProfileComponent, data: { title: 'Profile' }, canActivate: [AuthGuard] },
-  { path: 'project', component: ProjectComponent, data: { title: 'Project name' }, canActivate: [AuthGuard] },
-  { path: 'user-create', component: UserCreateComponent, data: { title: 'Create user' }, canActivate: [AuthGuard] },
-  { path: 'user-edit', component: UserEditComponent, data: { title: 'User edit' }, canActivate: [AuthGuard] },
-  { path: 'users', component: UserListComponent, data: { title: 'Users' }, canActivate: [AuthGuard] },
+  { path: 'login', component: LoginComponent },
+  { path: '', component: DashboardComponent, canActivate: [AuthGuard] },
+  { path: 'activity-log', component: ActivityLogComponent, canActivate: [AuthGuard] },
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: 'project', component: ProjectComponent, canActivate: [AuthGuard] },
+  { path: 'user-create', component: UserCreateComponent, canActivate: [AuthGuard] },
+  { path: 'user-edit', component: UserEditComponent, canActivate: [AuthGuard] },
+  { path: 'users', component: UserListComponent, canActivate: [AuthGuard] },
 
   // If path doesn't exist redirect to dashboard.
   { path: '**', redirectTo: '' }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  imports: [ RouterModule.forRoot(routes)],
+  exports: [ RouterModule ]
 })
 export class AppRoutingModule { }

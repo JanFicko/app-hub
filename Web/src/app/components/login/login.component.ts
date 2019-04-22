@@ -22,6 +22,7 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private userService: UserService) {
     this.nav.hide();
+    console.log('login' + nav.visible);
   }
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
@@ -46,7 +47,6 @@ export class LoginComponent implements OnInit {
       .subscribe(
         data => {
           if (data != null) {
-            console.log(this.returnUrl);
             this.router.navigate([this.returnUrl]);
           } else {
             this.loading = false;
