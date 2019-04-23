@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from '@angular/router';
+import {NavbarService} from '../../services/navbar.service';
 
 @Component({
   templateUrl: './project.component.html',
@@ -8,11 +9,12 @@ import {Router} from '@angular/router';
 export class ProjectComponent implements OnInit {
 
   constructor(
+    public nav: NavbarService,
     private router: Router
   ) {
+    console.log('project');
+    this.nav.show();
   }
-
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
 }

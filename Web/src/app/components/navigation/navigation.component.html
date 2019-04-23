@@ -1,3 +1,5 @@
+
+
 <!-- Views with navigation -->
 <div id="wrapper" *ngIf="nav.visible">
 
@@ -172,7 +174,7 @@
       <!-- End of Topbar -->
 
       <!-- Begin Page Content -->
-      <router-outlet></router-outlet>
+      <router-outlet *ngIf="nav.visible"></router-outlet>
       <!-- End of Page Content -->
 
     </div>
@@ -217,6 +219,6 @@
 <!-- Login form view -->
 <div class="bg-gradient-primary background-height-fill" *ngIf="!nav.visible">
   <div class="container">
-    <router-outlet></router-outlet>
+    <router-outlet *ngIf="!nav.visible"></router-outlet>
   </div>
 </div>

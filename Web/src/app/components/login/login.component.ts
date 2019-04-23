@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { NavbarService } from '../../services/navbar.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {UserService} from '../../services/user.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import { first } from 'rxjs/operators';
+import {NavbarService} from '../../services/navbar.service';
 
 @Component({
-  selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -21,8 +20,8 @@ export class LoginComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private userService: UserService) {
+    console.log('login');
     this.nav.hide();
-    console.log('login' + nav.visible);
   }
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
@@ -31,7 +30,7 @@ export class LoginComponent implements OnInit {
     });
     this.userService.logout();
     // Get return url from route parameters or default to '/'
-    this.returnUrl = this.route.snapshot.queryParams.returnUrl || '/';
+    this.returnUrl = this.route.snapshot.queryParams['returnUri'] || '/';
   }
   onSubmit() {
     this.submitted = true;

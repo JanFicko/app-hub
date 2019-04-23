@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -14,7 +14,6 @@ export class UserService {
         'Content-Type': 'application/json' }) };
     return this.http.post<any>(`http://localhost:3000/api/users/login`, { email: email, password: password }, options )
       .pipe(map(response => {
-        // TODO: Save user
         // login successful if there's a jwt token in the response
         if (response.user && response.token) {
           response.user.token = response.token;
