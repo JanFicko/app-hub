@@ -5,6 +5,7 @@ import {FormBuilder} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {first} from 'rxjs/operators';
 import {User} from '../../models/user';
+import {ProjectService} from '../../services/project.service';
 
 @Component({
   selector: 'app-user-edit',
@@ -17,6 +18,7 @@ export class UserEditComponent implements OnInit {
   constructor(
     public nav: NavbarService,
     public userService: UserService,
+    public projectService: ProjectService,
     private formBuilder: FormBuilder,
     private router: Router,
     private route: ActivatedRoute
@@ -45,7 +47,10 @@ export class UserEditComponent implements OnInit {
   }
 
   getProjects() {
-
+    this.projectService
+      .getProjects('all', true)
+      .pipe(first())
+      .subscribe();
   }
 
 }

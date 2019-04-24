@@ -9,7 +9,6 @@ const xmlbuilder = require("xmlbuilder");
 const ProjectController = require('../controllers/projectController');
 
 router.route("/").post(async (req, res, next) => {
-
     const { platform, userId } = req.body;
 
     if (!platform || !userId) {

@@ -17,9 +17,13 @@ export class ProjectService {
 
   constructor( private http: HttpClient ) { }
 
-  getProjects(platform: string) {
+  getProjects(platform: string, getAllProjects: boolean = false) {
     const user: User = JSON.parse(localStorage.getItem('loggedInUser'));
-    return this.http.post<any>(`http://localhost:3000/api/projects`, { platform: platform, userId: user._id } )
+    let body = { platform: platform, userId: user._id };
+    if (getAllProjects) {
+      body = { platform: platform, userId: 'all'};
+    }
+    return this.http.post<any>(`http://localhost:3000/api/projects`, body )
       .pipe(map(response => {
         if (response.code === 0) {
           this.projects = response.projects;

@@ -190,8 +190,7 @@
 
 </div>
 
-<!-- /.container-fluid -->
-<div class="container-fluid">
+<div class="container-fluid" *ngIf="user.userActivity != null">
 
   <!-- Page Heading -->
   <h1 class="h3 mb-2 text-gray-800">Activity log</h1>
@@ -219,12 +218,12 @@
             </tr>
             </tfoot>
             <tbody>
-            <tr *ngFor="let activity of user.userActivity">
-              <td>{{ activity.ip }}</td>
-              <td>{{ activity.time | date: 'dd.MM.yyyy HH:mm:ss' }}</td>
-              <td>{{ activity.activity }}</td>
-              <td>{{ activity.activityType }}</td>
-            </tr>
+              <tr *ngFor="let activity of user.userActivity">
+                <td>{{ activity.ip }}</td>
+                <td>{{ activity.time | date: 'dd.MM.yyyy HH:mm:ss' }}</td>
+                <td>{{ activity.activity }}</td>
+                <td>{{ activity.activityType }}</td>
+              </tr>
             </tbody>
           </table>
         </div>
