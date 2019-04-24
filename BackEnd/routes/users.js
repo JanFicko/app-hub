@@ -3,13 +3,23 @@ const router = express.Router();
 const UserController = require('../controllers/userController');
 
 router.route("/").get(async (req, res, next) => {
-  res.status(200).send(await UserController.getUsers());
+  const token = req.headers.authorization.split(" ")[1];
+  if (token == null) {
+    res.status(406).send();
+  } else {
+    res.status(200).send(await UserController.getUsers(req.headers.authorization.split(" ")[1]));
+  }
+
 });
 
 router.route("/:id").get(async (req, res, next) => {
-  res.status(200).send(
-      await UserController.getUserById(req.params.id)
-  );
+  const token = req.headers.authorization.split(" ")[1];
+  const getUserByTokenResponse = await UserController.getUserByToken(req.headers.authorization.split(" ")[1]);
+  if (getUserByTokenResponse.code === 0 && getUserByTokenResponse.user != null && getUserByTokenResponse.user.isAdmin) {
+    res.send(await UserController.getUserById(req.params.id));
+  } else {
+    res.send(getUserByTokenResponse);
+  }
 });
 
 router.route('/').post(async (req, res, next) => {
@@ -18,11 +28,11 @@ router.route('/').post(async (req, res, next) => {
   if (!email || !password ) {
     res.status(400).send({ code: -1, description: "Data not received" });
   } else {
-    const createUserResponse = await UserController.register(email, password, isAdmin);
-    if(createUserResponse.code === -1){
-      res.status(406).send();
+    const getUserByTokenResponse = await UserController.getUserByToken(req.headers.authorization.split(" ")[1]);
+    if (getUserByTokenResponse.code === 0 && getUserByTokenResponse.user != null && getUserByTokenResponse.user.isAdmin) {
+        res.send(await UserController.register(email, password, isAdmin));
     } else {
-      res.status(201).send();
+      res.send(getUserByTokenResponse);
     }
   }
 });
@@ -33,9 +43,7 @@ router.route('/').put(async (req, res, next) => {
   if (!id) {
     res.status(400).send({ code: -1, description: "Data not received" });
   } else {
-    res.send(
-        await UserController.update(id, password, isAdmin, isBanned, req.ip)
-    );
+    res.send(await UserController.update(id, password, isAdmin, isBanned, req.ip));
   }
 });
 
@@ -45,9 +53,7 @@ router.route('/login').post(async (req, res, next) => {
   if (!email || !password ) {
     res.status(400).send({ code: -1, description: "Data not received" });
   } else {
-    res.send(
-        await UserController.login(email, password, req.ip, device)
-    );
+    res.send(await UserController.login(email, password, req.ip, device));
   }
 });
 

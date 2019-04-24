@@ -16,6 +16,7 @@ class ProjectController {
     }
 
     static getUsersProjects(userId) {
+        console.log(userId);
         return Project.find({ "allowedUserAccess.user_uuid" : userId,  "allowedUserAccess.privilegeType" : [ "Full", "Latest" ]})
             .select(['-downloadPassword', '-jobs'])
             .then((projects) => {

@@ -14,10 +14,10 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: '', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'activity-log', component: ActivityLogComponent, canActivate: [AuthGuard] },
-  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
-  { path: 'project', component: ProjectComponent, canActivate: [AuthGuard] },
+  { path: 'profile/:userId', component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: 'project/:projectId', component: ProjectComponent, canActivate: [AuthGuard] },
   { path: 'user-create', component: UserCreateComponent, canActivate: [AuthGuard] },
-  { path: 'user-edit', component: UserEditComponent, canActivate: [AuthGuard] },
+  { path: 'user-edit/:userId', component: UserEditComponent, canActivate: [AuthGuard] },
   { path: 'users', component: UserListComponent, canActivate: [AuthGuard] },
 
   // If path doesn't exist redirect to dashboard.

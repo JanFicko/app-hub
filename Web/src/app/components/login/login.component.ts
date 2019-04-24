@@ -12,7 +12,6 @@ import {NavbarService} from '../../services/navbar.service';
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   loading = false;
-  submitted = false;
   returnUrl: string;
   constructor(
     public nav: NavbarService,
@@ -20,7 +19,6 @@ export class LoginComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private userService: UserService) {
-    console.log('login');
     this.nav.hide();
   }
   ngOnInit() {
@@ -33,8 +31,6 @@ export class LoginComponent implements OnInit {
     this.returnUrl = this.route.snapshot.queryParams['returnUri'] || '/';
   }
   onSubmit() {
-    this.submitted = true;
-
     // stop here if form is invalid
     if (this.loginForm.invalid) {
       return;

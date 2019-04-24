@@ -1,18 +1,18 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import {NavbarService} from '../../services/navbar.service';
+import { NavbarService } from '../../services/navbar.service';
+import { ProjectService } from '../../services/project.service';
 
 @Component({
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-
   constructor(
     public nav: NavbarService,
+    public projectService: ProjectService,
     private router: Router
   ) {
-    console.log('dashboard');
     this.nav.show();
   }
   ngOnInit() {}

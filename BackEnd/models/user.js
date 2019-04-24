@@ -8,6 +8,7 @@ const UserSchema = new Schema({
     isAdmin: { type: Boolean, default: false },
     isBanned: { type: Boolean, default: false },
     registerTime: { type: Date, default: Date.now },
+    token: { type: String, select: false },
     userActivity: [{
         time: { type: Date, default: Date.now },
         ip: String,

@@ -1,80 +1,58 @@
 <div class="container-fluid">
 
-  <!-- Page Heading -->
   <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
   </div>
 
-  <!-- Content Row -->
-
   <div class="row">
 
-    <!-- Area Chart -->
-    <div class="col-xl-6 col-lg-6">
-      <div class="card shadow mb-4">
-        <!-- Card Header - Dropdown -->
-        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+    <div *ngIf="projectService.androidProjects != null && projectService.androidProjects.length !== 0 && projectService.iosProjects != null && projectService.iosProjects.length !== 0;then content else other_content"></div>
 
+    <ng-template #content>
+      <div class="col-xl-6 col-lg-6" *ngIf="projectService.androidProjects != null && projectService.androidProjects.length !== 0">
+        <div class="card shadow mb-4">
+          <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold">
+              <i class="fab fa-android text-success"></i> Android
+            </h6>
+          </div>
 
-          <h6 class="m-0 font-weight-bold">
-            <i class="fab fa-android text-success"></i> Android
-          </h6>
-
-        </div>
-        <!-- Card Body -->
-        <div class="card-body">
-
-          <ul class="list-group list-group-flush">
-            <a routerLink="/project" class="list-group-item list-group-item-action">
-              <img src="../../../assets/img/logo_icon.png" alt="" width="32" height="32" /> Urbana
-            </a>
-            <a routerLink="/project" class="list-group-item list-group-item-action">
-              <img src="../../../assets/img/logo_icon.png" alt="" width="32" height="32" /> Študentska prehrana
-            </a>
-            <a routerLink="/project" class="list-group-item list-group-item-action">
-              <img src="../../../assets/img/logo_icon.png" alt="" width="32" height="32" /> Valu
-            </a>
-            <a routerLink="/project" class="list-group-item list-group-item-action">
-              <img src="../../../assets/img/logo_icon.png" alt="" width="32" height="32" /> Nomago
-            </a>
-            <a routerLink="/project" class="list-group-item list-group-item-action">
-              <img src="../../../assets/img/logo_icon.png" alt="" width="32" height="32"/> Moje kartice
-            </a>
-          </ul>
+          <div class="card-body">
+            <ul class="list-group list-group-flush">
+              <a [routerLink]="['/project', project.projectId]" class="list-group-item list-group-item-action" *ngFor="let project of projectService.androidProjects">
+                {{ project.name }}
+              </a>
+            </ul>
+          </div>
 
         </div>
       </div>
-    </div>
 
-    <div class="col-xl-6 col-lg-6">
-      <div class="card shadow mb-4">
-        <!-- Card Header - Dropdown -->
-        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-          <h6 class="m-0 font-weight-bold">
-            <i class="fab fa-apple text-dark"></i> iOS
-          </h6>
-        </div>
-        <!-- Card Body -->
-        <div class="card-body">
+      <div class="col-xl-6 col-lg-6" *ngIf="projectService.iosProjects != null && projectService.iosProjects.length !== 0">
+        <div class="card shadow mb-4">
+          <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold">
+              <i class="fab fa-apple text-dark"></i> iOS
+            </h6>
+          </div>
 
-          <ul class="list-group list-group-flush">
-            <a routerLink="/project" class="list-group-item list-group-item-action">
-              <img src="../../../assets/img/logo_icon.png" alt="" width="32" height="32" /> Študentska prehrana
-            </a>
-            <a routerLink="/project" class="list-group-item list-group-item-action">
-              <img src="../../../assets/img/logo_icon.png" alt="" width="32" height="32" /> Valu
-            </a>
-            <a routerLink="/project" class="list-group-item list-group-item-action">
-              <img src="../../../assets/img/logo_icon.png" alt="" width="32" height="32" /> Nomago
-            </a>
-            <a routerLink="/project" class="list-group-item list-group-item-action">
-              <img src="../../../assets/img/logo_icon.png" alt="" width="32" height="32" /> Moje kartice
-            </a>
-          </ul>
+          <div class="card-body">
+            <ul class="list-group list-group-flush">
+              <a [routerLink]="['/project', project.projectId]" class="list-group-item list-group-item-action" *ngFor="let project of projectService.iosProjects">
+               {{ project.name }}
+              </a>
+            </ul>
+          </div>
 
         </div>
       </div>
-    </div>
+    </ng-template>
+
+    <ng-template #other_content>
+      <div class="col-xl-6 col-lg-6">
+        No projects to show
+      </div>
+    </ng-template>
 
   </div>
 

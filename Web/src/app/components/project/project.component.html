@@ -1,160 +1,30 @@
-<div class="container-fluid">
+<div class="container-fluid" *ngIf="project != null">
 
   <!-- Page Heading -->
-  <h1 class="h3 mb-2 text-gray-800"><i class="fab fa-android text-success"></i> | Urbana</h1>
+  <h1 class="h3 mb-2 text-gray-800">
+    <i class="fab fa-android text-success" *ngIf="project.platform === 'android'"></i>
+    <i class="fab fa-apple text-dark" *ngIf="project.platform === 'ios'"></i> | {{ project.name }}</h1>
 
 
-  <div class="col-xl-3 col-lg-5 col-md-12">
+  <div class="col-xl-4 col-lg-6 col-md-12">
 
-    <ul class="list-group">
-      <a href="#" class="list-group-item list-group-item-action">
+    <ul class="list-group" *ngIf="project.jobs.length !== 0">
+      <a href="#" class="list-group-item list-group-item-action" *ngFor="let job of project.jobs">
         <div class="d-flex justify-content-between align-items-center">
-          <span>v1.1.2  <span class="badge badge-dark">10.03.2019 12:32</span></span>
+          <span>{{ job.title }}  <span class="badge badge-dark">{{ job.finishTime | date: 'dd.MM.yyyy HH:mm:ss' }}</span></span>
           <i class="fas fa-download"></i>
         </div>
-        <hr />
-        Release notes:<br />
-        - fixed bugs
-      </a>
-      <a href="#" class="list-group-item list-group-item-action">
-        <div class="d-flex justify-content-between align-items-center">
-          <span>v1.1.0  <span class="badge badge-dark">02.02.2019 10:44</span></span>
-          <i class="fas fa-download"></i>
-        </div>
-        <hr />
-        Release notes:<br />
-        - fixed bugs
-      </a>
-      <a href="#" class="list-group-item list-group-item-action">
-        <div class="d-flex justify-content-between align-items-center">
-          <span>v0.0.9  <span class="badge badge-dark">20.12.2018 16:32</span></span>
-          <i class="fas fa-download"></i>
-        </div>
-        <hr />
-        Release notes:<br />
-        - fixed bugs
-      </a>
-      <a href="#" class="list-group-item list-group-item-action">
-        <div class="d-flex justify-content-between align-items-center">
-          <span>No version  <span class="badge badge-dark">20.12.2018 16:32</span></span>
-          <i class="fas fa-download"></i>
-        </div>
-        <hr />
-        Release notes:<br />
-        - fixed bugs
-      </a>
-      <a href="#" class="list-group-item list-group-item-action">
-        <div class="d-flex justify-content-between align-items-center">
-          <span>No version  <span class="badge badge-dark">20.12.2018 16:15</span></span>
-          <i class="fas fa-download"></i>
-        </div>
-        <hr />
-        Release notes:<br />
-        - fixed bugs
-      </a>
-      <a href="#" class="list-group-item list-group-item-action">
-        <div class="d-flex justify-content-between align-items-center">
-          <span>v0.0.5  <span class="badge badge-dark">12.10.2018 14:22</span></span>
-          <i class="fas fa-download"></i>
-        </div>
-        <hr />
-        Release notes:<br />
-        - fixed bugs
-      </a>
-      <a href="#" class="list-group-item list-group-item-action">
-        <div class="d-flex justify-content-between align-items-center">
-          <span>v0.0.5  <span class="badge badge-dark">12.10.2018 14:22</span></span>
-          <i class="fas fa-download"></i>
-        </div>
-        <hr />
-        Release notes:<br />
-        - fixed bugs
-      </a>
-      <a href="#" class="list-group-item list-group-item-action">
-        <div class="d-flex justify-content-between align-items-center">
-          <span>v0.0.5  <span class="badge badge-dark">12.10.2018 14:22</span></span>
-          <i class="fas fa-download"></i>
+        <div *ngIf="job.changeLog != null">
+          <hr />
+          {{ job.changeLog }}
         </div>
       </a>
-      <a href="#" class="list-group-item list-group-item-action">
-        <div class="d-flex justify-content-between align-items-center">
-          <span>v0.0.5  <span class="badge badge-dark">12.10.2018 14:22</span></span>
-          <i class="fas fa-download"></i>
-        </div>
-      </a>
-      <a href="#" class="list-group-item list-group-item-action">
-        <div class="d-flex justify-content-between align-items-center">
-          <span>v0.0.5  <span class="badge badge-dark">12.10.2018 14:22</span></span>
-          <i class="fas fa-download"></i>
-        </div>
-      </a>
-      <a href="#" class="list-group-item list-group-item-action">
-        <div class="d-flex justify-content-between align-items-center">
-          <span>v0.0.5  <span class="badge badge-dark">12.10.2018 14:22</span></span>
-          <i class="fas fa-download"></i>
-        </div>
-      </a>
-      <a href="#" class="list-group-item list-group-item-action">
-        <div class="d-flex justify-content-between align-items-center">
-          <span>v0.0.5  <span class="badge badge-dark">12.10.2018 14:22</span></span>
-          <i class="fas fa-download"></i>
-        </div>
-      </a>
-      <a href="#" class="list-group-item list-group-item-action">
-        <div class="d-flex justify-content-between align-items-center">
-          <span>v0.0.5  <span class="badge badge-dark">12.10.2018 14:22</span></span>
-          <i class="fas fa-download"></i>
-        </div>
-      </a>
-      <a href="#" class="list-group-item list-group-item-action">
-        <div class="d-flex justify-content-between align-items-center">
-          <span>v0.0.5  <span class="badge badge-dark">12.10.2018 14:22</span></span>
-          <i class="fas fa-download"></i>
-        </div>
-      </a>
-      <a href="#" class="list-group-item list-group-item-action">
-        <div class="d-flex justify-content-between align-items-center">
-          <span>v0.0.5  <span class="badge badge-dark">12.10.2018 14:22</span></span>
-          <i class="fas fa-download"></i>
-        </div>
-      </a>
-      <a href="#" class="list-group-item list-group-item-action">
-        <div class="d-flex justify-content-between align-items-center">
-          <span>v0.0.5  <span class="badge badge-dark">12.10.2018 14:22</span></span>
-          <i class="fas fa-download"></i>
-        </div>
-      </a>
-      <a href="#" class="list-group-item list-group-item-action">
-        <div class="d-flex justify-content-between align-items-center">
-          <span>v0.0.5  <span class="badge badge-dark">12.10.2018 14:22</span></span>
-          <i class="fas fa-download"></i>
-        </div>
-      </a>
-      <a href="#" class="list-group-item list-group-item-action">
-        <div class="d-flex justify-content-between align-items-center">
-          <span>v0.0.5  <span class="badge badge-dark">12.10.2018 14:22</span></span>
-          <i class="fas fa-download"></i>
-        </div>
-      </a>
-      <a href="#" class="list-group-item list-group-item-action">
-        <div class="d-flex justify-content-between align-items-center">
-          <span>v0.0.5  <span class="badge badge-dark">12.10.2018 14:22</span></span>
-          <i class="fas fa-download"></i>
-        </div>
-      </a>
-      <a href="#" class="list-group-item list-group-item-action">
-        <div class="d-flex justify-content-between align-items-center">
-          <span>v0.0.5  <span class="badge badge-dark">12.10.2018 14:22</span></span>
-          <i class="fas fa-download"></i>
-        </div>
-      </a>
-      <a href="#" class="list-group-item list-group-item-action">
-        <div class="d-flex justify-content-between align-items-center">
-          <span>v0.0.5  <span class="badge badge-dark">12.10.2018 14:22</span></span>
-          <i class="fas fa-download"></i>
-        </div>
-      </a>
+
     </ul>
+
+    <div *ngIf="project.jobs.length === 0">
+      No jobs to show
+    </div>
 
   </div>
 
