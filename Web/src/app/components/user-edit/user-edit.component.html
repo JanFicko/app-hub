@@ -6,15 +6,15 @@
   <div class="col-xl-6 col-lg-9 col-md-12">
     <div class="card shadow mb-4">
       <div class="card-body">
-        <form>
+        <form [formGroup]="editUserForm" (ngSubmit)="onSubmit()" >
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="adminCheck" [attr.checked]="user.isAdmin">
+            <input class="form-check-input" formControlName="isAdmin" type="checkbox" id="adminCheck" [checked]="user.isAdmin">
             <label class="form-check-label" for="adminCheck">
               Administrator
             </label>
           </div>
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="banCheck" [attr.checked]="user.isBanned">
+            <input class="form-check-input" formControlName="isBanned" type="checkbox" id="banCheck" [checked]="user.isBanned">
             <label class="form-check-label" for="banCheck">
               Ban
             </label>
@@ -47,123 +47,28 @@
               <tr>
                 <td>
 
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="64check" checked>
-                    <label class="form-check-label" for="64check">
-                      Urbana
+                  <div class="form-check" *ngFor="let androidProject of androidProjects">
+                    <input class="form-check-input" type="checkbox" value="" [attr.formControlName]="'check_'+androidProject.projectId" [checked]="androidProject.hasPermission" (click)="toggleCheckbox('check_'+androidProject.projectId)">
+                    <label class="form-check-label" [attr.for]="'check_'+androidProject.projectId">
+                      {{ androidProject.name }}
                       <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="64check_full" checked>
-                        <label class="form-check-label" for="64check_full">
-                          All versions
-                        </label>
+                        <input class="form-check-input" type="checkbox" value="" [attr.formControlName]="'checkfull_'+androidProject.projectId" [checked]="androidProject.hasFullAccess" (click)="toggleCheckbox('checkfull_'+androidProject.projectId)">
+                        <label class="form-check-label" [attr.for]="'checkfull_'+androidProject.projectId">All versions</label>
                       </div>
                     </label>
                   </div>
 
-
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="65check" checked>
-                    <label class="form-check-label" for="65check">
-                      Študentska prehrana
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="65check_full" checked>
-                        <label class="form-check-label" for="65check_full">
-                          All versions
-                        </label>
-                      </div>
-                    </label>
-                  </div>
-
-                  <div class="form-check">
-                    <input class="form-check-inpuindext" type="checkbox" value="" id="66check" checked>
-                    <label class="form-check-label" for="66check">
-                      Valu
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="66check_full">
-                        <label class="form-check-label" for="66check_full">
-                          All versions
-                        </label>
-                      </div>
-                    </label>
-                  </div>
-
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="67check" checked>
-                    <label class="form-check-label" for="67check">
-                      Nomago
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="67check_full">
-                        <label class="form-check-label" for="67check_full">
-                          All versions
-                        </label>
-                      </div>
-                    </label>
-                  </div>
-
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="68check" checked>
-                    <label class="form-check-label" for="68check">
-                      Moje kartice
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="68check_full">
-                        <label class="form-check-label" for="68check_full">
-                          All versions
-                        </label>
-                      </div>
-                    </label>
-                  </div>
 
                 </td>
                 <td>
 
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="75check" checked>
-                    <label class="form-check-label" for="75check">
-                      Študentska prehrana
+                  <div class="form-check" *ngFor="let iosProject of iosProjects">
+                    <input class="form-check-input" type="checkbox" value="" [attr.formControlName]="'check_'+iosProject.projectId" [checked]="iosProject.hasPermission" (click)="toggleCheckbox('check_'+iosProject.projectId)">
+                    <label class="form-check-label" [attr.for]="'check_'+iosProject.projectId">
+                      {{ iosProject.name }}
                       <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="75check_full">
-                        <label class="form-check-label" for="75check_full">
-                          All versions
-                        </label>
-                      </div>
-                    </label>
-                  </div>
-
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="76check" checked>
-                    <label class="form-check-label" for="76check">
-                      Valu
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="76check_full">
-                        <label class="form-check-label" for="76check_full">
-                          All versions
-                        </label>
-                      </div>
-                    </label>
-                  </div>
-
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="77check" checked>
-                    <label class="form-check-label" for="77check">
-                      Nomago
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="77check_full">
-                        <label class="form-check-label" for="77check_full">
-                          All versions
-                        </label>
-                      </div>
-                    </label>
-                  </div>
-
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="78check" checked>
-                    <label class="form-check-label" for="78check">
-                      Moje kartice
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="78check_full">
-                        <label class="form-check-label" for="78check_full">
-                          All versions
-                        </label>
+                        <input class="form-check-input" type="checkbox" value="" [attr.formControlName]="'checkfull_'+iosProject.projectId" [checked]="iosProject.hasFullAccess" (click)="toggleCheckbox('checkfull_'+iosProject.projectId)">
+                        <label class="form-check-label" [attr.for]="'checkfull_'+iosProject.projectId">All versions</label>
                       </div>
                     </label>
                   </div>
@@ -174,13 +79,11 @@
             </table>
           </div>
 
-
-
           <div class="form-group">
-            <input type="text" class="form-control" id="password" placeholder="Enter new password for user">
+            <input type="text" formControlName="password" class="form-control" id="newPassword" placeholder="Enter new password for user">
           </div>
 
-          <button type="submit" class="btn btn-primary btn-lg btn-block">Update</button>
+          <button [disabled]="loading" class="btn btn-primary btn-lg btn-block">Update</button>
         </form>
       </div>
 
@@ -190,15 +93,13 @@
 
 </div>
 
-<div class="container-fluid" *ngIf="user.userActivity != null">
+<div class="container-fluid" *ngIf="user.userActivity.length !== 0">
 
-  <!-- Page Heading -->
   <h1 class="h3 mb-2 text-gray-800">Activity log</h1>
 
   <div class="col-xl-6 col-lg-9 col-md-12">
     <div class="card shadow mb-4">
       <div class="card-body">
-
         <div class="table-responsive">
           <table class="table table-hover table-bordered" width="100%" cellspacing="0">
             <thead>
@@ -228,10 +129,7 @@
           </table>
         </div>
       </div>
-
-
     </div>
-
   </div>
 
 </div>

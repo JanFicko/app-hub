@@ -42,8 +42,8 @@ export class UserCreateComponent implements OnInit {
     this.userService.createUser(
       this.createUserForm.controls.email.value,
       this.createUserForm.controls.password.value,
-      this.createUserForm.controls.isAdmin.value
-    ).pipe(first())
+      this.createUserForm.controls.isAdmin.value)
+      .pipe(first())
       .subscribe(
         data => {
           if (data != null) {

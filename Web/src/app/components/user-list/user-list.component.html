@@ -47,7 +47,7 @@
             <td>{{ user.registerTime | date: 'dd.MM.yyyy HH:mm:ss' }}</td>
             <td>
               <div *ngIf="user.userActivity.length !== 0;then time_content else time_otherContent"></div>
-              <ng-template #time_content>{{ user.userActivity[0].time | date: 'dd.MM.yyyy HH:mm:ss' }}</ng-template>
+              <ng-template #time_content>{{ user.userActivity[user.userActivity.length - 1].time | date: 'dd.MM.yyyy HH:mm:ss' }}</ng-template>
               <ng-template #time_otherContent>/</ng-template>
             </td>
           </tr>

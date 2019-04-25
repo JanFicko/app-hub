@@ -96,12 +96,12 @@ router.route("/job/:jobId").put(async (req, res, next) => {
 });
 
 router.route("/userAccess").post(async (req, res, next) => {
-    const { userId, projectId, privilegeType } = req.body;
+    const { userId, projects } = req.body;
 
-    if (!userId || !projectId || !privilegeType) {
+    if (!userId || !projects ) {
         res.status(400).send({ code: -1, description: "Data not received" });
     } else {
-        const createProjectResponse = await ProjectController.updateProjectAccess(projectId, userId, privilegeType);
+        const createProjectResponse = await ProjectController.updateProjectAccess(userId, projects);
         res.status(200).send(createProjectResponse)
     }
 });

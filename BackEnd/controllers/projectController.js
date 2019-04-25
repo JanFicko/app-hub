@@ -40,38 +40,47 @@ class ProjectController {
             });
     }
 
-    static async updateProjectAccess(projectId, userId, privilegeType) {
-        return await Project.findOne({ _id: projectId })
-            .then( async (project) => {
+    static async updateProjectAccess(userId, projects) {
 
-                let privilegeTypes = Project.schema.path('allowedUserAccess.0.privilegeType').enumValues;
+        let errors = [];
+        for (let j=0; j < projects.length; j++) {
+            await Project.findOne({ projectId: projects[j].projectId })
+                .then( async (project) => {
 
-                let privilege = privilegeTypes[0];
-                if (privilegeType === privilegeTypes[1]) {
-                    privilege = privilegeTypes[1];
-                }
+                    let privilegeTypes = Project.schema.path('allowedUserAccess.0.privilegeType').enumValues;
 
-                for (let i=0; i < project.allowedUserAccess.length; i++) {
-                    if (project.allowedUserAccess[i].user_uuid === userId) {
-                        project.allowedUserAccess.splice(i, 1);
-                        break;
+                    let privilege = privilegeTypes[0];
+                    if (projects[j].privilegeType === privilegeTypes[1]) {
+                        privilege = privilegeTypes[1];
                     }
-                }
 
-                if (privilegeType !== "None") {
-                    project.allowedUserAccess.push({
-                        user_uuid: userId,
-                        privilegeType: privilege
-                    });
-                }
+                    for (let i=0; i < project.allowedUserAccess.length; i++) {
+                        if (project.allowedUserAccess[i].user_uuid === userId) {
+                            project.allowedUserAccess.splice(i, 1);
+                            break;
+                        }
+                    }
 
-                await project.save();
+                    if (projects[j].privilegeType !== "None") {
+                        project.allowedUserAccess.push({
+                            user_uuid: userId,
+                            privilegeType: privilege
+                        });
+                    }
 
-                return { code: 0, description: "Data updated" };
-            })
-            .catch((err) => {
-                return { code: -1, description: "Project not found" }
-            });
+                    await project.save();
+                })
+                .catch((err) => {
+                    console.log(err);
+                    errors.push(projects.projectId);
+                });
+        }
+
+        if (errors.length === 0) {
+            return { code: 0 };
+        } else {
+            return { code: 0, description: errors };
+        }
     }
 
     static async updateProject(projectId, downloadPassword, bundleIdentifier) {

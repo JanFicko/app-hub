@@ -117,7 +117,11 @@ class UserController {
                 delete user['password'];
 
                 if (isMatch) {
-                    return { code: 0, token: token, user: user }
+                    if (!user.isBanned) {
+                        return { code: 0, token: token, user: user }
+                    } else {
+                        return { code: -1, description: "Rejected access" }
+                    }
                 } else {
                     return { code: -1, description: "Wrong password" }
                 }

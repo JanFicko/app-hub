@@ -1,5 +1,5 @@
 export class UserAccess {
   _id: string;
-  userUuid: string;
+  user_uuid: string;
   privilegeType: string;
 }

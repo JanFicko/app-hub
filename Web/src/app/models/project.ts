@@ -10,5 +10,8 @@ export class Project {
   platform: string;
   icon: string;
   jobs: Job[] = [];
-  allowedUserAccess: UserAccess[];
+  allowedUserAccess: UserAccess[] = [];
+  // Helper attributes
+  hasPermission: boolean;
+  hasFullAccess: boolean;
 }
