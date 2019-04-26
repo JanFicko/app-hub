@@ -34,7 +34,7 @@ class UserController {
     }
 
     static getUserByToken(token) {
-        return User.findOne({ token: token}).select('+token')
+        return User.findOne({ "tokens.token": token}).select('+token')
             .then((user) => {
                 if (user != null) {
                     return { code: 0, user: user };
@@ -60,8 +60,8 @@ class UserController {
         })
     }
 
-    static update(id, password, isAdmin, isBanned, ip) {
-        return User.findOne({ _id: id})
+    static update(userId, password, isAdmin, isBanned, ip) {
+        return User.findOne({ _id: userId})
             .then((user) => {
 
                 if (password != null){
@@ -104,7 +104,9 @@ class UserController {
                 const token = jwt.sign({ sub: user._id }, config.JWT_SECRET);
                 const isMatch = await user.comparePassword(password);
 
-                user.token = token;
+                user.tokens.push({
+                    token: token
+                });
                 user.userActivity.push({
                     ip: ip,
                     activity: "login",

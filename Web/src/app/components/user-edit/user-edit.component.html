@@ -8,13 +8,13 @@
       <div class="card-body">
         <form [formGroup]="editUserForm" (ngSubmit)="onSubmit()" >
           <div class="form-check">
-            <input class="form-check-input" formControlName="isAdmin" type="checkbox" id="adminCheck" [checked]="user.isAdmin">
+            <input class="form-check-input" formControlName="isAdmin" type="checkbox" id="adminCheck" [checked]="user.isAdmin" (click)="toggleCheckbox('isAdmin')">
             <label class="form-check-label" for="adminCheck">
               Administrator
             </label>
           </div>
           <div class="form-check">
-            <input class="form-check-input" formControlName="isBanned" type="checkbox" id="banCheck" [checked]="user.isBanned">
+            <input class="form-check-input" formControlName="isBanned" type="checkbox" id="banCheck" [checked]="user.isBanned" (click)="toggleCheckbox('isBanned')">
             <label class="form-check-label" for="banCheck">
               Ban
             </label>

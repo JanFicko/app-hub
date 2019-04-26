@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NavbarService } from '../../services/navbar.service';
 import { ProjectService } from '../../services/project.service';
+import {first} from 'rxjs/operators';
 
 @Component({
   templateUrl: './dashboard.component.html',

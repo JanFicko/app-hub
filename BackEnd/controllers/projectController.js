@@ -71,8 +71,7 @@ class ProjectController {
                     await project.save();
                 })
                 .catch((err) => {
-                    console.log(err);
-                    errors.push(projects.projectId);
+                    errors.push(projects[j].projectId);
                 });
         }
 
@@ -83,7 +82,8 @@ class ProjectController {
         }
     }
 
-    static async updateProject(projectId, downloadPassword, bundleIdentifier) {
+    static async updateProject(projectId, packageName, downloadPassword) {
+
         return await Project.findOne({ projectId: projectId })
             .then( async (project) => {
 
@@ -94,9 +94,9 @@ class ProjectController {
                     updated = true;
                 }
 
-                if (bundleIdentifier != null) {
+                if (packageName != null) {
                     updated = true;
-                    project.package = bundleIdentifier;
+                    project.packageName = packageName;
                 }
 
                 if (updated) {
@@ -113,7 +113,7 @@ class ProjectController {
             });
     }
 
-    static async updateJob(jobId, changeLog, version) {
+    static async updateJob(jobId, version, changeLog) {
         return await Project.find()
             .where("jobs.jobId")
             .in([jobId])
@@ -122,18 +122,26 @@ class ProjectController {
                 for (let i = 0; i < project[0].jobs.length; i++) {
 
                     if (project[0].jobs[i].jobId == jobId) {
+                        let updated = false;
 
                         if (changeLog != null) {
+                            updated = true;
                             project[0].jobs[i].changeLog = changeLog;
                         }
 
                         if (version != null) {
+                            updated = true;
                             project[0].jobs[i].title = version;
                         }
 
-                        await project[0].save();
+                        if (updated) {
+                            await project[0].save();
 
-                        return { code: 0, description: "Data updated" }
+                            return { code: 0, description: "Data updated" }
+                        } else {
+                            return { code: -1, description: "Data not updated" }
+                        }
+
                     }
                 }
 
@@ -194,20 +202,6 @@ class ProjectController {
     }
 
     static async addProjects(projects, platform) {
-        let allowedUsers = [];
-        let users = await User.find();
-
-        let privilegeTypes = Project.schema.path('allowedUserAccess.0.privilegeType').enumValues;
-
-        for (let i = 0; i < users.length; i++) {
-            if (users[i].isAdmin === true) {
-                allowedUsers.push({
-                    user_uuid: users[i]._id,
-                    privilegeType: privilegeTypes[0]
-                })
-            }
-        }
-
         for (let i = 0; i < projects.length; i++) {
             if (platform === "android" || platform === "ios" || platform === "all" && (projects[i].namespace.path === "android" || projects[i].namespace.path === "ios")) {
 
@@ -218,12 +212,10 @@ class ProjectController {
                         name: projects[i].name,
                         path: projects[i].path,
                         platform: projects[i].namespace.path,
-                        icon: projects[i].avatar_url,
-                        allowedUserAccess: allowedUsers
+                        icon: projects[i].avatar_url
                     },
                     { upsert: true },
                     null
-
                 )
             }
         }

@@ -4,6 +4,8 @@ import { UserService } from '../../services/user.service';
 import {NavbarService} from '../../services/navbar.service';
 import {ProjectService} from '../../services/project.service';
 import {first} from 'rxjs/operators';
+import {Project} from '../../models/project';
+import {User} from '../../models/user';
 
 @Component({
   selector: 'app-navigation',

@@ -36,9 +36,9 @@ export class UserEditComponent implements OnInit {
 
   ngOnInit() {
     this.editUserForm = this.formBuilder.group({
-      isAdmin: new FormControl(),
-      isBanned: new FormControl(),
-      password: new FormControl()
+      isAdmin: [],
+      isBanned: [],
+      password: []
     });
     this.route.params.subscribe(
       params => {
@@ -48,15 +48,10 @@ export class UserEditComponent implements OnInit {
     );
   }
   onSubmit() {
+    this.formConfig['password'] = this.editUserForm.controls.password.value;
     this.editUserForm = this.formBuilder.group(this.formConfig);
     this.extractCheckboxes(this.editUserForm.controls);
-    this.projectService.updateProjectAccessPermissions(
-      this.user._id,
-      this.updateUserRequest)
-      .pipe(first())
-      .subscribe(response => {
-        window.location.reload();
-      });
+    this.updateUser();
   }
   extractCheckboxes(controls) {
     Object.keys(this.formConfig).forEach(key => {
@@ -82,6 +77,24 @@ export class UserEditComponent implements OnInit {
       }
     });
   }
+  updateUser() {
+    this.userService.updateUser(
+      this.user._id,
+      this.editUserForm.controls.isAdmin.value,
+      this.editUserForm.controls.isBanned.value,
+      this.editUserForm.controls.password.value
+    )
+      .pipe(first())
+      .subscribe(response => {
+        this.projectService.updateProjectAccessPermissions(
+          this.user._id,
+          this.updateUserRequest)
+          .pipe(first())
+          .subscribe(() => {
+            window.location.reload();
+          });
+      });
+  }
   getUser(userId: string) {
     this.userService.getUser(userId)
       .pipe(first())
@@ -97,9 +110,10 @@ export class UserEditComponent implements OnInit {
   }
   getProjects() {
     this.projectService
-      .getAllProjects('all')
+      .getAllProjects()
       .pipe(first())
       .subscribe(projects => {
+        console.log(projects);
         this.projects = projects;
         for (const project of projects) {
           project.hasPermission = this.checkIfUserHasPermissionForProject(project.projectId);

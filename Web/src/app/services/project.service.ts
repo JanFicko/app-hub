@@ -22,6 +22,9 @@ export class ProjectService {
     return this.http.post<any>(`http://localhost:3000/api/projects`, { platform: platform, userId: user._id } )
       .pipe(map(response => {
         if (response.code === 0) {
+          this.projects = [];
+          this.androidProjects  = [];
+          this.iosProjects = [];
           this.projects = response.projects;
           for (const project of this.projects) {
             if (project.platform === 'android') {
@@ -33,8 +36,8 @@ export class ProjectService {
         }
       }));
   }
-  getAllProjects(platform: string) {
-    return this.http.post<any>(`http://localhost:3000/api/projects`, { platform: platform, userId: 'all'} )
+  getAllProjects() {
+    return this.http.get<any>(`http://localhost:3000/api/projects/allProjects` )
       .pipe(map(response => {
         if (response.code === 0) {
           return response.projects;
@@ -55,10 +58,39 @@ export class ProjectService {
         }
       }));
   }
+  updateProject(projectId, packageName) {
+    return this.http.put<any>(`http://localhost:3000/api/projects/${projectId}`,
+      {packageName: packageName, downloadPassword: null }
+      ).pipe(map(response => {
+        return response;
+      }));
+  }
+  updateJob(jobId, version, changeLog) {
+    return this.http.put<any>(`http://localhost:3000/api/projects/job/${jobId}`, { version: version, changeLog: changeLog } )
+      .pipe(map(response => {
+        return response;
+      }));
+  }
   updateProjectAccessPermissions(userId: string, projects) {
     return this.http.post<any>(`http://localhost:3000/api/projects/userAccess`, { userId: userId, projects: projects } )
       .pipe(map(response => {
         return response.code === 0;
+      }));
+  }
+  getArtifacts(jobId: number) {
+    return this.http.post<any>(`http://localhost:3000/api/projects/androidArtifacts`, { jobId: jobId } )
+      .pipe(map(response => {
+        if (response.code === 0) {
+          return response.outputs;
+        } else {
+          return null;
+        }
+      }));
+  }
+  downloadArtifact(jobId: number, userId: string, artifactName: string) {
+    return this.http.get<any>(`http://localhost:3000/api/projects/download/${jobId}/${userId}/${artifactName}` )
+      .pipe(map(artifact => {
+        return artifact;
       }));
   }
 }

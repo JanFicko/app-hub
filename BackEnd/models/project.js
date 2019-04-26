@@ -5,7 +5,7 @@ const config = require('../config');
 const ProjectSchema = new Schema({
     projectId: { type: Number, unique: true, required: true  },
     name: { type: String, required: true  },
-    bundleIdentifier: { type: String },
+    packageName: { type: String, default: null },
     path: { type: String, required: true  },
     platform: { type: String, required: true  },
     icon: String,

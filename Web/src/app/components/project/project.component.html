@@ -1,25 +1,27 @@
-<div class="container-fluid" *ngIf="project != null">
+<div class="container-fluid">
 
   <!-- Page Heading -->
   <h1 class="h3 mb-2 text-gray-800">
     <i class="fab fa-android text-success" *ngIf="project.platform === 'android'"></i>
-    <i class="fab fa-apple text-dark" *ngIf="project.platform === 'ios'"></i> | {{ project.name }}</h1>
+    <a href="" data-toggle="modal" data-target="#editProjectModal"><i class="fab fa-apple text-dark" *ngIf="project.platform === 'ios'"></i></a>
+    | {{ project.name }}
+  </h1>
 
 
   <div class="col-xl-4 col-lg-6 col-md-12">
 
     <ul class="list-group" *ngIf="project.jobs.length !== 0">
-      <a href="#" class="list-group-item list-group-item-action" *ngFor="let job of project.jobs">
+      <li class="list-group-item" *ngFor="let job of project.jobs">
         <div class="d-flex justify-content-between align-items-center">
           <span>{{ job.title }}  <span class="badge badge-dark">{{ job.finishTime | date: 'dd.MM.yyyy HH:mm:ss' }}</span></span>
-          <i class="fas fa-download"></i>
+          <a href="" (click)="getArtifacts(job.jobId)" data-toggle="modal" data-target="#getArtifactsModal"><i class="fas fa-download"></i></a>
+          <a href="" *ngIf="this.userService.getLoggedInUser().isAdmin" (click)="setJobId(job.jobId)" data-toggle="modal" data-target="#editJobModal"><i class="fas fa-edit"></i></a>
         </div>
         <div *ngIf="job.changeLog != null">
           <hr />
           {{ job.changeLog }}
         </div>
-      </a>
-
+      </li>
     </ul>
 
     <div *ngIf="project.jobs.length === 0">
@@ -28,4 +30,94 @@
 
   </div>
 
+</div>
+
+<!-- Modal for updating project -->
+<div class="modal fade" id="editProjectModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+
+    <form [formGroup]="updateProjectForm" (ngSubmit)="onSubmitProjectUpdate()">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Update project</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <input type="text" formControlName="packageName" class="form-control form-control-user" placeholder="com.margento.example" />
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button [disabled]="loading" class="btn btn-primary btn-user btn-block">Update</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal for updating single job -->
+<div class="modal fade" id="editJobModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+
+    <form [formGroup]="updateJobForm" (ngSubmit)="onSubmitJobUpdate()">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Update job</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <input type="text" formControlName="version" class="form-control form-control-user" placeholder="Version (e.g. v1.2.3)" />
+          </div>
+          <div class="form-group">
+            <textarea rows="3" formControlName="changeLog" class="form-control form-control-user"  placeholder="Change log"></textarea>
+          </div>
+
+
+        </div>
+        <div class="modal-footer">
+          <button [disabled]="loading" class="btn btn-primary btn-user btn-block">Update</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal for showing artifacts -->
+<div class="modal fade" id="getArtifactsModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Download file</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+          <ul class="list-group" *ngIf="artifacts.length !== 0">
+            <li class="list-group-item list-group-item-action" *ngFor="let artifact of artifacts">
+              <div class="d-flex justify-content-between align-items-center">
+                <span>{{ artifact }}  </span>
+                <a (click)="downloadArtifact(artifact)"><i class="fas fa-download text-primary"></i></a>
+              </div>
+            </li>
+          </ul>
+
+          <div *ngIf="artifacts.length === 0">
+            No files to show
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+  </div>
 </div>

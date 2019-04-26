@@ -5,7 +5,7 @@ export class Project {
   _id: string;
   projectId: number;
   name: string;
-  bundleIdentifier: string;
+  packageName: string;
   path: string;
   platform: string;
   icon: string;

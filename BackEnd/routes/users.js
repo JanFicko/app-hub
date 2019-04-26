@@ -13,9 +13,9 @@ router.route("/").get(async (req, res, next) => {
 });
 
 router.route("/:id").get(async (req, res, next) => {
-  const token = req.headers.authorization.split(" ")[1];
   const getUserByTokenResponse = await UserController.getUserByToken(req.headers.authorization.split(" ")[1]);
-  if (getUserByTokenResponse.code === 0 && getUserByTokenResponse.user != null && getUserByTokenResponse.user.isAdmin) {
+  if ((getUserByTokenResponse.code === 0 && getUserByTokenResponse.user != null && getUserByTokenResponse.user.isAdmin)
+      || getUserByTokenResponse.user != null && req.params.id === getUserByTokenResponse.user._id) {
     res.send(await UserController.getUserById(req.params.id));
   } else {
     res.send(getUserByTokenResponse);
@@ -38,12 +38,12 @@ router.route('/').post(async (req, res, next) => {
 });
 
 router.route('/').put(async (req, res, next) => {
-  const { id, password, isAdmin, isBanned } = req.body;
+  const { userId, password, isAdmin, isBanned } = req.body;
 
-  if (!id) {
+  if (!userId) {
     res.status(400).send({ code: -1, description: "Data not received" });
   } else {
-    res.send(await UserController.update(id, password, isAdmin, isBanned, req.ip));
+    res.send(await UserController.update(userId, password, isAdmin, isBanned, req.ip));
   }
 });
 

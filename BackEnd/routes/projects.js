@@ -7,6 +7,7 @@ const unzipper = require('unzipper');
 const rimraf = require("rimraf");
 const xmlbuilder = require("xmlbuilder");
 const ProjectController = require('../controllers/projectController');
+const UserController = require('../controllers/userController');
 
 router.route("/").post(async (req, res, next) => {
     const { platform, userId } = req.body;
@@ -44,6 +45,15 @@ router.route("/").post(async (req, res, next) => {
 
 });
 
+router.route("/allProjects").get(async (req, res, next) => {
+    const getUserByTokenResponse = await UserController.getUserByToken(req.headers.authorization.split(" ")[1]);
+    if (getUserByTokenResponse.code === 0 && getUserByTokenResponse.user != null && getUserByTokenResponse.user.isAdmin) {
+        res.status(200).send(await ProjectController.getUsersProjects("all"));
+    } else {
+        res.send({ code: -1, description: 'Access Denied'});
+    }
+});
+
 router.route("/jobs").post(async (req, res, next) => {
 
     const { projectId, userId } = req.body;
@@ -62,7 +72,6 @@ router.route("/jobs").post(async (req, res, next) => {
             json: true
         })
             .then(async (bodyResponse) => {
-
                 await ProjectController.addJobs(projectId, bodyResponse);
 
                 res.status(200).send(await ProjectController.getJobsByProjectId(projectId, userId));
@@ -74,23 +83,26 @@ router.route("/jobs").post(async (req, res, next) => {
 });
 
 router.route("/:projectId").put(async (req, res, next) => {
+    const { packageName, downloadPassword } = req.body;
 
-    const { downloadPassword, bundleIdentifier } = req.body;
-
-    const createProjectResponse = await ProjectController.updateProject(req.params.projectId, downloadPassword, bundleIdentifier);
-    res.status(200).send(createProjectResponse);
-
+    const getUserByTokenResponse = await UserController.getUserByToken(req.headers.authorization.split(" ")[1]);
+    if (getUserByTokenResponse.code === 0 && getUserByTokenResponse.user != null && getUserByTokenResponse.user.isAdmin) {
+        const createProjectResponse = await ProjectController.updateProject(req.params.projectId, packageName, downloadPassword);
+        res.status(200).send(createProjectResponse);
+    } else {
+        res.send({ code: -1, description: 'Access Denied'});
+    }
 });
 
 router.route("/job/:jobId").put(async (req, res, next) => {
+    const { version, changeLog } = req.body;
 
-    const { changeLog } = req.body;
-
-    if (!changeLog) {
-        res.status(400).send({ code: -1, description: "Data not received" });
-    } else {
-        const createProjectResponse = await ProjectController.updateJob(req.params.jobId, changeLog);
+    const getUserByTokenResponse = await UserController.getUserByToken(req.headers.authorization.split(" ")[1]);
+    if (getUserByTokenResponse.code === 0 && getUserByTokenResponse.user != null && getUserByTokenResponse.user.isAdmin) {
+        const createProjectResponse = await ProjectController.updateJob(req.params.jobId, version, changeLog);
         res.status(200).send(createProjectResponse)
+    } else  {
+        res.send({ code: -1, description: 'Access Denied'});
     }
 
 });
@@ -101,8 +113,13 @@ router.route("/userAccess").post(async (req, res, next) => {
     if (!userId || !projects ) {
         res.status(400).send({ code: -1, description: "Data not received" });
     } else {
-        const createProjectResponse = await ProjectController.updateProjectAccess(userId, projects);
-        res.status(200).send(createProjectResponse)
+        const getUserByTokenResponse = await UserController.getUserByToken(req.headers.authorization.split(" ")[1]);
+        if (getUserByTokenResponse.code === 0 && getUserByTokenResponse.user != null && getUserByTokenResponse.user.isAdmin) {
+            const createProjectResponse = await ProjectController.updateProjectAccess(userId, projects);
+            res.status(200).send(createProjectResponse)
+        } else {
+            res.send(getUserByTokenResponse);
+        }
     }
 });
 
@@ -148,7 +165,7 @@ router.route("/androidArtifacts").post(async (req, res, next) => {
                                             for (let i = 0; i < directories.length; i++) {
                                                 directories[i] = directories[i] + "/" + JSON.parse(fs.readFileSync(outputPath + '/' + directories[i] +'/output.json', 'utf8'))[0].apkInfo.outputFile;
                                             }
-                                            res.status(200).send({ code: '0', outputs: directories});
+                                            res.status(200).send({ code: 0, outputs: directories});
                                         });
 
                                     } else {
@@ -162,7 +179,8 @@ router.route("/androidArtifacts").post(async (req, res, next) => {
                 });
 
                 writeStream.on('error', (err) => {
-                    res.status(406).send({ code: -1, description: err.message });
+                    console.log(err);
+                    res.status(200).send({ code: -1, description: err.message });
                 });
 
                 writeStream.end();
@@ -170,21 +188,22 @@ router.route("/androidArtifacts").post(async (req, res, next) => {
                 res.status(200).send({ code: -1, description: "Artifact doesn't exist" });
             });
         } else {
-
             if (fs.existsSync(outputPath)) {
 
                 fs.readdir(outputPath, function(err, directories) {
                     for (let i = 0; i < directories.length; i++) {
                         directories[i] = directories[i] + "/" + JSON.parse(fs.readFileSync(outputPath + '/' + directories[i] +'/output.json', 'utf8'))[0].apkInfo.outputFile;
                     }
-                    res.status(200).send({ code: '0', outputs: directories});
+                    res.status(200).send({ code: 0, outputs: directories});
                 });
 
             } else {
-                let unzip = fs.createReadStream(filePath).pipe(unzipper.Extract({ path: 'public/' }));
+                // TODO: Fix unzip
+                let unzip = fs.createReadStream(zipFilePath).pipe(unzipper.Extract({ path: 'public/' }));
 
                 unzip.on('finish', () => {
                     fs.rename('./public/app/build/outputs/apk/', './public/' + jobId, function (err) {
+
                         if (err == null) {
 
                             rimraf('./public/app/', async (err) => {
@@ -194,7 +213,7 @@ router.route("/androidArtifacts").post(async (req, res, next) => {
                                         for (let i = 0; i < directories.length; i++) {
                                             directories[i] = directories[i] + "/" + JSON.parse(fs.readFileSync(outputPath + '/' + directories[i] +'/output.json', 'utf8'))[0].apkInfo.outputFile;
                                         }
-                                        res.status(200).send({ code: '0', outputs: directories});
+                                        res.status(200).send({ code: 0, outputs: directories});
                                     });
                                 } else {
                                     res.status(200).send({ code: -1, description: err.message });
@@ -240,7 +259,7 @@ router.route("/download/:jobId/:userId/:output").get(async (req, res, next) => {
 
         if (project.code !== -1) {
 
-            if (project.platform === 'ios' && project.bundleIdentifier == null) {
+            if (project.platform === 'ios' && project.packageName == null) {
                 res.status(417).send({ code: -1, description: "Bundle identifier is empty" });
             } else {
                 if (!fs.existsSync(filePath)) {
@@ -332,7 +351,7 @@ router.route("/download/:jobId/:userId/:output").get(async (req, res, next) => {
 
                                                     let array3 = array1.ele('dict');
                                                     array3.ele('key', 'bundle-identifier');
-                                                    array3.ele('string', project.bundleIdentifier);
+                                                    array3.ele('string', project.packageName);
                                                     array3.ele('key', 'kind');
                                                     array3.ele('string', 'software');
                                                     array3.ele('key', 'title');
@@ -372,7 +391,6 @@ router.route("/download/:jobId/:userId/:output").get(async (req, res, next) => {
 
                         })
                         .catch(function (err) {
-                            console.log(err);
                             res.status(200).send({ code: -1, description: "Artifact doesn't exist" });
                         });
                 } else {

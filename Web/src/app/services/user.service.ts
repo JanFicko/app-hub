@@ -48,6 +48,17 @@ export class UserService {
         }
       }));
   }
+  updateUser(userId: string, isAdmin: boolean, isBanned: boolean, password: string) {
+    return this.http.put<any>(`http://localhost:3000/api/users/`,
+      { userId: userId, isAdmin: isAdmin, isBanned: isBanned, password: password} )
+      .pipe(map(response => {
+        if (response.code === 0) {
+          return response.user;
+        } else {
+          return null;
+        }
+      }));
+  }
   logout() {
     localStorage.removeItem('loggedInUser');
   }
