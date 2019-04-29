@@ -84,8 +84,7 @@ export class ProjectComponent implements OnInit {
       this.jobId,
       this.updateJobForm.controls.version.value,
       this.updateJobForm.controls.changeLog.value
-    )
-      .pipe(first())
+    ).pipe(first())
       .subscribe(
         data => {
           window.location.reload();
@@ -100,8 +99,7 @@ export class ProjectComponent implements OnInit {
     this.jobId = jobId;
     this.projectService.getArtifacts(
       jobId
-    )
-      .pipe(first())
+    ).pipe(first())
       .subscribe(
         artifacts => {
           if (artifacts != null) {
@@ -110,17 +108,19 @@ export class ProjectComponent implements OnInit {
         });
   }
   downloadArtifact(artifactName: string) {
+    const fileName = artifactName.split('/');
     this.projectService.downloadArtifact(
       this.jobId,
       this.userService.getLoggedInUser()._id,
-      artifactName
-    )
-      .pipe(first())
-      .subscribe(
-        artifact => {
-          const blob = new Blob([artifact], {type: 'application/vnd.android.package-archive'});
-          console.log(blob);
-        });
+      fileName[0]
+    ).subscribe( data => {
+      const element = document.createElement('a');
+      element.download = fileName[1];
+      const blob = new Blob([data], { type: 'application/vnd.android.package-archive'});
+      element.href = URL.createObjectURL(blob);
+      document.body.appendChild(element);
+      element.click();
+    });
   }
 
 }

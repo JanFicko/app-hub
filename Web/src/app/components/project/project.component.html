@@ -103,9 +103,9 @@
 
           <ul class="list-group" *ngIf="artifacts.length !== 0">
             <li class="list-group-item list-group-item-action" *ngFor="let artifact of artifacts">
-              <div class="d-flex justify-content-between align-items-center">
+              <div class="d-flex justify-content-between align-items-center" (click)="downloadArtifact(artifact)">
                 <span>{{ artifact }}  </span>
-                <a (click)="downloadArtifact(artifact)"><i class="fas fa-download text-primary"></i></a>
+                <i class="fas fa-download text-primary"></i>
               </div>
             </li>
           </ul>

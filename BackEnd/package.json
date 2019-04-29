@@ -8,6 +8,7 @@
   "dependencies": {
     "adm-zip": "^0.4.13",
     "bcrypt": "^3.0.4",
+    "cors": "^2.8.5",
     "debug": "~2.6.9",
     "express": "~4.16.0",
     "express-jwt": "^5.3.1",

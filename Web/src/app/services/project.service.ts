@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders  } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Project } from '../models/project';
-import {User} from '../models/user';
-import {Job} from '../models/job';
+import { User } from '../models/user';
+import { Job } from '../models/job';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -88,9 +89,10 @@ export class ProjectService {
       }));
   }
   downloadArtifact(jobId: number, userId: string, artifactName: string) {
-    return this.http.get<any>(`http://localhost:3000/api/projects/download/${jobId}/${userId}/${artifactName}` )
-      .pipe(map(artifact => {
-        return artifact;
+    localStorage.setItem('artifactContentType', 'android');
+    return this.http.get(`http://localhost:3000/api/projects/download/${jobId}/${userId}/${artifactName}`, { responseType: 'blob'} )
+      .pipe(map(response => {
+        return response;
       }));
   }
 }

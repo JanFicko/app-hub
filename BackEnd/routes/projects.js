@@ -252,7 +252,6 @@ router.route("/download/:jobId/:userId/:output").get(async (req, res, next) => {
     if (!req.params.jobId || !req.params.userId) {
         res.status(400).send({ code: -1, description: "Data not received" });
     } else {
-
         const project = await ProjectController.downloadArtifact(req.ip, req.params.jobId, req.params.userId, downloadPassword);
 
         const filePath = './public/' + req.params.jobId + '.zip';
@@ -396,6 +395,10 @@ router.route("/download/:jobId/:userId/:output").get(async (req, res, next) => {
                 } else {
 
                     if (project.platform === "android") {
+                        if (apkOutput.includes('.')) {
+                            apkOutput = apkOutput.split('.')[0]
+                        }
+
                         const output = JSON.parse(fs.readFileSync('./public/'+ req.params.jobId + '/' + apkOutput + '/output.json', 'utf8'));
 
                         const apkFile = './public/'+ req.params.jobId + '/' + apkOutput + '/' + output[0].apkInfo.outputFile;
