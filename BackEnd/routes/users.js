@@ -57,4 +57,15 @@ router.route('/login').post(async (req, res, next) => {
   }
 });
 
+router.route("/activityLogs").get(async (req, res, next) => {
+  const getUserByTokenResponse = await UserController.getUserByToken(req.headers.authorization.split(" ")[1]);
+  if (getUserByTokenResponse.code === 0 && getUserByTokenResponse.user != null && getUserByTokenResponse.user.isAdmin) {
+    console.log('here');
+    res.send(await UserController.getActivityLogs());
+  } else {
+    console.log('here2');
+    res.send(getUserByTokenResponse);
+  }
+});
+
 module.exports = router;

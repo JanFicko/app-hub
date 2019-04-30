@@ -3,7 +3,7 @@
   <!-- Page Heading -->
   <h1 class="h3 mb-2 text-gray-800">User: {{ user.email }}</h1>
 
-  <div class="col-xl-6 col-lg-9 col-md-12">
+  <div class="col-xl-19 col-lg-10 col-md-12">
     <div class="card shadow mb-4">
       <div class="card-body">
         <form [formGroup]="editUserForm" (ngSubmit)="onSubmit()" >
@@ -97,7 +97,7 @@
 
   <h1 class="h3 mb-2 text-gray-800">Activity log</h1>
 
-  <div class="col-xl-6 col-lg-9 col-md-12">
+  <div class="col-xl-12 col-lg-12 col-md-12">
     <div class="card shadow mb-4">
       <div class="card-body">
         <div class="table-responsive">
@@ -119,7 +119,7 @@
             </tr>
             </tfoot>
             <tbody>
-              <tr *ngFor="let activity of user.userActivity">
+              <tr *ngFor="let activity of user.userActivity.slice().reverse()">
                 <td>{{ activity.ip }}</td>
                 <td>{{ activity.time | date: 'dd.MM.yyyy HH:mm:ss' }}</td>
                 <td>{{ activity.activity }}</td>

@@ -27,6 +27,9 @@ class UserController {
 
     static getUserById(id) {
         return User.findOne({ _id: id }).then((user) => {
+
+            user.userActivity = user.userActivity.slice(1).slice(-50);
+
             return { code: 0, user: user };
         }).catch((err) => {
             return { code: -1, description: err.errmsg }
@@ -80,6 +83,10 @@ class UserController {
                     });
                 }
                 if (isBanned != null){
+                    if (isBanned) {
+                        user.tokens = [];
+                    }
+
                     user.isBanned = isBanned;
                     user.userActivity.push({
                         ip: ip,
@@ -87,6 +94,26 @@ class UserController {
                         activityType: isBanned
                     });
                 }
+
+                return user.save().then(() => {
+                    return { code: 0, description: "Data updated" }
+                }).catch((err) => {
+                    return { code: -1, description: err.errmsg }
+                });
+            }).catch((err) => {
+                return { code: -1, description: err.errmsg }
+            });
+    }
+
+    static log(userId, activity, activityType, ip) {
+        return User.findOne({ _id: userId})
+            .then((user) => {
+
+                user.userActivity.push({
+                    ip: ip,
+                    activity: activity,
+                    activityType: activityType
+                });
 
                 return user.save().then(() => {
                     return { code: 0, description: "Data updated" }
@@ -128,6 +155,21 @@ class UserController {
                     return { code: -1, description: "Wrong password" }
                 }
             }).catch((err) => {
+                return { code: -1, description: err.errmsg }
+            });
+    }
+
+
+    static getActivityLogs() {
+        return User.find({}).select('-_id', '-email', '-password', '-isAdmin', '-isBanned', '-registerTime', '-tokens')
+            .then((activity) => {
+                if (activity != null) {
+                    return { code: 0, user: activity };
+                } else {
+                    return { code: 0, description: "Something went wrong" };
+                }
+            }).catch((err) => {
+                console.log(err);
                 return { code: -1, description: err.errmsg }
             });
     }

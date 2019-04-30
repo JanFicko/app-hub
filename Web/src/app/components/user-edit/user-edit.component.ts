@@ -113,7 +113,6 @@ export class UserEditComponent implements OnInit {
       .getAllProjects()
       .pipe(first())
       .subscribe(projects => {
-        console.log(projects);
         this.projects = projects;
         for (const project of projects) {
           project.hasPermission = this.checkIfUserHasPermissionForProject(project.projectId);

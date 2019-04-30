@@ -15,12 +15,7 @@ const ProjectSchema = new Schema({
         finishTime: Date,
         title: { type: String, default: config.NO_VERSION_TEXT },
         filename: { type: String, required: true  },
-        changeLog: String,
-        downloadActivity: [{
-            ip: String,
-            user_uuid: { type: String, required: true  },
-            downloadTime: { type: Date, default: Date.now }
-        }]
+        changeLog: String
     }],
     allowedUserAccess: [{
         user_uuid: { type: String, required : true },

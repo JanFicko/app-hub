@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { ActivityLogComponent } from './components/activity-log/activity-log.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ProjectComponent } from './components/project/project.component';
 import { UserCreateComponent } from './components/user-create/user-create.component';
@@ -13,7 +12,6 @@ import { AuthGuard } from './guards/auth.guard';
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: '', component: DashboardComponent, canActivate: [AuthGuard] },
-  { path: 'activity-log', component: ActivityLogComponent, canActivate: [AuthGuard] },
   { path: 'profile/:userId', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'project/:projectId', component: ProjectComponent, canActivate: [AuthGuard] },
   { path: 'user-create', component: UserCreateComponent, canActivate: [AuthGuard] },

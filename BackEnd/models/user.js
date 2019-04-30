@@ -15,7 +15,7 @@ const UserSchema = new Schema({
         time: { type: Date, default: Date.now },
         ip: String,
         activity: String,
-        activityType: Boolean,
+        activityType: String,
         device: String
     }]
 });

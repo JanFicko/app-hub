@@ -286,17 +286,8 @@ class ProjectController {
 
                             return project[0]
                         }
-                    } else {*/
-                        project[0].jobs[i].downloadActivity.push({
-                            ip: ip,
-                            user_uuid: userId
-                        });
-
-                        await project[0].save();
-
-                        return project[0]
-                    //}
-
+                    */
+                    return project[0]
                 }
             }
             throw "Job not found"

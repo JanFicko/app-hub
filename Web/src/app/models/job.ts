@@ -1,4 +1,3 @@
-import {DownloadActivity} from './download-activity';
 import {DatePipe} from '@angular/common';
 
 export class Job {
@@ -8,5 +7,4 @@ export class Job {
   title: string;
   filename: string;
   changeLog: string;
-  downloadActivity: DownloadActivity[];
 }

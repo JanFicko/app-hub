@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { ActivityLogComponent } from './components/activity-log/activity-log.component';
 import { LoginComponent } from './components/login/login.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ProjectComponent } from './components/project/project.component';
@@ -22,7 +21,6 @@ import { ErrorInterceptor } from './helpers/error.interceptor';
     AppComponent,
     NavigationComponent,
     DashboardComponent,
-    ActivityLogComponent,
     LoginComponent,
     ProfileComponent,
     ProjectComponent,

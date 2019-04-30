@@ -3,7 +3,7 @@ const router = express.Router();
 const rp = require('request-promise');
 const config = require('../config');
 const fs = require('fs');
-const unzipper = require('unzipper');
+const AdmZip = require('adm-zip');
 const rimraf = require("rimraf");
 const xmlbuilder = require("xmlbuilder");
 const ProjectController = require('../controllers/projectController');
@@ -134,6 +134,7 @@ router.route("/androidArtifacts").post(async (req, res, next) => {
     const outputPath = './public/' + jobId;
 
     if (project.code !== -1) {
+
         if (!fs.existsSync(zipFilePath)) {
             rp({
                 uri: config.GITLAB_IP.replace(config.GITLAB_IP_SUFFIX, "") + project.platform + "/" + project.path + "/-/jobs/" + jobId + '/artifacts/download',
@@ -151,30 +152,28 @@ router.route("/androidArtifacts").post(async (req, res, next) => {
                 writeStream.write(bodyResponse, 'binary');
                 writeStream.on('finish', () => {
 
-                    let unzip = fs.createReadStream(zipFilePath).pipe(unzipper.Extract({ path: 'public/' }));
+                    const zip = new AdmZip(zipFilePath);
+                    zip.extractAllTo(/*target path*/"./public/", /*overwrite*/true);
+                    fs.rename('./public/app/build/outputs/apk/', './public/' + jobId, function (err) {
+                        if (err == null) {
 
-                    unzip.on('finish', () => {
-                        fs.rename('./public/app/build/outputs/apk/', './public/' + jobId, function (err) {
-                            if (err == null) {
+                            rimraf('./public/app/', async (err) => {
 
-                                rimraf('./public/app/', async (err) => {
+                                if (err == null) {
 
-                                    if (err == null) {
+                                    fs.readdir(outputPath, function(err, directories) {
+                                        for (let i = 0; i < directories.length; i++) {
+                                            directories[i] = directories[i] + "/" + JSON.parse(fs.readFileSync(outputPath + '/' + directories[i] +'/output.json', 'utf8'))[0].apkInfo.outputFile;
+                                        }
+                                        res.status(200).send({ code: 0, outputs: directories});
+                                    });
 
-                                        fs.readdir(outputPath, function(err, directories) {
-                                            for (let i = 0; i < directories.length; i++) {
-                                                directories[i] = directories[i] + "/" + JSON.parse(fs.readFileSync(outputPath + '/' + directories[i] +'/output.json', 'utf8'))[0].apkInfo.outputFile;
-                                            }
-                                            res.status(200).send({ code: 0, outputs: directories});
-                                        });
+                                } else {
+                                    res.status(200).send({ code: -1, description: err.message });
+                                }
+                            });
 
-                                    } else {
-                                        res.status(200).send({ code: -1, description: err.message });
-                                    }
-                                });
-
-                            }
-                        });
+                        }
                     });
                 });
 
@@ -196,37 +195,29 @@ router.route("/androidArtifacts").post(async (req, res, next) => {
                     }
                     res.status(200).send({ code: 0, outputs: directories});
                 });
-
             } else {
-                // TODO: Fix unzip
-                let unzip = fs.createReadStream(zipFilePath).pipe(unzipper.Extract({ path: 'public/' }));
+                const zip = new AdmZip(zipFilePath);
+                zip.extractAllTo(/*target path*/"./public/", /*overwrite*/true);
 
-                unzip.on('finish', () => {
-                    fs.rename('./public/app/build/outputs/apk/', './public/' + jobId, function (err) {
+                fs.rename('./public/app/build/outputs/apk/', './public/' + jobId, function (err) {
 
-                        if (err == null) {
+                    if (err == null) {
 
-                            rimraf('./public/app/', async (err) => {
+                        rimraf('./public/app/', async (err) => {
 
-                                if (err == null) {
-                                    fs.readdir(outputPath, function(err, directories) {
-                                        for (let i = 0; i < directories.length; i++) {
-                                            directories[i] = directories[i] + "/" + JSON.parse(fs.readFileSync(outputPath + '/' + directories[i] +'/output.json', 'utf8'))[0].apkInfo.outputFile;
-                                        }
-                                        res.status(200).send({ code: 0, outputs: directories});
-                                    });
-                                } else {
-                                    res.status(200).send({ code: -1, description: err.message });
-                                }
-                            });
+                            if (err == null) {
+                                fs.readdir(outputPath, function(err, directories) {
+                                    for (let i = 0; i < directories.length; i++) {
+                                        directories[i] = directories[i] + "/" + JSON.parse(fs.readFileSync(outputPath + '/' + directories[i] +'/output.json', 'utf8'))[0].apkInfo.outputFile;
+                                    }
+                                    res.status(200).send({ code: 0, outputs: directories});
+                                });
+                            } else {
+                                res.status(200).send({ code: -1, description: err.message });
+                            }
+                        });
 
-                        }
-                    });
-                });
-
-
-                unzip.on('error', (err) => {
-                    res.status(200).send({ code: -1, description: err.message });
+                    }
                 });
             }
 
@@ -278,107 +269,104 @@ router.route("/download/:jobId/:userId/:output").get(async (req, res, next) => {
                             writeStream.write(bodyResponse, 'binary');
                             writeStream.on('finish', () => {
 
-                                let unzip = fs.createReadStream(filePath).pipe(unzipper.Extract({ path: 'public/' }));
+                                const zip = new AdmZip(filePath);
+                                zip.extractAllTo(/*target path*/"./public/", /*overwrite*/true);
 
                                 if (project.platform === "android") {
 
-                                    unzip.on('finish', () => {
-                                        fs.rename('./public/app/build/outputs/apk/', './public/' + req.params.jobId, function (err) {
-                                            if (err == null) {
+                                    fs.rename('./public/app/build/outputs/apk/', './public/' + req.params.jobId, function (err) {
+                                        if (err == null) {
 
-                                                rimraf('./public/app/', async (err) => {
+                                            rimraf('./public/app/', async (err) => {
 
-                                                    const output = JSON.parse(fs.readFileSync('./public/' + req.params.jobId + '/' + apkOutput +'/output.json', 'utf8'));
+                                                const output = JSON.parse(fs.readFileSync('./public/' + req.params.jobId + '/' + apkOutput +'/output.json', 'utf8'));
 
-                                                    ProjectController.updateJob(req.params.jobId, null, 'v' + output[0].apkInfo.versionName);
+                                                ProjectController.updateJob(req.params.jobId, null, 'v' + output[0].apkInfo.versionName);
 
-                                                    const apkFile = './public/'+ req.params.jobId + '/' + apkOutput + '/' + output[0].apkInfo.outputFile;
+                                                const apkFile = './public/'+ req.params.jobId + '/' + apkOutput + '/' + output[0].apkInfo.outputFile;
 
-                                                    if (fs.existsSync(apkFile)) {
-                                                        res.download(apkFile);
+                                                if (fs.existsSync(apkFile)) {
+                                                    UserController.log(req.params.userId, req.params.jobId + '/' + output[0].apkInfo.outputFile, 'Download', req.ip);
+
+                                                    res.download(apkFile);
+                                                } else {
+                                                    res.status(200).send({ code: -1, description: "APK file not found" });
+                                                }
+                                            });
+
+                                        }
+                                    });
+                                } else if (project.platform === "ios") {
+                                    const ipaFile = fs.readdirSync('./public/build/')[0];
+
+                                    fs.rename('./public/build/' + ipaFile + '/', './public/' + req.params.jobId, function (err) {
+                                        if (err == null) {
+
+                                            rimraf('./public/build/', async (err) => {
+
+                                                fs.unlink('./public/' + req.params.jobId + '/Packaging.log', (err) => {
+                                                    if(err) console.log(err);
+
+                                                });
+                                                fs.unlink('./public/' + req.params.jobId + '/ExportOptions.plist', (err) => {
+                                                    if(err) console.log(err);
+                                                });
+                                                fs.unlink('./public/' + req.params.jobId + '/DistributionSummary.plist', (err) => {
+                                                    if(err) console.log(err);
+                                                });
+
+
+                                                let root = xmlbuilder.create(
+                                                    'plist',
+                                                    { version: '1.0', encoding: 'UTF-8' },
+                                                    { pubID: '-//Apple//DTD PLIST 1.0//EN', sysID: 'http://www.apple.com/DTDs/PropertyList-1.0.dtd' })
+                                                    .att('version', '1.0')
+                                                    .ele('dict');
+
+                                                root.ele('key', 'items');
+                                                let array1 = root.ele('array')
+                                                    .ele('dict');
+
+                                                array1.ele('key', 'assets');
+
+                                                let array2 = array1.ele('array')
+                                                    .ele('dict');
+                                                array2.ele('key', 'kind');
+                                                array2.ele('string', 'software-package');
+                                                array2.ele('key', 'url');
+                                                array2.ele('string', 'https://' + config.DOMAIN_NAME + '/' + req.params.jobId + '/' + ipaFile);
+
+                                                array1.ele('key', 'metadata');
+
+                                                let array3 = array1.ele('dict');
+                                                array3.ele('key', 'bundle-identifier');
+                                                array3.ele('string', project.packageName);
+                                                array3.ele('key', 'kind');
+                                                array3.ele('string', 'software');
+                                                array3.ele('key', 'title');
+                                                array3.ele('string', ipaFile.replace(".ipa", ""));
+
+                                                root = root.end({ pretty: true});
+
+                                                const plistFile = './public/'+ req.params.jobId + '/' + ipaFile.replace(".ipa", "") + '.plist';
+
+                                                fs.writeFile(plistFile, root, (err) => {
+                                                    if (fs.existsSync(plistFile)) {
+                                                        UserController.log(req.params.userId, req.params.jobId + '/' + ipaFile, 'Download', req.ip);
+
+                                                        res.download(plistFile);
                                                     } else {
-                                                        res.status(200).send({ code: -1, description: "APK file not found" });
+                                                        res.status(200).send({ code: -1, description: "PLIST file not found" });
                                                     }
                                                 });
 
-                                            }
-                                        });
-                                    });
-                                } else if (project.platform === "ios") {
-                                    unzip.on('finish', () => {
+                                            });
 
-                                        const ipaFile = fs.readdirSync('./public/build/')[0];
-
-                                        fs.rename('./public/build/' + ipaFile + '/', './public/' + req.params.jobId, function (err) {
-                                            if (err == null) {
-
-                                                rimraf('./public/build/', async (err) => {
-
-                                                    fs.unlink('./public/' + req.params.jobId + '/Packaging.log', (err) => {
-                                                        if(err) console.log(err);
-
-                                                    });
-                                                    fs.unlink('./public/' + req.params.jobId + '/ExportOptions.plist', (err) => {
-                                                        if(err) console.log(err);
-                                                    });
-                                                    fs.unlink('./public/' + req.params.jobId + '/DistributionSummary.plist', (err) => {
-                                                        if(err) console.log(err);
-                                                    });
-
-
-                                                    let root = xmlbuilder.create(
-                                                        'plist',
-                                                        { version: '1.0', encoding: 'UTF-8' },
-                                                        { pubID: '-//Apple//DTD PLIST 1.0//EN', sysID: 'http://www.apple.com/DTDs/PropertyList-1.0.dtd' })
-                                                        .att('version', '1.0')
-                                                        .ele('dict');
-
-                                                    root.ele('key', 'items');
-                                                    let array1 = root.ele('array')
-                                                        .ele('dict');
-
-                                                    array1.ele('key', 'assets');
-
-                                                    let array2 = array1.ele('array')
-                                                        .ele('dict');
-                                                    array2.ele('key', 'kind');
-                                                    array2.ele('string', 'software-package');
-                                                    array2.ele('key', 'url');
-                                                    array2.ele('string', 'https://' + config.DOMAIN_NAME + '/' + req.params.jobId + '/' + ipaFile);
-
-                                                    array1.ele('key', 'metadata');
-
-                                                    let array3 = array1.ele('dict');
-                                                    array3.ele('key', 'bundle-identifier');
-                                                    array3.ele('string', project.packageName);
-                                                    array3.ele('key', 'kind');
-                                                    array3.ele('string', 'software');
-                                                    array3.ele('key', 'title');
-                                                    array3.ele('string', ipaFile.replace(".ipa", ""));
-
-                                                    root = root.end({ pretty: true});
-
-                                                    const plistFile = './public/'+ req.params.jobId + '/' + ipaFile.replace(".ipa", "") + '.plist';
-
-                                                    fs.writeFile(plistFile, root, (err) => {
-                                                        if (fs.existsSync(plistFile)) {
-                                                            res.download(plistFile);
-                                                        } else {
-                                                            res.status(200).send({ code: -1, description: "PLIST file not found" });
-                                                        }
-                                                    });
-
-                                                });
-
-                                            }
-                                        });
+                                        }
                                     });
 
                                 }
 
-                                unzip.on('error', (err) => {
-                                    res.status(200).send({ code: -1, description: err.message });
-                                });
 
                             });
 
@@ -400,10 +388,11 @@ router.route("/download/:jobId/:userId/:output").get(async (req, res, next) => {
                         }
 
                         const output = JSON.parse(fs.readFileSync('./public/'+ req.params.jobId + '/' + apkOutput + '/output.json', 'utf8'));
-
                         const apkFile = './public/'+ req.params.jobId + '/' + apkOutput + '/' + output[0].apkInfo.outputFile;
 
                         if (fs.existsSync(apkFile)) {
+                            UserController.log(req.params.userId, req.params.jobId + '/' + output[0].apkInfo.outputFile, 'Download', req.ip);
+
                             res.download(apkFile);
                         } else {
                             res.status(406).send({ code: -1, description: "APK file not found" });
@@ -414,6 +403,8 @@ router.route("/download/:jobId/:userId/:output").get(async (req, res, next) => {
                         const plistFile = './public/'+ req.params.jobId + '/' + ipaFile.replace(".ipa", "") + '.plist';
 
                         if (fs.existsSync(plistFile)) {
+                            UserController.log(req.params.userId, req.params.jobId + '/' + ipaFile, 'Download', req.ip);
+
                             res.download(plistFile);
                         } else {
                             res.status(406).send({ code: -1, description: "PLIST file not found" });
