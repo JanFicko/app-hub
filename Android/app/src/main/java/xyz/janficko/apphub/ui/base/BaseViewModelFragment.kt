@@ -12,10 +12,6 @@ import xyz.janficko.apphub.ui.main.MainActivity
 import xyz.janficko.apphub.util.LoggerPrinter
 import kotlin.contracts.ExperimentalContracts
 
-/**
-Created by Jan Ficko on 22/02/19 for Margento.
- */
-
 @ExperimentalContracts
 abstract class BaseViewModelFragment<ST, VM : BaseViewModel<ST>> : Fragment() {
 

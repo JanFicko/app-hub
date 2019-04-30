@@ -4,10 +4,6 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import java.util.*
 
-/**
-Created by Jan Ficko on 02/04/19 for Margento.
- */
-
 class User(
     @SerializedName("_id")
     @Expose

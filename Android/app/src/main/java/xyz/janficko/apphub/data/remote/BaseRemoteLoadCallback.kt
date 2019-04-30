@@ -2,10 +2,6 @@ package xyz.janficko.apphub.data.remote
 
 import xyz.janficko.apphub.data.remote.response.BaseResponse
 
-/**
-Created by Jan Ficko on 26/02/19 for Margento.
- */
-
 interface BaseRemoteLoadCallback<R : BaseResponse> {
     fun onSuccess(body: R)
     fun onError(code: Int)

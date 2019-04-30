@@ -3,10 +3,6 @@ package xyz.janficko.apphub.data.local.shared_preferences
 import android.content.SharedPreferences
 import com.google.gson.Gson
 
-/**
-Created by Jan Ficko on 02/04/19 for Margento.
- */
-
 class SharedPreferencesStorage
     (private val sharedPreferences: SharedPreferences, private val gson: Gson)
     : SharedPreferencesContract {

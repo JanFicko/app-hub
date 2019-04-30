@@ -14,10 +14,6 @@ import xyz.janficko.apphub.util.isValidEmail
 import xyz.janficko.apphub.util.snack
 import kotlin.contracts.ExperimentalContracts
 
-/**
-Created by Jan Ficko on 02/04/19 for Margento.
- */
-
 @ExperimentalContracts
 class LoginFragment :
     BaseViewModelFragment<LoginState, LoginViewModel>(),

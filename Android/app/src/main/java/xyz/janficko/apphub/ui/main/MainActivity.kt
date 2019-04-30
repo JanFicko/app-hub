@@ -18,10 +18,6 @@ import xyz.janficko.apphub.ui.login.LoginFragment
 import xyz.janficko.apphub.ui.job.JobFragment
 import kotlin.contracts.ExperimentalContracts
 
-/**
-Created by Jan Ficko on 21/02/19 for Margento.
- */
-
 @ExperimentalContracts
 class MainActivity : BaseViewModelActivity<MainState, MainViewModel>(), View.OnClickListener{
 

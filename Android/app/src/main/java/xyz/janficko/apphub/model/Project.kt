@@ -4,10 +4,6 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import xyz.janficko.apphub.data.remote.response.BaseResponse
 
-/**
-Created by Jan Ficko on 26/02/19 for Margento.
- */
-
 data class Project(
     @SerializedName("_id")
     @Expose

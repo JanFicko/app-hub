@@ -32,15 +32,13 @@ router.route("/").post(async (req, res, next) => {
                 'PRIVATE-TOKEN': config.GITLAB_PRIVATE_TOKEN
             },
             json: true
-        })
-            .then(async (bodyResponse) => {
-                await ProjectController.addProjects(bodyResponse, platform);
+        }).then((bodyResponse) => {
+            ProjectController.addProjects(bodyResponse, platform);
+        }).catch((err) => {
+            console.log(err);
+        });
 
-                res.status(200).send(await ProjectController.getUsersProjects(userId));
-            })
-            .catch((err) => {
-                res.status(406).send({code: -1, description: err.errmsg});
-            });
+        res.status(200).send(await ProjectController.getUsersProjects(userId));
     }
 
 });

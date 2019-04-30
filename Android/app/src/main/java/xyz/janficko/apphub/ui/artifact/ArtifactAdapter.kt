@@ -7,10 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_artifact.view.*
 import xyz.janficko.apphub.R
 
-/**
-Created by Jan Ficko on 28/02/19 for Margento.
- */
-
 class ArtifactAdapter(private val outputs: List<String>, val callback: (String) -> Unit) : RecyclerView.Adapter<ArtifactAdapter.ArtifactAdapterViewHolder>() {
 
     val layoutResId: Int

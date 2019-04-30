@@ -9,10 +9,6 @@ import xyz.janficko.apphub.data.remote.response.GetArtifactsResponse
 import xyz.janficko.apphub.data.remote.response.GetJobsResponse
 import xyz.janficko.apphub.data.remote.response.GetProjectsResponse
 
-/**
-Created by Jan Ficko on 02/04/19 for Margento.
- */
-
 class ProjectUseCase(remoteRepository: RemoteRepositoryContract) : BaseRemoteUseCase(remoteRepository) {
 
     fun getProjects(token: String, getProjectsRequest: GetProjectsRequest) : Deferred<GetProjectsResponse> {

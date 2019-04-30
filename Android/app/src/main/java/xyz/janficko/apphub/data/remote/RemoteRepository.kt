@@ -12,10 +12,6 @@ import xyz.janficko.apphub.data.remote.response.GetJobsResponse
 import xyz.janficko.apphub.data.remote.response.GetProjectsResponse
 import xyz.janficko.apphub.data.remote.response.LoginResponse
 
-/**
-Created by Jan Ficko on 26/02/19 for Margento.
- */
-
 class RemoteRepository : RemoteRepositoryContract, KoinComponent {
 
     val service : ApiService by inject()

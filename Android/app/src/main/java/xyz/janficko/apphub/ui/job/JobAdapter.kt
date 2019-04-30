@@ -8,10 +8,6 @@ import kotlinx.android.synthetic.main.item_version.view.*
 import xyz.janficko.apphub.R
 import xyz.janficko.apphub.model.Job
 
-/**
-Created by Jan Ficko on 25/02/19 for Margento.
- */
-
 class JobAdapter(private val jobs: List<Job>, private val callback : (Job) -> Unit) :
     RecyclerView.Adapter<JobAdapter.BuildAdapterViewHolder>() {
 

@@ -10,10 +10,6 @@ import xyz.janficko.apphub.dependency.networkModule
 import xyz.janficko.apphub.dependency.projectsModule
 import kotlin.contracts.ExperimentalContracts
 
-/**
-Created by Jan Ficko on 21/02/19 for Margento.
- */
-
 @ExperimentalContracts
 class AppHub : Application() {
 

@@ -13,10 +13,6 @@ import xyz.janficko.apphub.data.remote.RemoteRepositoryContract
 import xyz.janficko.apphub.ui.AppHub
 import kotlin.contracts.ExperimentalContracts
 
-/**
-Created by Jan Ficko on 26/02/19 for Margento.
- */
-
 @ExperimentalContracts
 val appModule = module {
 

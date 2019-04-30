@@ -12,10 +12,6 @@ import xyz.janficko.apphub.ui.main.MainActivity
 import java.util.concurrent.TimeUnit
 import kotlin.contracts.ExperimentalContracts
 
-/**
-Created by Jan Ficko on 21/02/19 for Margento.
- */
-
 @ExperimentalContracts
 class SplashActivity : AppCompatActivity() {
 

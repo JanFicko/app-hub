@@ -6,10 +6,6 @@ import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 
-/**
-Created by Jan Ficko on 22/02/19 for Margento.
- */
-
 inline fun FragmentManager.inTransaction(func: FragmentTransaction.() -> FragmentTransaction) {
     beginTransaction().func().disallowAddToBackStack().commit()
 }

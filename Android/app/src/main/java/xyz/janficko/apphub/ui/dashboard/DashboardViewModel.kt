@@ -1,8 +1,5 @@
 package xyz.janficko.apphub.ui.dashboard
 
-import org.koin.androidx.viewmodel.ext.sharedViewModel
-import org.koin.androidx.viewmodel.ext.viewModel
-import org.koin.core.KoinComponent
 import org.koin.core.inject
 import xyz.janficko.apphub.common.ErrorCodes
 import xyz.janficko.apphub.common.Keys
@@ -13,15 +10,7 @@ import xyz.janficko.apphub.domain.remote.ProjectUseCase
 import xyz.janficko.apphub.model.User
 import xyz.janficko.apphub.ui.AppHub
 import xyz.janficko.apphub.ui.base.BaseViewModel
-import xyz.janficko.apphub.ui.login.LoginState
-import xyz.janficko.apphub.ui.main.MainState
-import xyz.janficko.apphub.ui.main.MainViewModel
-import xyz.janficko.apphub.util.LoggerPrinter
 import kotlin.contracts.ExperimentalContracts
-
-/**
-Created by Jan Ficko on 02/04/19 for Margento.
- */
 
 @ExperimentalContracts
 class DashboardViewModel constructor(

@@ -5,10 +5,6 @@ import com.google.gson.annotations.SerializedName
 import xyz.janficko.apphub.data.remote.response.BaseResponse
 import java.util.*
 
-/**
-Created by Jan Ficko on 26/02/19 for Margento.
- */
-
 data class Job(
     @SerializedName("_id")
     @Expose

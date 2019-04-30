@@ -12,10 +12,6 @@ import xyz.janficko.apphub.ui.AppHub
 import xyz.janficko.apphub.ui.base.BaseViewModel
 import kotlin.contracts.ExperimentalContracts
 
-/**
-Created by Jan Ficko on 02/04/19 for Margento.
- */
-
 @ExperimentalContracts
 class LoginViewModel constructor(
     appHub: AppHub,

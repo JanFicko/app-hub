@@ -12,10 +12,6 @@ import xyz.janficko.apphub.ui.main.MainViewModel
 import xyz.janficko.apphub.ui.job.JobViewModel
 import kotlin.contracts.ExperimentalContracts
 
-/**
-Created by Jan Ficko on 26/02/19 for Margento.
- */
-
 @ExperimentalContracts
 val projectsModule = module {
 

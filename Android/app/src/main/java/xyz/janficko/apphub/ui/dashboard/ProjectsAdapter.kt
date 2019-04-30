@@ -8,10 +8,6 @@ import kotlinx.android.synthetic.main.item_app.view.*
 import xyz.janficko.apphub.R
 import xyz.janficko.apphub.model.Project
 
-/**
-Created by Jan Ficko on 25/02/19 for Margento.
- */
-
 class ProjectsAdapter(private var projects: List<Project>, private val callback : (Int) -> Unit) :
     RecyclerView.Adapter<ProjectsAdapter.AppAdapterViewHolder>() {
 

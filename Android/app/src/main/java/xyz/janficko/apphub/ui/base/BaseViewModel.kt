@@ -18,10 +18,6 @@ import java.net.UnknownHostException
 import kotlin.contracts.ExperimentalContracts
 import kotlin.coroutines.CoroutineContext
 
-/**
-Created by Jan Ficko on 22/02/19 for Margento.
- */
-
 @ExperimentalContracts
 abstract class BaseViewModel<ST> constructor(val appHub : AppHub) : ViewModel(), CoroutineScope, KoinComponent {
 

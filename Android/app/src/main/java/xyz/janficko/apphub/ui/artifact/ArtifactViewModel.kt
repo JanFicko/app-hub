@@ -20,10 +20,6 @@ import xyz.janficko.apphub.util.DownloadHelper
 import xyz.janficko.apphub.util.LoggerPrinter
 import kotlin.contracts.ExperimentalContracts
 
-/**
-Created by Jan Ficko on 05/04/19 for Margento.
- */
-
 @ExperimentalContracts
 class ArtifactViewModel constructor(
     appHub: AppHub,

@@ -15,10 +15,6 @@ import xyz.janficko.apphub.util.ApiLogger
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
-/**
-Created by Jan Ficko on 26/02/19 for Margento.
- */
-
 val networkModule = module {
 
     single{ GsonBuilder().create() }

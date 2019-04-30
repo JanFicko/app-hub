@@ -7,10 +7,6 @@ import xyz.janficko.apphub.ui.AppHub
 import xyz.janficko.apphub.ui.base.BaseViewModel
 import kotlin.contracts.ExperimentalContracts
 
-/**
-Created by Jan Ficko on 27/02/19 for Margento.
- */
-
 @ExperimentalContracts
 class MainViewModel(
     appHub : AppHub
@@ -40,7 +36,7 @@ class MainViewModel(
         postScreenState(MainState.OpenDashboard())
     }
 
-    fun openVersionFragment() {
+    fun openJobFragment() {
         postScreenState(MainState.OpenVersion())
     }
 

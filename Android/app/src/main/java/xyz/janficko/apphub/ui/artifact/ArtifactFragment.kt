@@ -17,10 +17,6 @@ import xyz.janficko.apphub.ui.main.MainViewModel
 import xyz.janficko.apphub.util.snack
 import kotlin.contracts.ExperimentalContracts
 
-/**
-Created by Jan Ficko on 28/02/19 for Margento.
- */
-
 @SuppressLint("ValidFragment")
 @ExperimentalContracts
 class ArtifactFragment :
@@ -83,7 +79,7 @@ class ArtifactFragment :
     }
 
     override fun onClick(view: View?) {
-        sharedviewmodel.openVersionFragment()
+        sharedviewmodel.openJobFragment()
     }
 
 }

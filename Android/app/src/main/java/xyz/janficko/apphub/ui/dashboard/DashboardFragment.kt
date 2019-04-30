@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_dashboard.*
-import kotlinx.android.synthetic.main.fragment_login.*
 import org.koin.androidx.viewmodel.ext.sharedViewModel
 import org.koin.androidx.viewmodel.ext.viewModel
 import xyz.janficko.apphub.R
@@ -16,10 +15,6 @@ import xyz.janficko.apphub.ui.base.BaseViewModelFragment
 import xyz.janficko.apphub.ui.main.MainViewModel
 import xyz.janficko.apphub.util.snack
 import kotlin.contracts.ExperimentalContracts
-
-/**
-Created by Jan Ficko on 22/02/19 for Margento.
- */
 
 @ExperimentalContracts
 class DashboardFragment :
@@ -64,7 +59,7 @@ class DashboardFragment :
             baseActivity?.tv_error?.visibility = View.GONE
             projectAdapter = ProjectsAdapter(projects) {
                 sharedviewmodel.projectId = it
-                sharedviewmodel.openVersionFragment()
+                sharedviewmodel.openJobFragment()
             }
             rv_apps.adapter = projectAdapter
         }

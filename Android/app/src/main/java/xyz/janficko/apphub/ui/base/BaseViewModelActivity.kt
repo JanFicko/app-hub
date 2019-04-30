@@ -13,10 +13,6 @@ import xyz.janficko.apphub.util.LoggerPrinter
 import xyz.janficko.apphub.util.inTransaction
 import kotlin.contracts.ExperimentalContracts
 
-/**
-Created by Jan Ficko on 22/02/19 for Margento.
- */
-
 @ExperimentalContracts
 abstract class BaseViewModelActivity<ST, VM : BaseViewModel<ST>> : AppCompatActivity() {
 
