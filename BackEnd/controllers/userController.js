@@ -159,21 +159,6 @@ class UserController {
             });
     }
 
-
-    static getActivityLogs() {
-        return User.find({}).select('-_id', '-email', '-password', '-isAdmin', '-isBanned', '-registerTime', '-tokens')
-            .then((activity) => {
-                if (activity != null) {
-                    return { code: 0, user: activity };
-                } else {
-                    return { code: 0, description: "Something went wrong" };
-                }
-            }).catch((err) => {
-                console.log(err);
-                return { code: -1, description: err.errmsg }
-            });
-    }
-
 }
 
 module.exports = UserController;

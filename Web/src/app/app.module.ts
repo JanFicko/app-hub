@@ -15,6 +15,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { ErrorInterceptor } from './helpers/error.interceptor';
+import { DeviceDetectorModule } from 'ngx-device-detector';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { ErrorInterceptor } from './helpers/error.interceptor';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    DeviceDetectorModule.forRoot()
   ],
   providers: [
     AuthGuard,

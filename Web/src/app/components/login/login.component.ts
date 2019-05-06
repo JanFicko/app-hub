@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {UserService} from '../../services/user.service';
-import {ActivatedRoute, Router} from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UserService } from '../../services/user.service';
+import { ActivatedRoute, Router } from '@angular/router';
 import { first } from 'rxjs/operators';
-import {NavbarService} from '../../services/navbar.service';
+import { NavbarService } from '../../services/navbar.service';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Component({
   templateUrl: './login.component.html',
@@ -15,10 +16,11 @@ export class LoginComponent implements OnInit {
   returnUrl: string;
   constructor(
     public nav: NavbarService,
+    private userService: UserService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private userService: UserService) {
+    private deviceService: DeviceDetectorService) {
     this.nav.hide();
   }
   ngOnInit() {
@@ -35,9 +37,10 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.invalid) {
       return;
     }
-
     this.loading = true;
-    this.userService.login(this.loginForm.controls.email.value, this.loginForm.controls.password.value)
+    const di = this.deviceService.getDeviceInfo();
+    const deviceInfo = di.browser + ' ' + di.browser_version + '/' + di.os + ' ' + di.os_version;
+    this.userService.login(this.loginForm.controls.email.value, this.loginForm.controls.password.value, deviceInfo)
       .pipe(first())
       .subscribe(
         data => {

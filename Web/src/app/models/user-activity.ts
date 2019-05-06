@@ -6,4 +6,5 @@ export class UserActivity {
   activity: string;
   activityType: string;
   time: DatePipe;
+  device: string;
 }

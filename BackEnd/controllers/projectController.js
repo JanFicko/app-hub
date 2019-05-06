@@ -124,12 +124,12 @@ class ProjectController {
                     if (project[0].jobs[i].jobId == jobId) {
                         let updated = false;
 
-                        if (changeLog != null) {
+                        if (changeLog != null && changeLog !== '') {
                             updated = true;
                             project[0].jobs[i].changeLog = changeLog;
                         }
 
-                        if (version != null) {
+                        if (version != null && version !== '') {
                             updated = true;
                             project[0].jobs[i].title = version;
                         }
