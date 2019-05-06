@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
-import {NavbarService} from '../../services/navbar.service';
-import {ProjectService} from '../../services/project.service';
-import {first} from 'rxjs/operators';
-import {Project} from '../../models/project';
-import {User} from '../../models/user';
+import { NavbarService } from '../../services/navbar.service';
+import { ProjectService } from '../../services/project.service';
+import { first } from 'rxjs/operators';
+import { User } from '../../models/user';
 
 @Component({
   selector: 'app-navigation',
@@ -21,7 +20,10 @@ export class NavigationComponent implements OnInit {
     private route: ActivatedRoute
   ) {}
   ngOnInit() {
-    this.getProjects();
+    const user: User = JSON.parse(localStorage.getItem('loggedInUser'));
+    if (user != null) {
+      this.getProjects();
+    }
   }
   getProjects() {
     this.projectService

@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { NavbarService } from '../../services/navbar.service';
 import { DeviceDetectorService } from 'ngx-device-detector';
+import { ProjectService } from '../../services/project.service';
 
 @Component({
   templateUrl: './login.component.html',
@@ -17,6 +18,7 @@ export class LoginComponent implements OnInit {
   constructor(
     public nav: NavbarService,
     private userService: UserService,
+    private projectService: ProjectService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
@@ -24,6 +26,9 @@ export class LoginComponent implements OnInit {
     this.nav.hide();
   }
   ngOnInit() {
+    this.projectService.projects = [];
+    this.projectService.androidProjects  = [];
+    this.projectService.iosProjects = [];
     this.loginForm = this.formBuilder.group({
       email: ['', Validators.required],
       password: ['', Validators.required]
@@ -45,7 +50,10 @@ export class LoginComponent implements OnInit {
       .subscribe(
         data => {
           if (data != null) {
-            this.router.navigate([this.returnUrl]);
+            this.router.navigate([this.returnUrl])
+              .then(() => {
+                window.location.reload();
+              });
           } else {
             this.loading = false;
           }

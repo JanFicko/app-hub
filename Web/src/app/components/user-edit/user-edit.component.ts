@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import {NavbarService} from '../../services/navbar.service';
-import {UserService} from '../../services/user.service';
-import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
-import {first} from 'rxjs/operators';
-import {User} from '../../models/user';
-import {ProjectService} from '../../services/project.service';
-import {Project} from '../../models/project';
+import { NavbarService } from '../../services/navbar.service';
+import { UserService } from '../../services/user.service';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { first } from 'rxjs/operators';
+import { User } from '../../models/user';
+import { ProjectService } from '../../services/project.service';
+import { Project } from '../../models/project';
 
 @Component({
   selector: 'app-user-edit',

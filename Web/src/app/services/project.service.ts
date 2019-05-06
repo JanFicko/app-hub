@@ -3,14 +3,14 @@ import { HttpClient, HttpHeaders  } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Project } from '../models/project';
 import { User } from '../models/user';
-import { Job } from '../models/job';
-import {Observable} from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectService {
 
+  env = environment;
   projects: Project[] = [];
   androidProjects: Project[] = [];
   iosProjects: Project[] = [];
@@ -20,7 +20,7 @@ export class ProjectService {
 
   getProjects(platform: string) {
     const user: User = JSON.parse(localStorage.getItem('loggedInUser'));
-    return this.http.post<any>(`http://localhost:3000/api/projects`, { platform: platform, userId: user._id } )
+    return this.http.post<any>(`${this.env.service_url}/api/projects`, { platform: platform, userId: user._id } )
       .pipe(map(response => {
         if (response.code === 0) {
           this.projects = [];
@@ -38,7 +38,7 @@ export class ProjectService {
       }));
   }
   getAllProjects() {
-    return this.http.get<any>(`http://localhost:3000/api/projects/allProjects` )
+    return this.http.get<any>(`${this.env.service_url}/api/projects/allProjects` )
       .pipe(map(response => {
         if (response.code === 0) {
           return response.projects;
@@ -49,7 +49,7 @@ export class ProjectService {
   }
   getJobs(projectId: number) {
     const user: User = JSON.parse(localStorage.getItem('loggedInUser'));
-    return this.http.post<any>(`http://localhost:3000/api/projects/jobs`, { projectId: projectId, userId: user._id } )
+    return this.http.post<any>(`${this.env.service_url}/api/projects/jobs`, { projectId: projectId, userId: user._id } )
       .pipe(map(response => {
         if (response.code === 0) {
           this.project = response.project;
@@ -60,26 +60,26 @@ export class ProjectService {
       }));
   }
   updateProject(projectId, packageName) {
-    return this.http.put<any>(`http://localhost:3000/api/projects/${projectId}`,
-      {packageName: packageName, downloadPassword: null }
+    return this.http.put<any>(`${this.env.service_url}/api/projects/${projectId}`,
+      { packageName: packageName, downloadPassword: null }
       ).pipe(map(response => {
         return response;
       }));
   }
   updateJob(jobId, version, changeLog) {
-    return this.http.put<any>(`http://localhost:3000/api/projects/job/${jobId}`, { version: version, changeLog: changeLog } )
+    return this.http.put<any>(`${this.env.service_url}/api/projects/job/${jobId}`, { version: version, changeLog: changeLog } )
       .pipe(map(response => {
         return response;
       }));
   }
   updateProjectAccessPermissions(userId: string, projects) {
-    return this.http.post<any>(`http://localhost:3000/api/projects/userAccess`, { userId: userId, projects: projects } )
+    return this.http.post<any>(`${this.env.service_url}/api/projects/userAccess`, { userId: userId, projects: projects } )
       .pipe(map(response => {
         return response.code === 0;
       }));
   }
   getArtifacts(jobId: number) {
-    return this.http.post<any>(`http://localhost:3000/api/projects/androidArtifacts`, { jobId: jobId } )
+    return this.http.post<any>(`${this.env.service_url}/api/projects/androidArtifacts`, { jobId: jobId } )
       .pipe(map(response => {
         if (response.code === 0) {
           return response.outputs;
@@ -90,7 +90,7 @@ export class ProjectService {
   }
   downloadArtifact(jobId: number, userId: string, artifactName: string) {
     localStorage.setItem('artifactContentType', 'android');
-    return this.http.get(`http://localhost:3000/api/projects/download/${jobId}/${userId}/${artifactName}`, { responseType: 'blob'} )
+    return this.http.get(`${this.env.service_url}/api/projects/download/${jobId}/${userId}/${artifactName}`, { responseType: 'blob'} )
       .pipe(map(response => {
         return response;
       }));
