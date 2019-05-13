@@ -6,8 +6,8 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_version.*
-import kotlinx.android.synthetic.main.item_version.*
+import kotlinx.android.synthetic.main.fragment_job.*
+import kotlinx.android.synthetic.main.item_job.*
 import org.koin.androidx.viewmodel.ext.sharedViewModel
 import org.koin.androidx.viewmodel.ext.viewModel
 import xyz.janficko.apphub.R
@@ -29,7 +29,7 @@ class JobFragment :
     private val sharedviewmodel : MainViewModel by sharedViewModel()
 
     override val layoutResId: Int
-        get() = R.layout.fragment_version
+        get() = R.layout.fragment_job
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -65,6 +65,13 @@ class JobFragment :
             sharedviewmodel.jobId = copiedJobs[0].jobId
 
             tv_app_version.text = copiedJobs[0].title
+
+            copiedJobs[0].changeLog?.let {
+                if (!it.isBlank()) {
+                    ll_change_log.visibility = View.VISIBLE
+                    tv_change_log.text = it
+                }
+            }
 
             copiedJobs.removeAt(0)
 

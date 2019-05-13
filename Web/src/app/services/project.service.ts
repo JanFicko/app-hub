@@ -89,7 +89,6 @@ export class ProjectService {
       }));
   }
   downloadArtifact(jobId: number, userId: string, artifactName: string) {
-    localStorage.setItem('artifactContentType', 'android');
     return this.http.get(`${this.env.service_url}/api/projects/download/${jobId}/${userId}/${artifactName}`, { responseType: 'blob'} )
       .pipe(map(response => {
         return response;

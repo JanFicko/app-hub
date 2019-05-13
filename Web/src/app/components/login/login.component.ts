@@ -4,7 +4,6 @@ import { UserService } from '../../services/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { NavbarService } from '../../services/navbar.service';
-import { DeviceDetectorService } from 'ngx-device-detector';
 import { ProjectService } from '../../services/project.service';
 
 @Component({
@@ -21,8 +20,7 @@ export class LoginComponent implements OnInit {
     private projectService: ProjectService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router,
-    private deviceService: DeviceDetectorService) {
+    private router: Router) {
     this.nav.hide();
   }
   ngOnInit() {
@@ -43,9 +41,7 @@ export class LoginComponent implements OnInit {
       return;
     }
     this.loading = true;
-    const di = this.deviceService.getDeviceInfo();
-    const deviceInfo = di.browser + ' ' + di.browser_version + '/' + di.os + ' ' + di.os_version;
-    this.userService.login(this.loginForm.controls.email.value, this.loginForm.controls.password.value, deviceInfo)
+    this.userService.login(this.loginForm.controls.email.value, this.loginForm.controls.password.value)
       .pipe(first())
       .subscribe(
         data => {

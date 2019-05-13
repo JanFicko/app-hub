@@ -1,7 +1,6 @@
 package xyz.janficko.apphub.data.remote
 
 import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.Job
 import retrofit2.http.*
 import xyz.janficko.apphub.data.remote.request.GetArtifactsRequest
 import xyz.janficko.apphub.data.remote.request.GetJobsRequest
@@ -15,7 +14,7 @@ import xyz.janficko.apphub.data.remote.response.LoginResponse
 interface ApiService {
 
     @POST("api/users/login")
-    fun login(@Body loginRequest: LoginRequest) : Deferred<LoginResponse>
+    fun login(@Header("DeviceInfo") deviceInfo: String, @Body loginRequest: LoginRequest) : Deferred<LoginResponse>
 
     @POST("api/projects")
     fun getProjects(@Header("Authorization") token: String, @Body getProjectsRequest: GetProjectsRequest) : Deferred<GetProjectsResponse>

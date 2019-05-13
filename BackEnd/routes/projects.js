@@ -230,8 +230,7 @@ router.route("/androidArtifacts").post(async (req, res, next) => {
 
 router.route("/download/:jobId/:userId/:output").get(async (req, res, next) => {
 
-    const { downloadPassword } = req.header;
-
+    const deviceInfo = req.get('DeviceInfo');
     let apkOutput;
 
     if (req.params.output == null) {
@@ -243,7 +242,7 @@ router.route("/download/:jobId/:userId/:output").get(async (req, res, next) => {
     if (!req.params.jobId || !req.params.userId) {
         res.status(400).send({ code: -1, description: "Data not received" });
     } else {
-        const project = await ProjectController.downloadArtifact(req.ip, req.params.jobId, req.params.userId, downloadPassword);
+        const project = await ProjectController.downloadArtifact(req.ip, req.params.jobId, req.params.userId);
 
         const filePath = './public/' + req.params.jobId + '.zip';
 
@@ -286,7 +285,13 @@ router.route("/download/:jobId/:userId/:output").get(async (req, res, next) => {
                                                 const apkFile = './public/'+ req.params.jobId + '/' + apkOutput + '/' + output[0].apkInfo.outputFile;
 
                                                 if (fs.existsSync(apkFile)) {
-                                                    UserController.log(req.params.userId, req.params.jobId + '/' + output[0].apkInfo.outputFile, 'Download', req.ip);
+                                                    UserController.log(
+                                                        req.params.userId,
+                                                        req.params.jobId + '/' + output[0].apkInfo.outputFile,
+                                                        'Download',
+                                                        req.ip,
+                                                        deviceInfo
+                                                    );
 
                                                     res.download(apkFile);
                                                 } else {
@@ -352,7 +357,13 @@ router.route("/download/:jobId/:userId/:output").get(async (req, res, next) => {
 
                                                 fs.writeFile(plistFile, root, (err) => {
                                                     if (fs.existsSync(plistFile)) {
-                                                        UserController.log(req.params.userId, req.params.jobId + '/' + ipaFile, 'Download', req.ip);
+                                                        UserController.log(
+                                                            req.params.userId,
+                                                            req.params.jobId + '/' + ipaFile,
+                                                            'Download',
+                                                            req.ip,
+                                                            deviceInfo
+                                                        );
 
                                                         res.download(plistFile);
                                                     } else {
@@ -391,7 +402,13 @@ router.route("/download/:jobId/:userId/:output").get(async (req, res, next) => {
                         const apkFile = './public/'+ req.params.jobId + '/' + apkOutput + '/' + output[0].apkInfo.outputFile;
 
                         if (fs.existsSync(apkFile)) {
-                            UserController.log(req.params.userId, req.params.jobId + '/' + output[0].apkInfo.outputFile, 'Download', req.ip);
+                            UserController.log(
+                                req.params.userId,
+                                req.params.jobId + '/' + output[0].apkInfo.outputFile,
+                                'Download',
+                                req.ip,
+                                deviceInfo
+                            );
 
                             res.download(apkFile);
                         } else {
@@ -403,7 +420,13 @@ router.route("/download/:jobId/:userId/:output").get(async (req, res, next) => {
                         const plistFile = './public/'+ req.params.jobId + '/' + ipaFile.replace(".ipa", "") + '.plist';
 
                         if (fs.existsSync(plistFile)) {
-                            UserController.log(req.params.userId, req.params.jobId + '/' + ipaFile, 'Download', req.ip);
+                            UserController.log(
+                                req.params.userId,
+                                req.params.jobId + '/' + ipaFile,
+                                'Download',
+                                req.ip,
+                                deviceInfo
+                            );
 
                             res.download(plistFile);
                         } else {

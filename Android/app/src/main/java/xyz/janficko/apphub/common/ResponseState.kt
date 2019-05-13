@@ -1,6 +1,7 @@
 package xyz.janficko.apphub.common
 
 enum class ResponseState {
+
     LOADING,
     NOT_LOADING,
     ERROR,
@@ -9,4 +10,5 @@ enum class ResponseState {
     NO_INTERNET,
     NO_SERVER,
     NO_TOKEN
+
 }

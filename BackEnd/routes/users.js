@@ -48,12 +48,14 @@ router.route('/').put(async (req, res, next) => {
 });
 
 router.route('/login').post(async (req, res, next) => {
-  const { email, password, device } = req.body;
+  const { email, password } = req.body;
+
+  const deviceInfo = req.get('DeviceInfo');
 
   if (!email || !password ) {
     res.status(400).send({ code: -1, description: "Data not received" });
   } else {
-    res.send(await UserController.login(email, password, req.ip, device));
+    res.send(await UserController.login(email, password, req.ip, deviceInfo));
   }
 });
 

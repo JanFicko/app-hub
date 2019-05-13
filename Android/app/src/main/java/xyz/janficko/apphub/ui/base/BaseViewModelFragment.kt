@@ -7,9 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
-import kotlinx.android.synthetic.main.activity_main.*
-import xyz.janficko.apphub.ui.main.MainActivity
-import xyz.janficko.apphub.util.LoggerPrinter
 import kotlin.contracts.ExperimentalContracts
 
 @ExperimentalContracts

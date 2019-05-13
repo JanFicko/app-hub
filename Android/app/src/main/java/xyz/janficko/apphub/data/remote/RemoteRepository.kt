@@ -3,6 +3,7 @@ package xyz.janficko.apphub.data.remote
 import kotlinx.coroutines.Deferred
 import org.koin.core.KoinComponent
 import org.koin.core.inject
+import xyz.janficko.apphub.common.Constants
 import xyz.janficko.apphub.data.remote.request.GetArtifactsRequest
 import xyz.janficko.apphub.data.remote.request.GetJobsRequest
 import xyz.janficko.apphub.data.remote.request.GetProjectsRequest
@@ -21,9 +22,8 @@ class RemoteRepository : RemoteRepositoryContract, KoinComponent {
     }
 
     override fun login(loginRequest: LoginRequest): Deferred<LoginResponse> {
-        return service.login(loginRequest)
+        return service.login(Constants.DEVICE_DESCRIPTION, loginRequest)
     }
-
 
     override fun getProjects(token: String, getProjectsRequest: GetProjectsRequest): Deferred<GetProjectsResponse> {
         return service.getProjects(token, getProjectsRequest)
@@ -32,7 +32,6 @@ class RemoteRepository : RemoteRepositoryContract, KoinComponent {
     override fun getJobs(token: String, getJobsRequest : GetJobsRequest): Deferred<GetJobsResponse> {
         return service.getJobs(token, getJobsRequest)
     }
-
 
     override fun getArtifacts(token: String, getArtifactsRequest: GetArtifactsRequest): Deferred<GetArtifactsResponse> {
         return service.getArtifacts(token, getArtifactsRequest)

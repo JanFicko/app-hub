@@ -28,7 +28,7 @@
                 app:layout_constraintEnd_toEndOf="parent" />
 
         <include
-                layout="@layout/item_version"
+                layout="@layout/item_job"
                 android:id="@+id/l_latest_build"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -63,7 +63,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                tools:listitem="@layout/item_version"
+                tools:listitem="@layout/item_job"
                 tools:visibility="visible"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,7 +2,6 @@ package xyz.janficko.apphub.model
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import xyz.janficko.apphub.data.remote.response.BaseResponse
 import java.util.*
 
 data class Job(
@@ -12,6 +11,9 @@ data class Job(
     @SerializedName("title")
     @Expose
     val title : String,
+    @SerializedName("changeLog")
+    @Expose
+    val changeLog : String? = null,
     @SerializedName("jobId")
     @Expose
     val jobId : Int,

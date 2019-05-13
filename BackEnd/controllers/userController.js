@@ -105,14 +105,15 @@ class UserController {
             });
     }
 
-    static log(userId, activity, activityType, ip) {
+    static log(userId, activity, activityType, ip, device) {
         return User.findOne({ _id: userId})
             .then((user) => {
 
                 user.userActivity.push({
                     ip: ip,
                     activity: activity,
-                    activityType: activityType
+                    activityType: activityType,
+                    device: device
                 });
 
                 return user.save().then(() => {

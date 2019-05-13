@@ -13,8 +13,8 @@ export class UserService {
 
   constructor( private http: HttpClient ) { }
 
-  login(email: string, password: string, deviceInfo: string) {
-    return this.http.post<any>(`${this.env.service_url}/api/users/login`, { email: email, password: password, deviceInfo: deviceInfo } )
+  login(email: string, password: string) {
+    return this.http.post<any>(`${this.env.service_url}/api/users/login`, { email: email, password: password } )
       .pipe(map(response => {
         // Login successful if there's a jwt token in the response
         if (response.user && response.token) {

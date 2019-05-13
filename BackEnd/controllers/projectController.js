@@ -262,7 +262,7 @@ class ProjectController {
             });
     }
 
-    static downloadArtifact(ip, jobId, userId, downloadPassword) {
+    static downloadArtifact(ip, jobId, userId) {
 
         return Project.find({
             'jobs.jobId': jobId

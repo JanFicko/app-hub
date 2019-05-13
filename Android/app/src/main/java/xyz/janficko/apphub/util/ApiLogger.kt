@@ -18,7 +18,6 @@ class ApiLogger : HttpLoggingInterceptor.Logger {
                 }
             } else {
                 LoggerPrinter.printVerbose(logName, message)
-
             }
         }
     }

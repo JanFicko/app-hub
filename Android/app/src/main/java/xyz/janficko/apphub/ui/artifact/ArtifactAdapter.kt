@@ -22,7 +22,6 @@ class ArtifactAdapter(private val outputs: List<String>, val callback: (String) 
 
     override fun getItemCount(): Int = outputs.size
 
-
     inner class ArtifactAdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(output : String) = with(itemView) {
@@ -30,8 +29,6 @@ class ArtifactAdapter(private val outputs: List<String>, val callback: (String) 
 
             setOnClickListener { callback(outputs[adapterPosition]) }
         }
-
-
 
     }
 }

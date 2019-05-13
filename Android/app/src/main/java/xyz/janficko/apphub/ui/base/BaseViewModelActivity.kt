@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.activity_main.*
 import xyz.janficko.apphub.R
-import xyz.janficko.apphub.util.LoggerPrinter
 import xyz.janficko.apphub.util.inTransaction
 import kotlin.contracts.ExperimentalContracts
 

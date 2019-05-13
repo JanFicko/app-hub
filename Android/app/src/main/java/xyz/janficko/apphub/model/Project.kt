@@ -2,7 +2,6 @@ package xyz.janficko.apphub.model
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import xyz.janficko.apphub.data.remote.response.BaseResponse
 
 data class Project(
     @SerializedName("_id")

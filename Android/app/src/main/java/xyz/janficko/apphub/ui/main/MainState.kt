@@ -1,6 +1,5 @@
 package xyz.janficko.apphub.ui.main
 
-
 sealed class MainState  {
 
     class OpenLogin : MainState()
