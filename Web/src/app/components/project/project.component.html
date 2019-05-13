@@ -18,13 +18,14 @@
         <li class="list-group-item">
 
           <div class="row">
-            <div class="col-lg">
+            <div class="col-md-8">
               <span>{{ job.title }}  <span class="badge badge-dark">{{ job.finishTime | date: 'dd.MM.yyyy HH:mm:ss' }}</span></span>
             </div>
-            <div class="col-md d-flex justify-content-end">
-              <a style="margin-right: 20px" href="" (click)="getArtifacts(job.jobId)" data-toggle="modal" data-target="#getArtifactsModal" *ngIf="project.platform === 'android'"><i class="fas fa-download"></i></a>
-              <a style="margin-right: 20px" href="itms-services://?action=download-manifest&url=https://localhost:3000/jobId/mk.plist" *ngIf="project.platform === 'ios'"><i class="fas fa-download"></i></a>
-              <a href="" *ngIf="this.userService.getLoggedInUser().isAdmin" (click)="setJobId(job.jobId)" data-toggle="modal" data-target="#editJobModal"><i class="fas fa-edit"></i></a>
+            <div class="col-md-4 d-flex justify-content-end">
+              <a href="" *ngIf="this.userService.getLoggedInUser().isAdmin" (click)="sendNotification(job.jobId)" style="margin-right: 20px"><i class="fas fa-mail-bulk"></i></a>
+              <a href="" *ngIf="this.userService.getLoggedInUser().isAdmin" (click)="setJobId(job.jobId)" data-toggle="modal" data-target="#editJobModal" style="margin-right: 20px"><i class="fas fa-edit"></i></a>
+              <a href="" (click)="getArtifacts(job.jobId)" data-toggle="modal" data-target="#getArtifactsModal" *ngIf="project.platform === 'android'" ><i class="fas fa-download"></i></a>
+              <a href="itms-services://?action=download-manifest&url=https://localhost:3000/jobId/mk.plist" *ngIf="project.platform === 'ios'"><i class="fas fa-download"></i></a>
             </div>
           </div>
 
