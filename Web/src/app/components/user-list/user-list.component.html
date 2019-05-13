@@ -12,7 +12,6 @@
           <thead>
           <tr>
             <th>Email</th>
-            <th>Projects</th>
             <th>Administrator</th>
             <th>Registration</th>
             <th>Last login</th>
@@ -21,7 +20,6 @@
           <tfoot>
           <tr>
             <th>Email</th>
-            <th>Projects</th>
             <th>Administrator</th>
             <th>Registration</th>
             <th>Last login</th>
@@ -34,10 +32,6 @@
                 <i class="fas fa-fw fa-user-edit"></i>
               </a>
               <i tabindex="0" class="fas fa-fw fa-ban text-danger" role="button" data-toggle="popover" data-placement="top" data-trigger="focus" title="Blocked" *ngIf="user.isBanned"></i>
-            </td>
-            <td>
-              <i tabindex="0" class="fab fa-android text-success" role="button" data-toggle="popover" data-placement="top" data-trigger="focus" data-content="Urbana, Študentska prehrana, Nomago, Valu, Moje kartice"></i>
-              <i tabindex="0" class="fab fa-apple text-dark" role="button" data-toggle="popover" data-placement="top" data-trigger="focus" data-content="Študentska prehrana, Nomago, Valu, Moje kartice"></i>
             </td>
             <td>
               <div *ngIf="user.isAdmin;then isAdmin_content else isAdmin_otherContent"></div>
