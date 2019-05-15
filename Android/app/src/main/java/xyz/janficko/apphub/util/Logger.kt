@@ -1,9 +1,32 @@
 package xyz.janficko.apphub.util
 
+import android.util.Log
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
 import com.google.gson.JsonSyntaxException
 import okhttp3.logging.HttpLoggingInterceptor
+import xyz.janficko.apphub.BuildConfig
+
+private var DO_PRINT_LOG : Boolean = BuildConfig.DEBUG
+
+fun printVerbose(TAG: String, message: String) {
+    if (!DO_PRINT_LOG) return
+    Log.v(TAG, message)
+}
+
+fun printError(TAG: String, message: String) {
+    if (!DO_PRINT_LOG) return
+    Log.e(TAG, message)
+}
+
+fun printWarning(TAG: String, message: String) {
+    if (!DO_PRINT_LOG) return
+    Log.w(TAG, message)
+}
+
+fun setPrintLog(printLog: Boolean) {
+    DO_PRINT_LOG = printLog
+}
 
 class ApiLogger : HttpLoggingInterceptor.Logger {
 
@@ -12,12 +35,12 @@ class ApiLogger : HttpLoggingInterceptor.Logger {
             if (message.startsWith("{") || message.startsWith("[")) {
                 try {
                     val json = GsonBuilder().setPrettyPrinting().create().toJson(JsonParser().parse(message))
-                    LoggerPrinter.printVerbose(logName, json)
+                    printVerbose(logName, json)
                 } catch (ex: JsonSyntaxException) {
-                    LoggerPrinter.printError(logName, message)
+                    printError(logName, message)
                 }
             } else {
-                LoggerPrinter.printVerbose(logName, message)
+                printVerbose(logName, message)
             }
         }
     }

@@ -95,6 +95,7 @@ class UserController {
                     });
                 }
 
+
                 return user.save().then(() => {
                     return { code: 0, description: "Data updated" }
                 }).catch((err) => {
@@ -129,7 +130,7 @@ class UserController {
     static login(email, password, ip, device) {
         return User.findOne({ email: email }).select('+password')
             .then(async (user) => {
-                const token = jwt.sign({ sub: user._id }, config.JWT_SECRET);
+                const token = jwt.sign({ sub: user._id }, config.JWT_SECRET, { expiresIn: '24h' });
                 const isMatch = await user.comparePassword(password);
 
                 user.tokens.push({
@@ -150,10 +151,10 @@ class UserController {
                     if (!user.isBanned) {
                         return { code: 0, token: token, user: user }
                     } else {
-                        return { code: -1, description: "Rejected access" }
+                        return { code: -3, description: "Rejected access" }
                     }
                 } else {
-                    return { code: -1, description: "Wrong password" }
+                    return { code: -2, description: "Wrong password" }
                 }
             }).catch((err) => {
                 return { code: -1, description: err.errmsg }

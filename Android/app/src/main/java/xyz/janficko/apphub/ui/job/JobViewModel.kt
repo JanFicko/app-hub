@@ -1,6 +1,7 @@
 package xyz.janficko.apphub.ui.job
 
 import org.koin.core.inject
+import xyz.janficko.apphub.common.ErrorCodes
 import xyz.janficko.apphub.common.Keys
 import xyz.janficko.apphub.data.local.shared_preferences.SharedPreferencesContract
 import xyz.janficko.apphub.data.remote.request.GetJobsRequest
@@ -8,6 +9,7 @@ import xyz.janficko.apphub.data.remote.response.GetJobsResponse
 import xyz.janficko.apphub.domain.remote.ProjectUseCase
 import xyz.janficko.apphub.model.User
 import xyz.janficko.apphub.ui.AppHub
+import xyz.janficko.apphub.ui.artifact.ArtifactState
 import xyz.janficko.apphub.ui.base.BaseViewModel
 import kotlin.contracts.ExperimentalContracts
 
@@ -24,7 +26,6 @@ class JobViewModel constructor(
 
         getDataFromWeb(
             projectUseCase.getJobs(
-                sharedPreferences.getString(Keys.PREF_TOKEN, ""),
                 GetJobsRequest(
                     projectId,
                     user._id
@@ -41,6 +42,10 @@ class JobViewModel constructor(
 
                 override fun onError(code: Int) {
                     postScreenState(JobState.ShowError(code))
+                }
+
+                override fun noToken() {
+                    postScreenState(JobState.ShowError(ErrorCodes.TOKEN_EXPIRED))
                 }
             }
         )

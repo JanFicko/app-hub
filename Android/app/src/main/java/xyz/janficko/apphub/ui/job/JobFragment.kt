@@ -6,6 +6,7 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_artifact.*
 import kotlinx.android.synthetic.main.fragment_job.*
 import kotlinx.android.synthetic.main.item_job.*
 import org.koin.androidx.viewmodel.ext.sharedViewModel
@@ -97,6 +98,11 @@ class JobFragment :
         when(code) {
             ErrorCodes.UNKNOWN_ERROR -> {
                 srl_container_versions.snack(R.string.error_unknown)
+            }
+            ErrorCodes.TOKEN_EXPIRED -> {
+                srl_container_versions.snack(R.string.error_token_expired)
+
+                sharedviewmodel.openLoginFragment()
             }
         }
     }

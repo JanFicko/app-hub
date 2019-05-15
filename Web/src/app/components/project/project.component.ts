@@ -94,9 +94,6 @@ export class ProjectComponent implements OnInit {
   setJobId(jobId: number) {
     this.jobId = jobId;
   }
-  sendNotification(jobId: number) {
-    // TODO: Send mail to all authorized users
-  }
   getArtifacts(jobId: number) {
     this.artifacts = [];
     this.jobId = jobId;

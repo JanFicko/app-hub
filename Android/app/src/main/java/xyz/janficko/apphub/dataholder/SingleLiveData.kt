@@ -3,7 +3,7 @@ package xyz.janficko.apphub.dataholder
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import xyz.janficko.apphub.util.LoggerPrinter
+import xyz.janficko.apphub.util.printWarning
 import java.util.concurrent.atomic.AtomicBoolean
 
 class SingleLiveData<T> : MutableLiveData<T>() {
@@ -14,7 +14,7 @@ class SingleLiveData<T> : MutableLiveData<T>() {
 
     fun observedData(lifecycleOwner : LifecycleOwner, observer : Observer<T>) {
         if (hasActiveObservers()) {
-            LoggerPrinter.printWarning(TAG, "Multiple observers but only one will be notified of changes.")
+            printWarning(TAG, "Multiple observers but only one will be notified of changes.")
 
             super.observe(lifecycleOwner, Observer<T> {
                 if (pending.compareAndSet(true, false)) {

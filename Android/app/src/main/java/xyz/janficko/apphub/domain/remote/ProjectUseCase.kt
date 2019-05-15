@@ -11,16 +11,16 @@ import xyz.janficko.apphub.data.remote.response.GetProjectsResponse
 
 class ProjectUseCase(remoteRepository: RemoteRepositoryContract) : BaseRemoteUseCase(remoteRepository) {
 
-    fun getProjects(token: String, getProjectsRequest: GetProjectsRequest) : Deferred<GetProjectsResponse> {
-        return remoteRepository.getProjects(token, getProjectsRequest)
+    fun getProjects(getProjectsRequest: GetProjectsRequest) : Deferred<GetProjectsResponse> {
+        return remoteRepository.getProjects(getProjectsRequest)
     }
 
-    fun getJobs(token: String, getJobsRequest: GetJobsRequest) : Deferred<GetJobsResponse> {
-        return remoteRepository.getJobs(token, getJobsRequest)
+    fun getJobs(getJobsRequest: GetJobsRequest) : Deferred<GetJobsResponse> {
+        return remoteRepository.getJobs(getJobsRequest)
     }
 
-    fun getArtifacts(token: String, getArtifactsRequest: GetArtifactsRequest) : Deferred<GetArtifactsResponse> {
-        return remoteRepository.getArtifacts(token, getArtifactsRequest)
+    fun getArtifacts(getArtifactsRequest: GetArtifactsRequest) : Deferred<GetArtifactsResponse> {
+        return remoteRepository.getArtifacts(getArtifactsRequest)
     }
 
 }

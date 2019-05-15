@@ -14,10 +14,10 @@ interface RemoteRepositoryContract {
 
     fun login(loginRequest: LoginRequest) : Deferred<LoginResponse>
 
-    fun getProjects(token: String, getProjectsRequest: GetProjectsRequest) : Deferred<GetProjectsResponse>
+    fun getProjects(getProjectsRequest: GetProjectsRequest) : Deferred<GetProjectsResponse>
 
-    fun getJobs(token: String, getJobsRequest : GetJobsRequest) : Deferred<GetJobsResponse>
+    fun getJobs(getJobsRequest : GetJobsRequest) : Deferred<GetJobsResponse>
 
-    fun getArtifacts(token: String, getArtifactsRequest: GetArtifactsRequest) : Deferred<GetArtifactsResponse>
+    fun getArtifacts(getArtifactsRequest: GetArtifactsRequest) : Deferred<GetArtifactsResponse>
 
 }

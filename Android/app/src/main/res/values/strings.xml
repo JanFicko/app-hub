@@ -19,4 +19,7 @@
     <string name="error_field_empty">Polje je prazno</string>
     <string name="error_fields_empty">Nekatera polja so prazna</string>
     <string name="error_unknown">Neznana napaka</string>
+    <string name="error_token_expired">Seja je potekla</string>
+    <string name="error_wrong_password">Napačno geslo</string>
+    <string name="error_banned">Račun je onemogočen</string>
 </resources>

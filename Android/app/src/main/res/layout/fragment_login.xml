@@ -7,17 +7,6 @@
         android:layout_height="match_parent"
         tools:ignore="Autofill">
 
-        <ImageView
-                android:id="@+id/iv_logo"
-                android:layout_width="@dimen/login_logo_square_size"
-                android:layout_height="@dimen/login_logo_square_size"
-                android:layout_marginTop="@dimen/spacing_large"
-                android:src="@drawable/logo_transparent_small"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                tools:ignore="ContentDescription"/>
-
         <EditText
                 android:id="@+id/et_email"
                 android:layout_width="0dp"
@@ -27,7 +16,8 @@
                 android:layout_marginEnd="@dimen/spacing_large"
                 android:hint="@string/email"
                 android:inputType="textEmailAddress"
-                app:layout_constraintTop_toBottomOf="@id/iv_logo"
+                android:gravity="center"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
@@ -40,6 +30,7 @@
                 android:layout_marginEnd="@dimen/spacing_large"
                 android:hint="@string/password"
                 android:inputType="textPassword"
+                android:gravity="center"
                 app:layout_constraintTop_toBottomOf="@id/et_email"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
@@ -49,11 +40,22 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_medium"
+                android:layout_marginStart="@dimen/spacing_large"
+                android:layout_marginEnd="@dimen/spacing_large"
                 android:text="@string/login"
                 android:textColor="@color/white"
                 android:backgroundTint="@color/colorAccent"
+                app:layout_constraintTop_toBottomOf="@id/et_password"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+                android:id="@+id/tv_app_version"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/spacing_large"
+                app:layout_constraintTop_toBottomOf="@id/bt_login"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                tools:text="v1.0.0-DEBUG"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

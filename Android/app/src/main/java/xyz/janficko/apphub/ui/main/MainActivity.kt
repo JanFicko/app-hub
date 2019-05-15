@@ -60,14 +60,15 @@ class MainActivity : BaseViewModelActivity<MainState, MainViewModel>(), View.OnC
         tv_error.visibility = View.GONE
         when (v?.id) {
             R.id.iv_logout -> {
-                sharedPreferences.saveString(Keys.PREF_TOKEN, "")
-                sharedPreferences.saveObject(Keys.PREF_USER, "")
                 openLogin()
             }
         }
     }
 
     private fun openLogin() {
+        sharedPreferences.saveString(Keys.PREF_TOKEN, "")
+        sharedPreferences.saveObject(Keys.PREF_USER, "")
+
         iv_back.visibility = View.GONE
         iv_refresh.visibility = View.GONE
         iv_logout.visibility = View.GONE

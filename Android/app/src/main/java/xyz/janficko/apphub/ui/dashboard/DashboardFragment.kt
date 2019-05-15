@@ -6,10 +6,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_dashboard.*
+import kotlinx.android.synthetic.main.fragment_login.*
 import org.koin.androidx.viewmodel.ext.sharedViewModel
 import org.koin.androidx.viewmodel.ext.viewModel
 import xyz.janficko.apphub.R
 import xyz.janficko.apphub.common.ErrorCodes
+import xyz.janficko.apphub.common.Keys
 import xyz.janficko.apphub.model.Project
 import xyz.janficko.apphub.ui.base.BaseViewModelFragment
 import xyz.janficko.apphub.ui.main.MainViewModel
@@ -79,6 +81,11 @@ class DashboardFragment :
 
                 baseActivity?.tv_error?.visibility = View.VISIBLE
                 baseActivity?.tv_error?.text = getString(R.string.error_no_server_connection)
+            }
+            ErrorCodes.TOKEN_EXPIRED -> {
+                srl_container_apps.snack(R.string.error_token_expired)
+
+                sharedviewmodel.openLoginFragment()
             }
 
         }

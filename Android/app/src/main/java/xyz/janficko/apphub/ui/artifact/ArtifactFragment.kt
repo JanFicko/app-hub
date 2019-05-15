@@ -6,6 +6,7 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_artifact.*
+import kotlinx.android.synthetic.main.fragment_dashboard.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.sharedViewModel
 import org.koin.androidx.viewmodel.ext.viewModel
@@ -25,7 +26,6 @@ class ArtifactFragment :
 
     override val viewmodel : ArtifactViewModel by viewModel()
     private val sharedviewmodel: MainViewModel by sharedViewModel()
-    private val sharedPreferences: SharedPreferencesContract by inject()
 
     override val layoutResId: Int
         get() = R.layout.fragment_artifact
@@ -74,6 +74,11 @@ class ArtifactFragment :
         when (code) {
             ErrorCodes.UNKNOWN_ERROR -> {
                 cl_container_artifacts.snack(R.string.error_unknown)
+            }
+            ErrorCodes.TOKEN_EXPIRED -> {
+                cl_container_artifacts.snack(R.string.error_token_expired)
+
+                sharedviewmodel.openLoginFragment()
             }
         }
     }

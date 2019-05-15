@@ -29,7 +29,6 @@ class DashboardViewModel constructor(
 
         getDataFromWeb(
             projectUseCase.getProjects(
-                sharedPreferences.getString(Keys.PREF_TOKEN, ""),
                 GetProjectsRequest(user._id)
             ),
             object : BaseViewModel<DashboardState>.RemoteRepositoryCallback<GetProjectsResponse>() {
@@ -55,6 +54,10 @@ class DashboardViewModel constructor(
 
                 override fun onUnknownError() {
                     postScreenState(DashboardState.ShowError(ErrorCodes.UNKNOWN_ERROR))
+                }
+
+                override fun noToken() {
+                    postScreenState(DashboardState.ShowError(ErrorCodes.TOKEN_EXPIRED))
                 }
             }
         )

@@ -12,8 +12,10 @@ import xyz.janficko.apphub.data.remote.BaseRemoteLoadCallback
 import xyz.janficko.apphub.data.remote.response.BaseResponse
 import xyz.janficko.apphub.dataholder.SingleLiveData
 import xyz.janficko.apphub.ui.AppHub
-import xyz.janficko.apphub.util.LoggerPrinter
+import xyz.janficko.apphub.util.printError
+import java.io.IOException
 import java.net.ConnectException
+import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import kotlin.contracts.ExperimentalContracts
 import kotlin.coroutines.CoroutineContext
@@ -100,20 +102,24 @@ abstract class BaseViewModel<ST> constructor(val appHub : AppHub) : ViewModel(),
                     dataSource.onError(result.code)
                 }
             } catch (e : HttpException) {
-                e.message?.let { LoggerPrinter.printError(TAG, it)}
+                e.message?.let { printError(TAG, it)}
 
                 dataSource.onLoadIndicator(false)
-                dataSource.onUnknownError();
+
+                when (e.code()) {
+                    401 -> { dataSource.noToken() }
+                    else -> { dataSource.onUnknownError() }
+                }
             } catch (e : Throwable) {
-                e.message?.let { LoggerPrinter.printError(TAG, it)}
+                e.message?.let { printError(TAG, it)}
 
                 dataSource.onLoadIndicator(false)
                 if (e is UnknownHostException) {
-                    dataSource.onNoInternet();
-                } else if (e is ConnectException) {
-                    dataSource.onNoServer();
+                    dataSource.onNoInternet()
+                } else if (e is IOException || e is ConnectException || e is SocketTimeoutException) {
+                    dataSource.onNoServer()
                 } else {
-                    dataSource.onUnknownError();
+                    dataSource.onUnknownError()
                 }
             }
         }

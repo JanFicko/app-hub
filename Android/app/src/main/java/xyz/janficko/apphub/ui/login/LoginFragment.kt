@@ -6,6 +6,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_login.*
 import org.koin.androidx.viewmodel.ext.sharedViewModel
 import org.koin.androidx.viewmodel.ext.viewModel
+import xyz.janficko.apphub.BuildConfig
 import xyz.janficko.apphub.R
 import xyz.janficko.apphub.common.ErrorCodes
 import xyz.janficko.apphub.ui.base.BaseViewModelFragment
@@ -30,7 +31,8 @@ class LoginFragment :
 
         bt_login.setOnClickListener(this)
 
-        baseActivity?.tv_title?.text = getString(R.string.login)
+        baseActivity?.tv_title?.text = getString(R.string.app_name)
+        tv_app_version.text = BuildConfig.VERSION_NAME
     }
 
     override fun processRenderState(renderState: LoginState) {
@@ -42,9 +44,11 @@ class LoginFragment :
 
     fun showError(code: Int) {
         when (code) {
-            ErrorCodes.UNKNOWN_ERROR -> v_login.snack(R.string.error_not_logged_in)
+            ErrorCodes.ERROR_WRONG_PASSWORD -> v_login.snack(R.string.error_wrong_password)
+            ErrorCodes.ERROR_BANNED -> v_login.snack(R.string.error_banned)
             ErrorCodes.NO_INTERNET -> v_login.snack(R.string.error_no_internet_connection)
             ErrorCodes.NO_SERVER -> v_login.snack(R.string.error_no_server_connection)
+            ErrorCodes.UNKNOWN_ERROR -> v_login.snack(R.string.error_unknown)
         }
     }
 

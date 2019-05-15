@@ -95,8 +95,6 @@ router.route("/:projectId").put(async (req, res, next) => {
 router.route("/job/:jobId").put(async (req, res, next) => {
     const { version, changeLog } = req.body;
 
-    console.log(req.body);
-
     const getUserByTokenResponse = await UserController.getUserByToken(req.headers.authorization.split(" ")[1]);
     if (getUserByTokenResponse.code === 0 && getUserByTokenResponse.user != null && getUserByTokenResponse.user.isAdmin) {
         const createProjectResponse = await ProjectController.updateJob(req.params.jobId, version, changeLog);

@@ -6,7 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/spacing_tiny"
-        android:background="@drawable/bg_round_white">
+        android:background="@drawable/bg_round_grey">
 
     <TextView
             android:id="@+id/tv_artifact_name"
