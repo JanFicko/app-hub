@@ -145,7 +145,7 @@
                   Profile
                 </a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" data-toggle="modal" data-target="#logoutModal">
+                <a href="#" class="dropdown-item" data-toggle="modal" data-target="#logoutModal">
                   <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                   Logout
                 </a>
@@ -193,7 +193,7 @@
         <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" [routerLink]="['login']" data-dismiss="modal">Logout</a>
+          <a class="btn btn-black" [routerLink]="['login']" data-dismiss="modal">Logout</a>
         </div>
       </div>
     </div>
@@ -202,7 +202,7 @@
 
 
 <ng-template #isLoggedIn_otherContent>
-  <div class="bg-gradient-primary background-height-fill">
+  <div class="bg-black background-height-fill">
     <div class="container">
       <router-outlet *ngIf="!nav.visible"></router-outlet>
     </div>
