@@ -11,7 +11,7 @@ import xyz.janficko.apphub.common.ResponseState
 import xyz.janficko.apphub.data.remote.BaseRemoteLoadCallback
 import xyz.janficko.apphub.data.remote.response.BaseResponse
 import xyz.janficko.apphub.dataholder.SingleLiveData
-import xyz.janficko.apphub.ui.AppHub
+import xyz.janficko.apphub.AppHub
 import xyz.janficko.apphub.util.printError
 import java.io.IOException
 import java.net.ConnectException
@@ -64,7 +64,12 @@ abstract class BaseViewModel<ST> constructor(val appHub : AppHub) : ViewModel(),
 
     override val coroutineContext : CoroutineContext
         get() {
-            if (!::job.isInitialized) {
+            /**
+             *  ViewModel is tied to View's lifecycle. If you want to re-use View while switching between other View's
+             *  onCleared is called and job gets cancelled. We've put isCancelled checker here to re-initialize job
+             *  in case of View switching.
+             */
+            if (!::job.isInitialized || job.isCancelled) {
                 job = Job()
             }
             return Dispatchers.Main + job

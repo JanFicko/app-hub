@@ -5,7 +5,7 @@ import android.content.Context
 import android.net.Uri
 import android.os.Environment
 import xyz.janficko.apphub.common.Constants
-import xyz.janficko.apphub.ui.AppHub
+import xyz.janficko.apphub.AppHub
 import kotlin.contracts.ExperimentalContracts
 
 @ExperimentalContracts

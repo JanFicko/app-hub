@@ -8,7 +8,7 @@ import xyz.janficko.apphub.data.remote.request.GetProjectsRequest
 import xyz.janficko.apphub.data.remote.response.GetProjectsResponse
 import xyz.janficko.apphub.domain.remote.ProjectUseCase
 import xyz.janficko.apphub.model.User
-import xyz.janficko.apphub.ui.AppHub
+import xyz.janficko.apphub.AppHub
 import xyz.janficko.apphub.ui.base.BaseViewModel
 import kotlin.contracts.ExperimentalContracts
 

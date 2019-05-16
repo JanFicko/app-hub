@@ -1,4 +1,4 @@
-package xyz.janficko.apphub.ui
+package xyz.janficko.apphub
 
 import android.app.Application
 import org.koin.android.ext.koin.androidContext

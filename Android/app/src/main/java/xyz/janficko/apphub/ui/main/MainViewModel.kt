@@ -3,7 +3,7 @@ package xyz.janficko.apphub.ui.main
 import org.koin.core.inject
 import xyz.janficko.apphub.common.Keys
 import xyz.janficko.apphub.data.local.shared_preferences.SharedPreferencesContract
-import xyz.janficko.apphub.ui.AppHub
+import xyz.janficko.apphub.AppHub
 import xyz.janficko.apphub.ui.base.BaseViewModel
 import kotlin.contracts.ExperimentalContracts
 

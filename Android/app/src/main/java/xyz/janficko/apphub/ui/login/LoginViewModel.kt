@@ -8,7 +8,7 @@ import xyz.janficko.apphub.data.local.shared_preferences.SharedPreferencesContra
 import xyz.janficko.apphub.data.remote.request.LoginRequest
 import xyz.janficko.apphub.data.remote.response.LoginResponse
 import xyz.janficko.apphub.domain.remote.UserUseCase
-import xyz.janficko.apphub.ui.AppHub
+import xyz.janficko.apphub.AppHub
 import xyz.janficko.apphub.ui.base.BaseViewModel
 import kotlin.contracts.ExperimentalContracts
 
