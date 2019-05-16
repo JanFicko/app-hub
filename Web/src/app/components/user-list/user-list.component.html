@@ -2,7 +2,7 @@
 <div class="container-fluid">
 
   <!-- Page Heading -->
-  <h1 class="h3 mb-2 text-gray-800">Users <a [routerLink]="'/user-create'"><i class="fas fa-fw fa-user-plus"></i></a></h1>
+  <h1 class="h3 mb-2 text-gray-800">Users <a [routerLink]="'/user-create'"><i class="fas fa-fw fa-user-plus text-black"></i></a></h1>
 
   <!-- DataTales Example -->
   <div class="card shadow mb-4">
@@ -28,7 +28,7 @@
           <tbody>
           <tr *ngFor="let user of users">
             <td>{{ user.email }}
-              <a [routerLink]="['/user-edit', user._id]">
+              <a [routerLink]="['/user-edit', user._id]" class="btn-link-dark">
                 <i class="fas fa-fw fa-user-edit"></i>
               </a>
               <i tabindex="0" class="fas fa-fw fa-ban text-danger" role="button" data-toggle="popover" data-placement="top" data-trigger="focus" title="Blocked" *ngIf="user.isBanned"></i>
