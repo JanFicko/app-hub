@@ -5,7 +5,8 @@
         android:id="@+id/v_login"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:ignore="Autofill">
+        tools:ignore="Autofill"
+        tools:context=".ui.login.LoginFragment">
 
         <EditText
                 android:id="@+id/et_email"
