@@ -21,7 +21,6 @@ fun downloadFile(artifactName : String, url : String, token: String) {
         setTitle(artifactName)
         setDescription(artifactName)
         setMimeType("application/vnd.android.package-archive")
-        allowScanningByMediaScanner()
         setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, artifactName)
         setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
     }

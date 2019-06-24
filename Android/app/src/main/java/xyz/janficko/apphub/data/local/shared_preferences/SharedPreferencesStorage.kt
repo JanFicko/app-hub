@@ -13,7 +13,7 @@ class SharedPreferencesStorage
 
     @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
     override fun getString(key: String, defaultValue: String): String {
-        return sharedPreferences.getString(key, defaultValue)
+        return sharedPreferences.getString(key, defaultValue).toString()
     }
 
     override fun saveLong(key: String, number: Long) {
