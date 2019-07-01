@@ -13,9 +13,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        self.window = UIWindow(frame: UIScreen.main.bounds)
+        let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        /*
+         Check if user is logged in and show appropriate View.
+        */
+        if (UserDefaults.standard.bool(forKey: "LOGGED_IN")) {
+            self.window?.rootViewController = mainStoryboard.instantiateViewController(withIdentifier: "idDashboard") as! DashboardVC
+            
+            self.window?.makeKeyAndVisible()
+        }
+        else {
+            self.window?.rootViewController = mainStoryboard.instantiateViewController(withIdentifier: "idLogin") as! LoginVC
+            
+            self.window?.makeKeyAndVisible()
+        }
+        
         return true
     }
 
