@@ -12,6 +12,7 @@ object Constants {
     const val SHARED_PREF = "SHARED_PREFERENCES"
 
     const val DOWNLOAD_PREFIX = "api/projects/download/"
+
     const val DOWNLOAD_PASSWORD_HEADER = "DownloadPassword"
     const val DEVICE_INFO_HEADER = "DeviceInfo"
     const val AUTHORIZATION_HEADER = "Authorization"
