@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "adm-zip": "^0.4.13",
-    "bcrypt": "^3.0.4",
+    "bcrypt": "^3.0.6",
     "cors": "^2.8.5",
     "debug": "~2.6.9",
     "express": "~4.16.0",
@@ -15,7 +15,7 @@
     "fs": "0.0.1-security",
     "http-errors": "~1.6.2",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.4.17",
+    "mongoose": "^5.6.2",
     "morgan": "~1.9.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",

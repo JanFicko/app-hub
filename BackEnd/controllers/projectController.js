@@ -15,10 +15,15 @@ class ProjectController {
             });
     }
 
-    static getUsersProjects(userId) {
+    static getUsersProjects(userId, platform) {
         let options = { "allowedUserAccess.privilegeType" : [ "Full", "Latest" ] };
         if (userId !== "all") {
-            options = { "allowedUserAccess.user_uuid" : userId, "allowedUserAccess.privilegeType" : [ "Full", "Latest" ]};
+            if (platform !== "all") {
+                options = { "platform" : platform, "allowedUserAccess.user_uuid" : userId, "allowedUserAccess.privilegeType" : [ "Full", "Latest" ]};
+            }
+            else {
+                options = { "allowedUserAccess.user_uuid" : userId, "allowedUserAccess.privilegeType" : [ "Full", "Latest" ]};
+            }
         }
         return Project.find(options)
             .select(['-downloadPassword', '-jobs'])
@@ -43,7 +48,7 @@ class ProjectController {
     static async updateProjectAccess(userId, projects) {
 
         let errors = [];
-        for (let j=0; j < projects.length; j++) {
+        for (let j = 0; j < projects.length; j++) {
             await Project.findOne({ projectId: projects[j].projectId })
                 .then( async (project) => {
 
