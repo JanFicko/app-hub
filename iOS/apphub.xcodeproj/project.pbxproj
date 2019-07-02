@@ -10,26 +10,32 @@
 		AA90BB99868C8FEA4CE8A2D5 /* Pods_apphub.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FED255252DDB0249A738D44C /* Pods_apphub.framework */; };
 		C904F4CB22C3912500814F2B /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C904F4CA22C3912500814F2B /* LoginVC.swift */; };
 		C904F4CD22C4A99200814F2B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C904F4CC22C4A99200814F2B /* Assets.xcassets */; };
-		C904F4CF22C5F52000814F2B /* MainNavigationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C904F4CE22C5F52000814F2B /* MainNavigationVC.swift */; };
 		C904F4D422C60D1A00814F2B /* LoginResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C904F4D322C60D1A00814F2B /* LoginResponse.swift */; };
+		C904F4D622C9ED2900814F2B /* SplashVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C904F4D522C9ED2900814F2B /* SplashVC.swift */; };
+		C904F4D822C9F38C00814F2B /* MainNavigationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C904F4D722C9F38C00814F2B /* MainNavigationVC.swift */; };
+		C904F4DA22C9FFE900814F2B /* GetProjectsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C904F4D922C9FFE900814F2B /* GetProjectsResponse.swift */; };
 		C97CA36322C0EBE50076226D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97CA36222C0EBE50076226D /* AppDelegate.swift */; };
 		C97CA36522C0EBE50076226D /* DashboardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97CA36422C0EBE50076226D /* DashboardVC.swift */; };
 		C97CA36822C0EBE50076226D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C97CA36622C0EBE50076226D /* Main.storyboard */; };
 		C97CA36D22C0EBE60076226D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C97CA36B22C0EBE60076226D /* LaunchScreen.storyboard */; };
+		C9FF1C0522CA2D8A00BBFC73 /* JobVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9FF1C0422CA2D8A00BBFC73 /* JobVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		ABDD9D0FC8F44850853826BC /* Pods-apphub.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-apphub.release.xcconfig"; path = "Target Support Files/Pods-apphub/Pods-apphub.release.xcconfig"; sourceTree = "<group>"; };
 		C904F4CA22C3912500814F2B /* LoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
 		C904F4CC22C4A99200814F2B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = ../../../.Trash/Assets.xcassets; sourceTree = "<group>"; };
-		C904F4CE22C5F52000814F2B /* MainNavigationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigationVC.swift; sourceTree = "<group>"; };
 		C904F4D322C60D1A00814F2B /* LoginResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginResponse.swift; sourceTree = "<group>"; };
+		C904F4D522C9ED2900814F2B /* SplashVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashVC.swift; sourceTree = "<group>"; };
+		C904F4D722C9F38C00814F2B /* MainNavigationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigationVC.swift; sourceTree = "<group>"; };
+		C904F4D922C9FFE900814F2B /* GetProjectsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetProjectsResponse.swift; sourceTree = "<group>"; };
 		C97CA35F22C0EBE50076226D /* apphub.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = apphub.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C97CA36222C0EBE50076226D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C97CA36422C0EBE50076226D /* DashboardVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardVC.swift; sourceTree = "<group>"; };
 		C97CA36722C0EBE50076226D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C97CA36C22C0EBE60076226D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C97CA36E22C0EBE60076226D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C9FF1C0422CA2D8A00BBFC73 /* JobVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobVC.swift; sourceTree = "<group>"; };
 		EFF5513098E44D862C6387F3 /* Pods-apphub.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-apphub.debug.xcconfig"; path = "Target Support Files/Pods-apphub/Pods-apphub.debug.xcconfig"; sourceTree = "<group>"; };
 		FED255252DDB0249A738D44C /* Pods_apphub.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_apphub.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -68,7 +74,9 @@
 			children = (
 				C97CA36422C0EBE50076226D /* DashboardVC.swift */,
 				C904F4CA22C3912500814F2B /* LoginVC.swift */,
-				C904F4CE22C5F52000814F2B /* MainNavigationVC.swift */,
+				C904F4D522C9ED2900814F2B /* SplashVC.swift */,
+				C904F4D722C9F38C00814F2B /* MainNavigationVC.swift */,
+				C9FF1C0422CA2D8A00BBFC73 /* JobVC.swift */,
 			);
 			path = controller;
 			sourceTree = "<group>";
@@ -86,6 +94,7 @@
 			isa = PBXGroup;
 			children = (
 				C904F4D322C60D1A00814F2B /* LoginResponse.swift */,
+				C904F4D922C9FFE900814F2B /* GetProjectsResponse.swift */,
 			);
 			path = data;
 			sourceTree = "<group>";
@@ -237,9 +246,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				C97CA36522C0EBE50076226D /* DashboardVC.swift in Sources */,
+				C904F4D622C9ED2900814F2B /* SplashVC.swift in Sources */,
+				C9FF1C0522CA2D8A00BBFC73 /* JobVC.swift in Sources */,
 				C97CA36322C0EBE50076226D /* AppDelegate.swift in Sources */,
+				C904F4D822C9F38C00814F2B /* MainNavigationVC.swift in Sources */,
+				C904F4DA22C9FFE900814F2B /* GetProjectsResponse.swift in Sources */,
 				C904F4CB22C3912500814F2B /* LoginVC.swift in Sources */,
-				C904F4CF22C5F52000814F2B /* MainNavigationVC.swift in Sources */,
 				C904F4D422C60D1A00814F2B /* LoginResponse.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
