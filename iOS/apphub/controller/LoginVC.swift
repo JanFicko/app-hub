@@ -63,7 +63,7 @@ class LoginVC: UIViewController {
         ]
         
         Alamofire.request(
-            "http://TODO-SERVICE-URL",
+            "http://172.20.11.35:3000/api/users/login",
             method: .post,
             parameters: parameters,
             encoding: JSONEncoding.default,
@@ -74,9 +74,11 @@ class LoginVC: UIViewController {
                 switch (response.result) {
                 case .success:
                     let loginResponse : LoginResponse? = response.result.value
-                
+                    
                     switch (loginResponse?.code) {
                         case 0:
+                            UserDefaults.standard.set(true, forKey: "LOGGED_IN")
+                            
                             self.navigateToDashboard()
                         case -2:
                             self.showSnackbar(snackbarMessage: "Napačno geslo")
@@ -105,7 +107,7 @@ class LoginVC: UIViewController {
             return
         }
         
-        present(mainNavigationVC, animated: true, completion: nil)
+        self.present(mainNavigationVC, animated: true, completion: nil)
     }
     
     private func showSnackbar(snackbarMessage : String) {
