@@ -16,6 +16,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { ErrorInterceptor } from './helpers/error.interceptor';
 import { DeviceDetectorModule } from 'ngx-device-detector';
+import { AlertComponent } from './components/alert/alert.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { DeviceDetectorModule } from 'ngx-device-detector';
     ProjectComponent,
     UserCreateComponent,
     UserEditComponent,
-    UserListComponent
+    UserListComponent,
+    AlertComponent
   ],
   imports: [
     BrowserModule,
