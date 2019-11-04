@@ -16,10 +16,6 @@ class RemoteRepository : RemoteRepositoryContract, KoinComponent {
 
     val service : ApiService by inject()
 
-    companion object {
-        val TAG : String = RemoteRepository::class.java.simpleName
-    }
-
     override fun login(loginRequest: LoginRequest): Deferred<LoginResponse> {
         return service.login(loginRequest)
     }

@@ -29,8 +29,7 @@ class DashboardFragment :
 
     var projectAdapter : ProjectsAdapter? = null
 
-    override val layoutResId: Int
-        get() = R.layout.fragment_dashboard
+    override val layoutResId: Int = R.layout.fragment_dashboard
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -41,53 +40,22 @@ class DashboardFragment :
         baseActivity?.tv_title?.text = getString(R.string.app_name)
 
         rv_apps.layoutManager = LinearLayoutManager(context)
-        rv_apps.setHasFixedSize(true)
     }
 
     override fun processRenderState(renderState: DashboardState) {
         when (renderState) {
             is DashboardState.ShowProjects -> showProjects(renderState.projects)
-            is DashboardState.ShowError -> showError(renderState.code)
         }
     }
 
-    private fun showProjects(projects : List<Project>) {
-        if (projects.size == 0) {
-            projectAdapter?.clearAdapter()
+    override fun showError(errorCode: Int) {
+        super.showError(errorCode)
 
-            baseActivity?.tv_error?.visibility = View.VISIBLE
-            baseActivity?.tv_error?.text = getString(R.string.error_no_projects)
-        } else {
-            baseActivity?.tv_error?.visibility = View.GONE
-            projectAdapter = ProjectsAdapter(projects) {
-                sharedviewmodel.projectId = it
-                sharedviewmodel.openJobFragment()
-            }
-            rv_apps.adapter = projectAdapter
-        }
-    }
-
-    private fun showError(code : Int) {
-        when (code) {
-            ErrorCodes.UNKNOWN_ERROR -> srl_container_apps.snack(R.string.error_unknown)
-            ErrorCodes.NO_INTERNET -> {
-                projectAdapter?.clearAdapter()
-
-                baseActivity?.tv_error?.visibility = View.VISIBLE
-                baseActivity?.tv_error?.text = getString(R.string.error_no_internet_connection)
-            }
-            ErrorCodes.NO_SERVER -> {
-                projectAdapter?.clearAdapter()
-
-                baseActivity?.tv_error?.visibility = View.VISIBLE
-                baseActivity?.tv_error?.text = getString(R.string.error_no_server_connection)
-            }
+        when (errorCode) {
             ErrorCodes.TOKEN_EXPIRED -> {
-                srl_container_apps.snack(R.string.error_token_expired)
-
                 sharedviewmodel.openLoginFragment()
             }
-
+            else -> baseActivity?.showUnknownError()
         }
     }
 
@@ -99,6 +67,22 @@ class DashboardFragment :
     override fun onClick(view: View?) {
         when(view?.id) {
             R.id.iv_refresh -> viewmodel.getProjects()
+        }
+    }
+
+    private fun showProjects(projects : List<Project>) {
+        if (projects.isNotEmpty()) {
+            baseActivity?.tv_error?.visibility = View.GONE
+            projectAdapter = ProjectsAdapter(projects) {
+                sharedviewmodel.projectId = it
+                sharedviewmodel.openJobFragment()
+            }
+            rv_apps.adapter = projectAdapter
+        } else {
+            projectAdapter?.clearAdapter()
+
+            baseActivity?.tv_error?.visibility = View.VISIBLE
+            baseActivity?.tv_error?.text = getString(R.string.error_no_projects)
         }
     }
 

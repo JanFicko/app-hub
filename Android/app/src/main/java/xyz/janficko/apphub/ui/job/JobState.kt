@@ -6,6 +6,4 @@ sealed class JobState {
 
     class ShowJobs(val project : Project) : JobState()
 
-    class ShowError(val code : Int) : JobState()
-
 }

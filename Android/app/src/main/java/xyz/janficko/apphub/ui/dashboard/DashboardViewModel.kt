@@ -15,10 +15,9 @@ import kotlin.contracts.ExperimentalContracts
 @ExperimentalContracts
 class DashboardViewModel constructor(
     appHub: AppHub,
-    private val projectUseCase: ProjectUseCase
+    private val projectUseCase: ProjectUseCase,
+    private val sharedPreferences: SharedPreferencesContract
 ) : BaseViewModel<DashboardState>(appHub) {
-
-    private val sharedPreferences: SharedPreferencesContract by inject()
 
     init {
         getProjects()
@@ -34,30 +33,6 @@ class DashboardViewModel constructor(
             object : BaseViewModel<DashboardState>.RemoteRepositoryCallback<GetProjectsResponse>() {
                 override fun onSuccess(body: GetProjectsResponse) {
                     postScreenState(DashboardState.ShowProjects(body.projects))
-                }
-
-                override fun onLoadIndicator(active: Boolean) {
-                    postScreenLoader(active)
-                }
-
-                override fun onError(code: Int) {
-                    postScreenState(DashboardState.ShowError(code))
-                }
-
-                override fun onNoInternet() {
-                    postScreenState(DashboardState.ShowError(ErrorCodes.NO_INTERNET))
-                }
-
-                override fun onNoServer() {
-                    postScreenState(DashboardState.ShowError(ErrorCodes.NO_SERVER))
-                }
-
-                override fun onUnknownError() {
-                    postScreenState(DashboardState.ShowError(ErrorCodes.UNKNOWN_ERROR))
-                }
-
-                override fun noToken() {
-                    postScreenState(DashboardState.ShowError(ErrorCodes.TOKEN_EXPIRED))
                 }
             }
         )

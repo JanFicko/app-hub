@@ -18,10 +18,10 @@ val projectsModule = module {
     factory<UserUseCase>()
     factory<ProjectUseCase>()
 
-    viewModel { MainViewModel(get()) }
-    viewModel { LoginViewModel(get(), get()) }
-    viewModel { DashboardViewModel(get(), get()) }
-    viewModel { JobViewModel(get(), get()) }
-    viewModel { ArtifactViewModel(get(), get()) }
+    viewModel { MainViewModel(get(), get()) }
+    viewModel { LoginViewModel(get(), get(), get()) }
+    viewModel { DashboardViewModel(get(), get(), get()) }
+    viewModel { JobViewModel(get(), get(), get()) }
+    viewModel { ArtifactViewModel(get(), get(), get()) }
 
 }

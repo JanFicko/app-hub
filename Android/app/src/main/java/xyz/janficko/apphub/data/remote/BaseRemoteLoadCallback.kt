@@ -9,5 +9,5 @@ interface BaseRemoteLoadCallback<R : BaseResponse> {
     fun onNoInternet()
     fun onNoServer()
     fun onLoadIndicator(active: Boolean)
-    fun noToken()
+    fun onTokenExpired()
 }

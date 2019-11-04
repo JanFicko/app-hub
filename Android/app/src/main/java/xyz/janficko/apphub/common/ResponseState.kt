@@ -9,6 +9,6 @@ enum class ResponseState {
     UNKNOWN_ERROR,
     NO_INTERNET,
     NO_SERVER,
-    NO_TOKEN
+    TOKEN_EXPIRED
 
 }

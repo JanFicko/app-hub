@@ -37,6 +37,20 @@ abstract class BaseViewModel<ST> constructor(val appHub : AppHub) : ViewModel(),
         _screenState.postValue(ScreenState.Render(screenState))
     }
 
+    protected fun postGenericErrorState(error : ResponseState) {
+        if (!::_screenState.isInitialized) {
+            _screenState = MutableLiveData()
+        }
+        _screenState.postValue(ScreenState.GenericErrors(error))
+    }
+
+    protected fun postErrorState(error : Int) {
+        if (!::_screenState.isInitialized) {
+            _screenState = MutableLiveData()
+        }
+        _screenState.postValue(ScreenState.Error(error))
+    }
+
     val screenState: LiveData<ScreenState<ST>>
         get() {
             if (!::_screenState.isInitialized) {
@@ -112,7 +126,7 @@ abstract class BaseViewModel<ST> constructor(val appHub : AppHub) : ViewModel(),
                 dataSource.onLoadIndicator(false)
 
                 when (e.code()) {
-                    401 -> { dataSource.noToken() }
+                    401 -> { dataSource.onTokenExpired() }
                     else -> { dataSource.onUnknownError() }
                 }
             } catch (e : Throwable) {
@@ -132,32 +146,28 @@ abstract class BaseViewModel<ST> constructor(val appHub : AppHub) : ViewModel(),
 
     abstract inner class RemoteRepositoryCallback<T : BaseResponse> : BaseRemoteLoadCallback<T> {
 
+        override fun onLoadIndicator(active: Boolean) {
+            postScreenLoader(active)
+        }
+
         override fun onError(code: Int) {
-            _responseEvent.postValue(ScreenState.Render(ResponseState.ERROR))
+            postErrorState(code)
         }
 
         override fun onUnknownError() {
-            _responseEvent.postValue(ScreenState.Render(ResponseState.UNKNOWN_ERROR))
+            postGenericErrorState(ResponseState.UNKNOWN_ERROR)
         }
 
         override fun onNoInternet() {
-            _responseEvent.postValue(ScreenState.Render(ResponseState.NO_INTERNET))
+            postGenericErrorState(ResponseState.NO_INTERNET)
         }
 
         override fun onNoServer() {
-            _responseEvent.postValue(ScreenState.Render(ResponseState.NO_SERVER))
+            postGenericErrorState(ResponseState.NO_SERVER)
         }
 
-        override fun onLoadIndicator(active: Boolean) {
-            if (active) {
-                _responseEvent.postValue(ScreenState.Render(ResponseState.LOADING))
-            } else {
-                _responseEvent.postValue(ScreenState.Render(ResponseState.NOT_LOADING))
-            }
-        }
-
-        override fun noToken() {
-            _responseEvent.postValue(ScreenState.Render(ResponseState.NO_TOKEN))
+        override fun onTokenExpired() {
+            postGenericErrorState(ResponseState.TOKEN_EXPIRED)
         }
     }
 

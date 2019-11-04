@@ -20,10 +20,9 @@ import kotlin.contracts.ExperimentalContracts
 @ExperimentalContracts
 class ArtifactViewModel constructor(
     appHub: AppHub,
-    private val projectUseCase: ProjectUseCase
+    private val projectUseCase: ProjectUseCase,
+    private val sharedPreferences: SharedPreferencesContract
 ) : BaseViewModel<ArtifactState>(appHub) {
-
-    private val sharedPreferences: SharedPreferencesContract by inject()
 
     fun showArtifacts(jobId : Int) {
         getDataFromWeb(
@@ -33,18 +32,6 @@ class ArtifactViewModel constructor(
             object : BaseViewModel<ArtifactState>.RemoteRepositoryCallback<GetArtifactsResponse>() {
                 override fun onSuccess(body: GetArtifactsResponse) {
                     postScreenState(ArtifactState.ShowArtifacts(body.outputs))
-                }
-
-                override fun onLoadIndicator(active: Boolean) {
-                    postScreenLoader(active)
-                }
-
-                override fun onError(code: Int) {
-                    postScreenState(ArtifactState.ShowArtifacts(ArrayList()))
-                }
-
-                override fun noToken() {
-                    postScreenState(ArtifactState.ShowError(ErrorCodes.TOKEN_EXPIRED))
                 }
             }
         )

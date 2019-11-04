@@ -7,6 +7,4 @@ sealed class MainState  {
     class OpenVersion : MainState()
     class OpenArtifacts : MainState()
 
-    class ShowError(val code : Int) : MainState()
-
 }

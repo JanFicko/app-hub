@@ -8,11 +8,12 @@ import kotlinx.android.synthetic.main.item_app.view.*
 import xyz.janficko.apphub.R
 import xyz.janficko.apphub.model.Project
 
-class ProjectsAdapter(private var projects: List<Project>, private val callback : (Int) -> Unit) :
-    RecyclerView.Adapter<ProjectsAdapter.AppAdapterViewHolder>() {
+class ProjectsAdapter(
+    private var projects: List<Project>,
+    private val callback : (Int) -> Unit
+): RecyclerView.Adapter<ProjectsAdapter.AppAdapterViewHolder>() {
 
-    val layoutResId: Int
-        get() = R.layout.item_app
+    val layoutResId: Int = R.layout.item_app
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AppAdapterViewHolder {
         return AppAdapterViewHolder(LayoutInflater.from(parent.context).inflate(layoutResId, parent, false))
@@ -29,7 +30,7 @@ class ProjectsAdapter(private var projects: List<Project>, private val callback 
         notifyDataSetChanged()
     }
 
-    inner class AppAdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class AppAdapterViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
         fun bind(project: Project) = with(itemView) {
             tv_app_name.text = project.name

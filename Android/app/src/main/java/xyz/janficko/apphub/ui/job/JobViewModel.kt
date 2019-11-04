@@ -15,10 +15,9 @@ import kotlin.contracts.ExperimentalContracts
 @ExperimentalContracts
 class JobViewModel constructor(
     appHub: AppHub,
-    private val projectUseCase: ProjectUseCase
+    private val projectUseCase: ProjectUseCase,
+    private val sharedPreferences: SharedPreferencesContract
 ) : BaseViewModel<JobState>(appHub) {
-
-    private val sharedPreferences: SharedPreferencesContract by inject()
 
     fun getJobs(projectId : Int) {
         val user : User = sharedPreferences.getObject(Keys.PREF_USER, User::class.java)
@@ -33,18 +32,6 @@ class JobViewModel constructor(
             object : BaseViewModel<JobState>.RemoteRepositoryCallback<GetJobsResponse>() {
                 override fun onSuccess(body: GetJobsResponse) {
                     postScreenState(JobState.ShowJobs(body.project))
-                }
-
-                override fun onLoadIndicator(active: Boolean) {
-                    postScreenLoader(active)
-                }
-
-                override fun onError(code: Int) {
-                    postScreenState(JobState.ShowError(code))
-                }
-
-                override fun noToken() {
-                    postScreenState(JobState.ShowError(ErrorCodes.TOKEN_EXPIRED))
                 }
             }
         )

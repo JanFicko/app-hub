@@ -9,8 +9,7 @@ import xyz.janficko.apphub.R
 
 class ArtifactAdapter(private val outputs: List<String>, val callback: (String) -> Unit) : RecyclerView.Adapter<ArtifactAdapter.ArtifactAdapterViewHolder>() {
 
-    val layoutResId: Int
-        get() = R.layout.item_artifact
+    val layoutResId: Int = R.layout.item_artifact
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArtifactAdapterViewHolder {
         return ArtifactAdapterViewHolder(LayoutInflater.from(parent.context).inflate(layoutResId, parent, false))

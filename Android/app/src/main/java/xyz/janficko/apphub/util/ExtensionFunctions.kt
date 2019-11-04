@@ -14,5 +14,4 @@ fun Context.toast(message: CharSequence, duration: Int = Toast.LENGTH_SHORT) {
     Toast.makeText(this, message, duration).show()
 }
 
-fun String.isValidEmail(): Boolean
-        = this.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(this).matches()
+fun String.isValidEmail(): Boolean = this.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(this).matches()

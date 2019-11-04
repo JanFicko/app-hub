@@ -11,8 +11,7 @@ import xyz.janficko.apphub.model.Job
 class JobAdapter(private val jobs: List<Job>, private val callback : (Job) -> Unit) :
     RecyclerView.Adapter<JobAdapter.BuildAdapterViewHolder>() {
 
-    val layoutResId: Int
-        get() = R.layout.item_job
+    val layoutResId: Int = R.layout.item_job
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BuildAdapterViewHolder {
         return BuildAdapterViewHolder(LayoutInflater.from(parent.context).inflate(layoutResId, parent, false))

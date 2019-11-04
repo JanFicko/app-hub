@@ -1,43 +1,56 @@
 package xyz.janficko.apphub.ui.base
 
 import android.content.Context
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.annotation.LayoutRes
-import androidx.fragment.app.Fragment
+import kotlinx.android.synthetic.main.activity_main.*
+import org.koin.androidx.viewmodel.ext.sharedViewModel
+import xyz.janficko.apphub.R
+import xyz.janficko.apphub.common.ErrorCodes
+import xyz.janficko.apphub.common.ResponseState
+import xyz.janficko.apphub.ui.main.MainViewModel
+import xyz.janficko.apphub.util.snack
 import kotlin.contracts.ExperimentalContracts
 
 @ExperimentalContracts
-abstract class BaseViewModelFragment<ST, VM : BaseViewModel<ST>> : Fragment() {
+abstract class BaseViewModelFragment<ST, VM : BaseViewModel<ST>>: BaseFragment() {
 
-    protected var TAG = ""
     abstract val viewmodel : VM
-    protected var baseActivity: BaseViewModelActivity<*, *>? = null
-
-    @get: LayoutRes
-    protected abstract val layoutResId: Int
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        TAG = javaClass.simpleName
-        baseActivity = context as BaseViewModelActivity<*, *>?
+
         viewmodel.screenState.observe(::getLifecycle, ::updateUI)
         viewmodel.loadingState.observe(::getLifecycle, ::updateUI)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(layoutResId, container, false)
+    abstract fun processRenderState(renderState: ST)
+
+    protected open fun showError(errorCode: Int) {
+        if (errorCode == ErrorCodes.UNKNOWN_ERROR) {
+            baseActivity?.showUnknownError()
+        }
     }
 
     private fun updateUI(screenState: ScreenState<ST>?){
         when (screenState) {
             is ScreenState.Render -> processRenderState(screenState.renderState)
             is ScreenState.Loading -> baseActivity?.showLoadingIndicator(screenState.active)
+            is ScreenState.GenericErrors -> processErrors(screenState.error)
+            is ScreenState.Error -> showError(screenState.error)
         }
     }
 
-    abstract fun processRenderState(renderState: ST)
+    private fun processErrors(error : ResponseState) {
+        when (error) {
+            ResponseState.NO_INTERNET -> baseActivity?.showNoInternet()
+            ResponseState.NO_SERVER -> baseActivity?.showNoServer()
+            ResponseState.UNKNOWN_ERROR -> baseActivity?.showUnknownError()
+            ResponseState.TOKEN_EXPIRED -> {
+                baseActivity?.showTokenExpiredError()
+
+                showError(ErrorCodes.TOKEN_EXPIRED)
+            }
+            else -> baseActivity?.showUnknownError()
+        }
+    }
 
 }

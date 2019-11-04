@@ -1,6 +1,5 @@
 package xyz.janficko.apphub.ui.main
 
-import org.koin.core.inject
 import xyz.janficko.apphub.common.Keys
 import xyz.janficko.apphub.data.local.shared_preferences.SharedPreferencesContract
 import xyz.janficko.apphub.AppHub
@@ -9,19 +8,16 @@ import kotlin.contracts.ExperimentalContracts
 
 @ExperimentalContracts
 class MainViewModel(
-    appHub : AppHub
+    appHub : AppHub,
+    sharedPreferences: SharedPreferencesContract
 ) : BaseViewModel<MainState>(appHub) {
-
-    private val sharedPreferences: SharedPreferencesContract by inject()
 
     var jobId : Int = 0
     var projectName : String = ""
     var projectId : Int = 0
 
     init {
-        val token = sharedPreferences.getString(Keys.PREF_TOKEN, "")
-
-        if(!token.isEmpty()) {
+        if(sharedPreferences.getString(Keys.PREF_TOKEN, "").isNotBlank()) {
             openDashboardFragment()
         } else {
             openLoginFragment()

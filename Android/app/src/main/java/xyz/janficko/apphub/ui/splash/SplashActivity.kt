@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import kotlinx.coroutines.*
 import xyz.janficko.apphub.common.Constants
 import xyz.janficko.apphub.ui.main.MainActivity
+import xyz.janficko.apphub.util.extNavigateToActivity
 import java.util.concurrent.TimeUnit
 import kotlin.contracts.ExperimentalContracts
 
@@ -20,9 +21,7 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val permission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-
-        if (permission != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             requestPermission()
         } else {
             startApp()
@@ -33,15 +32,17 @@ class SplashActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             delay(TimeUnit.SECONDS.toMillis(Constants.SPLASH_WAIT_SECONDS))
             withContext(Dispatchers.Main) {
-                MainActivity.start(this@SplashActivity)
+                extNavigateToActivity<MainActivity>()
             }
         }
     }
 
     private fun requestPermission() {
-        ActivityCompat.requestPermissions(this,
+        ActivityCompat.requestPermissions(
+            this,
             arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-            WRITE_EXTERNAL_STORAGE_PERMISSION)
+            WRITE_EXTERNAL_STORAGE_PERMISSION
+        )
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

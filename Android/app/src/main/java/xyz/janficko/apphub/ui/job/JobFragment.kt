@@ -29,8 +29,7 @@ class JobFragment :
     override val viewmodel : JobViewModel by viewModel()
     private val sharedviewmodel : MainViewModel by sharedViewModel()
 
-    override val layoutResId: Int
-        get() = R.layout.fragment_job
+    override val layoutResId: Int = R.layout.fragment_job
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -42,14 +41,34 @@ class JobFragment :
         srl_container_versions.setOnRefreshListener(this)
 
         rv_build.layoutManager = LinearLayoutManager(context)
-        rv_build.setHasFixedSize(true)
     }
 
     override fun processRenderState(renderState: JobState) {
         when (renderState) {
             is JobState.ShowJobs -> showJobs(renderState.project)
-            is JobState.ShowError -> showError(renderState.code)
         }
+    }
+
+    override fun showError(errorCode: Int) {
+        super.showError(errorCode)
+        when (errorCode) {
+            ErrorCodes.TOKEN_EXPIRED -> {
+                sharedviewmodel.openLoginFragment()
+            }
+            else -> baseActivity?.showUnknownError()
+        }
+    }
+
+    override fun onClick(view: View?) {
+        when (view?.id) {
+            R.id.iv_back -> sharedviewmodel.openDashboardFragment()
+            R.id.l_latest_build -> sharedviewmodel.openArtifactFragment()
+        }
+    }
+
+    override fun onRefresh() {
+        viewmodel.getJobs(sharedviewmodel.projectId)
+        srl_container_versions.isRefreshing = false
     }
 
     private fun showJobs(project : Project) {
@@ -58,7 +77,7 @@ class JobFragment :
 
         baseActivity?.tv_title?.text = project.name
 
-        if (project.jobs.size > 0) {
+        if (project.jobs.isNotEmpty()) {
             baseActivity?.tv_error?.visibility = View.GONE
             srl_container_versions.visibility = View.VISIBLE
 
@@ -84,39 +103,13 @@ class JobFragment :
                     sharedviewmodel.openArtifactFragment()
                 }
             }
-        } else if (project.jobs.size == 0) {
+        } else {
             baseActivity?.tv_error?.visibility = View.VISIBLE
             baseActivity?.tv_error?.text = getString(R.string.error_no_versions)
             srl_container_versions.visibility = View.GONE
 
             tv_old_builds.visibility = View.GONE
             rv_build.visibility = View.GONE
-        }
-    }
-
-    private fun showError(code : Int) {
-        when(code) {
-            ErrorCodes.UNKNOWN_ERROR -> {
-                srl_container_versions.snack(R.string.error_unknown)
-            }
-            ErrorCodes.TOKEN_EXPIRED -> {
-                srl_container_versions.snack(R.string.error_token_expired)
-
-                sharedviewmodel.openLoginFragment()
-            }
-        }
-    }
-
-    override fun onRefresh() {
-        viewmodel.getJobs(sharedviewmodel.projectId)
-        srl_container_versions.isRefreshing = false
-    }
-
-    override fun onClick(view: View?) {
-        when (view?.id) {
-            R.id.iv_back -> sharedviewmodel.openDashboardFragment()
-            R.id.l_latest_build -> sharedviewmodel.openArtifactFragment()
-
         }
     }
 

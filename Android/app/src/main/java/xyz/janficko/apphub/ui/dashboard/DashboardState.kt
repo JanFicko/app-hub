@@ -6,6 +6,4 @@ sealed class DashboardState {
 
     class ShowProjects(val projects : List<Project>) : DashboardState()
 
-    class ShowError(val code : Int) : DashboardState()
-
 }

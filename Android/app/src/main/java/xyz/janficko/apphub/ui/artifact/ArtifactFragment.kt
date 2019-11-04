@@ -27,9 +27,7 @@ class ArtifactFragment :
     override val viewmodel : ArtifactViewModel by viewModel()
     private val sharedviewmodel: MainViewModel by sharedViewModel()
 
-    override val layoutResId: Int
-        get() = R.layout.fragment_artifact
-
+    override val layoutResId: Int = R.layout.fragment_artifact
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -39,21 +37,34 @@ class ArtifactFragment :
         baseActivity?.iv_back?.setOnClickListener(this)
 
         rv_artifact.layoutManager = LinearLayoutManager(context)
-        rv_artifact.setHasFixedSize(true)
     }
 
 
     override fun processRenderState(renderState: ArtifactState) {
         when (renderState) {
             is ArtifactState.ShowArtifacts -> showArtifacts(renderState.outputs)
-            is ArtifactState.ShowError -> showError(renderState.code)
         }
+    }
+
+    override fun showError(errorCode: Int) {
+        super.showError(errorCode)
+
+        when (errorCode) {
+            ErrorCodes.TOKEN_EXPIRED -> {
+                sharedviewmodel.openLoginFragment()
+            }
+            else -> baseActivity?.showUnknownError()
+        }
+    }
+
+    override fun onClick(view: View?) {
+        sharedviewmodel.openJobFragment()
     }
 
     private fun showArtifacts(outputs : List<String>) {
         baseActivity?.tv_title?.text = sharedviewmodel.projectName
 
-        if (outputs.size > 0) {
+        if (outputs.isNotEmpty()) {
             baseActivity?.tv_error?.visibility = View.GONE
             cl_container_artifacts.visibility = View.VISIBLE
 
@@ -61,30 +72,13 @@ class ArtifactFragment :
             rv_artifact.adapter = ArtifactAdapter(outputs) {
                 viewmodel.downloadApk(sharedviewmodel.jobId, it)
             }
-        } else if (outputs.size == 0) {
+        } else {
             baseActivity?.tv_error?.visibility = View.VISIBLE
             baseActivity?.tv_error?.text = getString(R.string.error_no_artifacts)
             cl_container_artifacts.visibility = View.GONE
 
             rv_artifact.visibility = View.GONE
         }
-    }
-
-    private fun showError(code : Int) {
-        when (code) {
-            ErrorCodes.UNKNOWN_ERROR -> {
-                cl_container_artifacts.snack(R.string.error_unknown)
-            }
-            ErrorCodes.TOKEN_EXPIRED -> {
-                cl_container_artifacts.snack(R.string.error_token_expired)
-
-                sharedviewmodel.openLoginFragment()
-            }
-        }
-    }
-
-    override fun onClick(view: View?) {
-        sharedviewmodel.openJobFragment()
     }
 
 }
