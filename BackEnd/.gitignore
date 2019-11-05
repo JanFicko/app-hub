@@ -123,7 +123,7 @@ fabric.properties
 x64/
 x86/
 bld/
-[Bb]in/
+#[Bb]in/
 [Oo]bj/
 
 # Visual Studio 2015 cache/options directory
@@ -377,5 +377,6 @@ nbactions.xml
 .sass-cache/
 *.css.map
 
-### File with configuration data ###
-config.js
+
+### Folder with artifact files ###
+/public/
