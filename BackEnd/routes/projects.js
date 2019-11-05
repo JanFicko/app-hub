@@ -332,8 +332,7 @@ router.route("/download/:jobId/:userId/:output").get(async (req, res, next) => {
 
                                                 array1.ele('key', 'assets');
 
-                                                let array2 = array1.ele('array')
-                                                    .ele('dict');
+                                                let array2 = array1.ele('array').ele('dict');
                                                 array2.ele('key', 'kind');
                                                 array2.ele('string', 'software-package');
                                                 array2.ele('key', 'url');

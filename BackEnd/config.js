@@ -1,10 +1,10 @@
-let DOMAIN_NAME = "localhost:3000";
+let DOMAIN_NAME = "server:3000";
 
 let WEB_PORT = "3000";
 
 let JWT_SECRET = "THIS IS USED TO SIGN AND VERIFY JWT TOKENS, REPLACE IT WITH YOUR OWN SECRET, IT CAN BE ANY STRING";
 
-let MONGODB_IP = "localhost";
+let MONGODB_IP = "database";
 let MONGODB_PORT = "27017";
 let MONGODB_DATABASE_NAME = "app-hub";
 

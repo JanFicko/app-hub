@@ -1,0 +1,34 @@
+ # Specify docker-compose version
+version: '3'
+ 
+# Define the services/containers to be run
+services:
+ client: # Name of the first service
+   container_name: apphub_web
+   build: 
+    context: Web
+    dockerfile: DOCKERFILE
+   ports:
+     - "4200:4200"
+ server: # Name of the second service
+   container_name: apphub_server
+   build: 
+    context: BackEnd
+    dockerfile: DOCKERFILE
+   ports:
+     - "3000:3000"
+   environment:
+     - MONGO_URL=mongodb://database/app-hub
+   links:
+     - database
+   depends_on:
+     - database
+ database: # Name of the third service
+   container_name: apphub_database
+   environment:
+     - MONGO_INITDB_DATABASE=app-hub
+   image: mongo
+   volumes:
+     - "/data/db:/data/db"
+   ports:
+     - "27017:27017"
