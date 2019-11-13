@@ -1,6 +1,6 @@
-let DOMAIN_NAME = "server:3000";
+let SERVER_PORT = "3000";
 
-let WEB_PORT = "3000";
+let DOMAIN_NAME = "server:" + SERVER_PORT;
 
 let JWT_SECRET = "THIS IS USED TO SIGN AND VERIFY JWT TOKENS, REPLACE IT WITH YOUR OWN SECRET, IT CAN BE ANY STRING";
 
@@ -18,10 +18,12 @@ let IOS_GROUP = "groups/9";
 let VERSION_REGEX = "^v[0-9]+.[0-9]+.[0-9]+$";
 let NO_VERSION_TEXT = "No version";
 
+let LOGIN_TOKEN_VALIDITY = "24h";
+
 module.exports = {
     DOMAIN_NAME,
+    SERVER_PORT,
     JWT_SECRET,
-    WEB_PORT,
     MONGODB_IP,
     MONGODB_PORT,
     MONGODB_DATABASE_NAME,
@@ -31,5 +33,6 @@ module.exports = {
     ANDROID_GROUP,
     IOS_GROUP,
     VERSION_REGEX,
-    NO_VERSION_TEXT
+    NO_VERSION_TEXT,
+    LOGIN_TOKEN_VALIDITY
 };

@@ -7,19 +7,26 @@ router.route("/").get(async (req, res, next) => {
   if (token == null) {
     res.status(406).send();
   } else {
-    res.status(200).send(await UserController.getUsers(req.headers.authorization.split(" ")[1]));
+    res.status(200).send(await UserController.getUsers(token));
   }
 
 });
 
 router.route("/:id").get(async (req, res, next) => {
-  const getUserByTokenResponse = await UserController.getUserByToken(req.headers.authorization.split(" ")[1]);
-  if ((getUserByTokenResponse.code === 0 && getUserByTokenResponse.user != null && getUserByTokenResponse.user.isAdmin)
-      || getUserByTokenResponse.user != null && req.params.id === getUserByTokenResponse.user._id) {
-    res.send(await UserController.getUserById(req.params.id));
+  const token = req.headers.authorization.split(" ")[1];
+  if (token == null) {
+    res.status(406).send();
   } else {
-    res.send(getUserByTokenResponse);
+    const getUserByTokenResponse = await UserController.getUserByToken(token);
+    if ((getUserByTokenResponse.code === 0 && getUserByTokenResponse.user != null && getUserByTokenResponse.user.isAdmin)
+        || getUserByTokenResponse.user != null && req.params.id === getUserByTokenResponse.user._id) {
+      res.send(await UserController.getUserById(req.params.id));
+    } else {
+      res.send(getUserByTokenResponse);
+    }
   }
+
+
 });
 
 router.route('/').post(async (req, res, next) => {
@@ -28,12 +35,18 @@ router.route('/').post(async (req, res, next) => {
   if (!email || !password ) {
     res.status(400).send({ code: -1, description: "Data not received" });
   } else {
-    const getUserByTokenResponse = await UserController.getUserByToken(req.headers.authorization.split(" ")[1]);
-    if (getUserByTokenResponse.code === 0 && getUserByTokenResponse.user != null && getUserByTokenResponse.user.isAdmin) {
-        res.send(await UserController.register(email, password, isAdmin));
+    res.send(await UserController.register(email, password, isAdmin));
+    /*const token = req.headers.authorization.split(" ")[1];
+    if (token == null) {
+      res.status(406).send();
     } else {
-      res.send(getUserByTokenResponse);
-    }
+      const getUserByTokenResponse = await UserController.getUserByToken(token);
+      if (getUserByTokenResponse.code === 0 && getUserByTokenResponse.user != null && getUserByTokenResponse.user.isAdmin) {
+        res.send(await UserController.register(email, password, isAdmin));
+      } else {
+        res.send(getUserByTokenResponse);
+      }
+    }*/
   }
 });
 

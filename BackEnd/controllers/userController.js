@@ -50,7 +50,7 @@ class UserController {
     }
 
     static register(email, password, isAdmin = false) {
-        let user = new User({
+        const user = new User({
             email: email,
             password: password,
             isAdmin: isAdmin
@@ -60,7 +60,7 @@ class UserController {
             return { code: 0 }
         }).catch((err) => {
             return { code: -1, description: err.errmsg }
-        })
+        });
     }
 
     static update(userId, password, isAdmin, isBanned, ip) {
@@ -130,7 +130,7 @@ class UserController {
     static login(email, password, ip, device) {
         return User.findOne({ email: email }).select('+password')
             .then(async (user) => {
-                const token = jwt.sign({ sub: user._id }, config.JWT_SECRET, { expiresIn: '24h' });
+                const token = jwt.sign({ sub: user._id }, config.JWT_SECRET, { expiresIn: config.LOGIN_TOKEN_VALIDITY });
                 const isMatch = await user.comparePassword(password);
 
                 user.tokens.push({

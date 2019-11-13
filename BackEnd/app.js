@@ -17,10 +17,11 @@ var app = express();
  */
 // sudo mongo app-hub --eval "db.dropDatabase()"
 mongoose.connect(
-    'mongodb://' + config.MONGODB_IP + ':'+ config.MONGODB_PORT +'/'+ config.MONGODB_DATABASE_NAME,
+    'mongodb://' + config.MONGODB_IP + ':' + config.MONGODB_PORT + '/' + config.MONGODB_DATABASE_NAME,
     {
-      useCreateIndex: true,
-      useNewUrlParser: true
+        useCreateIndex: true,
+        useNewUrlParser: true,
+        useUnifiedTopology: true
     });
 mongoose.Promise = global.Promise;
 const db = mongoose.connection;

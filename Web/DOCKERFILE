@@ -1,5 +1,6 @@
-FROM node:carbon
+FROM node:8
 
+# Create app directory
 WORKDIR /usr/src/app
 
 # Install app dependencies
@@ -8,11 +9,11 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # Install any needed packages
-RUN npm i
+RUN npm install
 
 # Bundle app source
 COPY . .
 
-EXPOSE 4200
+EXPOSE 80
 
 CMD [ "npm", "start" ]

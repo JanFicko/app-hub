@@ -6,29 +6,27 @@ services:
  client: # Name of the first service
    container_name: apphub_web
    build: 
-    context: Web
-    dockerfile: DOCKERFILE
+     context: ./Web
+     dockerfile: DOCKERFILE
    ports:
-     - "4200:4200"
+     - "80"
+   depends_on:
+     - server
+     - database
+   links:
+     - server
  server: # Name of the second service
    container_name: apphub_server
    build: 
-    context: BackEnd
-    dockerfile: DOCKERFILE
+     context: ./BackEnd
+     dockerfile: DOCKERFILE
    ports:
-     - "3000:3000"
-   environment:
-     - MONGO_URL=mongodb://database/app-hub
+     - "3000"
    links:
-     - database
-   depends_on:
      - database
  database: # Name of the third service
    container_name: apphub_database
-   environment:
-     - MONGO_INITDB_DATABASE=app-hub
    image: mongo
-   volumes:
-     - "/data/db:/data/db"
+   restart: always
    ports:
-     - "27017:27017"
+     - "27017"

@@ -1,4 +1,4 @@
-FROM node:carbon as builder
+FROM node:8
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -13,12 +13,6 @@ RUN npm install
 
 # Bundle app source
 COPY . .
-
-# Stage 2 build for creating smaller image
-FROM node:carbon-alpine
-WORKDIR /usr/src/app
-
-COPY --from=builder /usr/src/app .
 
 EXPOSE 3000
 
