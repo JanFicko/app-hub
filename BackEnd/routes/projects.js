@@ -24,7 +24,7 @@ router.route("/").post(async (req, res, next) => {
         }
 
         rp({
-            uri: config.GITLAB_IP + platformType + '/projects',
+            uri: config.GITLAB_IP + platformType + 'projects',
             qs: {
                 per_page: '100'
             },

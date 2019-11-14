@@ -1,6 +1,6 @@
 let SERVER_PORT = "3000";
 
-let DOMAIN_NAME = "server:" + SERVER_PORT;
+let DOMAIN_NAME = "localhost:" + SERVER_PORT;
 
 let JWT_SECRET = "THIS IS USED TO SIGN AND VERIFY JWT TOKENS, REPLACE IT WITH YOUR OWN SECRET, IT CAN BE ANY STRING";
 
@@ -12,8 +12,8 @@ let GITLAB_IP = "http://localhost/api/v4/";
 let GITLAB_IP_SUFFIX = "api/v4/";
 let GITLAB_PRIVATE_TOKEN = "PRIVATE_GITLAB_TOKEN";
 
-let ANDROID_GROUP = "groups/8";
-let IOS_GROUP = "groups/9";
+let ANDROID_GROUP = "groups/8/";
+let IOS_GROUP = "groups/9/";
 
 let VERSION_REGEX = "^v[0-9]+.[0-9]+.[0-9]+$";
 let NO_VERSION_TEXT = "No version";

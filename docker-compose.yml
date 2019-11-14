@@ -5,11 +5,12 @@ version: '3'
 services:
  client: # Name of the first service
    container_name: apphub_web
+   restart: on-failure
    build: 
      context: ./Web
      dockerfile: DOCKERFILE
    ports:
-     - "80"
+     - "80:80"
    depends_on:
      - server
      - database
@@ -17,16 +18,17 @@ services:
      - server
  server: # Name of the second service
    container_name: apphub_server
+   restart: on-failure
    build: 
      context: ./BackEnd
      dockerfile: DOCKERFILE
    ports:
-     - "3000"
+     - "3000:3000"
    links:
      - database
  database: # Name of the third service
    container_name: apphub_database
+   restart: on-failure
    image: mongo
-   restart: always
    ports:
-     - "27017"
+     - "27017:27017"
