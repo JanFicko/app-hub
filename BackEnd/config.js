@@ -6,7 +6,7 @@ let JWT_SECRET = "THIS IS USED TO SIGN AND VERIFY JWT TOKENS, REPLACE IT WITH YO
 
 let MONGODB_IP = "database";
 let MONGODB_PORT = "27017";
-let MONGODB_DATABASE_NAME = "app-hub";
+let MONGODB_DATABASE_NAME = "apphub";
 
 let GITLAB_IP = "http://localhost/api/v4/";
 let GITLAB_IP_SUFFIX = "api/v4/";

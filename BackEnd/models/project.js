@@ -8,7 +8,6 @@ const ProjectSchema = new Schema({
     packageName: { type: String, default: null },
     path: { type: String, required: true  },
     platform: { type: String, required: true  },
-    icon: String,
     downloadPassword: { type: String, default: null },
     jobs: [{
         jobId: { type: Number, required: true  },

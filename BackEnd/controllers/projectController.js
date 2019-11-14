@@ -16,7 +16,8 @@ class ProjectController {
     }
 
     static getUsersProjects(userId, platform) {
-        let options = { "allowedUserAccess.privilegeType" : [ "Full", "Latest" ] };
+        let options;
+
         if (userId !== "all") {
             if (platform !== "all") {
                 options = { "platform" : platform, "allowedUserAccess.user_uuid" : userId, "allowedUserAccess.privilegeType" : [ "Full", "Latest" ]};
@@ -31,7 +32,7 @@ class ProjectController {
                 return { code: 0, projects: projects };
             })
             .catch((err) => {
-                return { code: -1, description: err }
+                return { code: -1, description: err.message }
             });
     }
 
@@ -208,20 +209,28 @@ class ProjectController {
 
     static async addProjects(projects, platform) {
         for (let i = 0; i < projects.length; i++) {
-            if (platform === "android" || platform === "ios" || platform === "all" && (projects[i].namespace.path === "android" || projects[i].namespace.path === "ios")) {
+            if (platform === "android" || platform === "ios" || platform === "all" &&
+                (projects[i].namespace.full_path.includes("android") || projects[i].namespace.full_path.includes("ios"))) {
+
+                let tempPlatform = "";
+                if (projects[i].namespace.full_path.includes("android")) {
+                    tempPlatform = "android";
+                }
+                else if (projects[i].namespace.full_path.includes("ios")) {
+                    tempPlatform = "ios";
+                }
 
                 await Project.findOneAndUpdate(
                     { projectId: projects[i].id },
                     {
                         projectId: projects[i].id,
                         name: projects[i].name,
-                        path: projects[i].path,
-                        platform: projects[i].namespace.path,
-                        icon: projects[i].avatar_url
+                        path: projects[i].path_with_namespace,
+                        platform: tempPlatform
                     },
                     { upsert: true },
                     null
-                )
+                );
             }
         }
     }

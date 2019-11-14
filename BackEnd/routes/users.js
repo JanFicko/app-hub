@@ -35,8 +35,7 @@ router.route('/').post(async (req, res, next) => {
   if (!email || !password ) {
     res.status(400).send({ code: -1, description: "Data not received" });
   } else {
-    res.send(await UserController.register(email, password, isAdmin));
-    /*const token = req.headers.authorization.split(" ")[1];
+    const token = req.headers.authorization.split(" ")[1];
     if (token == null) {
       res.status(406).send();
     } else {
@@ -46,7 +45,7 @@ router.route('/').post(async (req, res, next) => {
       } else {
         res.send(getUserByTokenResponse);
       }
-    }*/
+    }
   }
 });
 
