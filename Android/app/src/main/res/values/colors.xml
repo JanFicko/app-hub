@@ -13,4 +13,6 @@
 
     <color name="grey_pressed">#D2D3D5</color>
     <color name="grey">#EBEDF0</color>
+
+    <color name="ic_launcher_background">#FEF4E8</color>
 </resources>

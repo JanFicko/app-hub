@@ -31,6 +31,16 @@
             app:layout_constraintBottom_toBottomOf="@id/tv_title"/>
 
     <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/spacing_large"
+            app:srcCompat="@drawable/ic_info"
+            app:layout_constraintTop_toTopOf="@id/tv_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/tv_title"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iv_refresh"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

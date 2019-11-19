@@ -1,14 +1,12 @@
 package xyz.janficko.apphub.ui.main
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.viewModel
+import xyz.janficko.apphub.BuildConfig
 import xyz.janficko.apphub.R
-import xyz.janficko.apphub.common.ErrorCodes
 import xyz.janficko.apphub.common.Keys
 import xyz.janficko.apphub.data.local.shared_preferences.SharedPreferencesContract
 import xyz.janficko.apphub.ui.artifact.ArtifactFragment
@@ -17,6 +15,7 @@ import xyz.janficko.apphub.ui.dashboard.DashboardFragment
 import xyz.janficko.apphub.ui.login.LoginFragment
 import xyz.janficko.apphub.ui.job.JobFragment
 import xyz.janficko.apphub.util.extReplaceFragment
+import xyz.janficko.apphub.util.snack
 import kotlin.contracts.ExperimentalContracts
 
 @ExperimentalContracts
@@ -30,6 +29,7 @@ class MainActivity : BaseViewModelActivity<MainState, MainViewModel>(), View.OnC
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         iv_logout.setOnClickListener(this)
+        iv_info.setOnClickListener(this)
     }
 
     override fun processRenderState(renderState: MainState) {
@@ -48,6 +48,9 @@ class MainActivity : BaseViewModelActivity<MainState, MainViewModel>(), View.OnC
         when (view?.id) {
             R.id.iv_logout -> {
                 openLogin()
+            }
+            R.id.iv_info -> {
+                content_container.snack(getString(R.string.developer, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE))
             }
         }
     }
@@ -74,6 +77,7 @@ class MainActivity : BaseViewModelActivity<MainState, MainViewModel>(), View.OnC
 
     private fun openDashboard() {
         iv_back.visibility = View.GONE
+        iv_info.visibility = View.VISIBLE
         iv_refresh.visibility = View.VISIBLE
         iv_logout.visibility = View.VISIBLE
         extReplaceFragment(DashboardFragment())
@@ -81,6 +85,7 @@ class MainActivity : BaseViewModelActivity<MainState, MainViewModel>(), View.OnC
 
     private fun openVersion() {
         iv_back.visibility = View.VISIBLE
+        iv_info.visibility = View.GONE
         iv_refresh.visibility = View.GONE
         extReplaceFragment(JobFragment())
     }

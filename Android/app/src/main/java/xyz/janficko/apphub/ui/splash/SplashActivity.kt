@@ -2,7 +2,7 @@ package xyz.janficko.apphub.ui.splash
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.os.Bundle
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -12,19 +12,44 @@ import xyz.janficko.apphub.ui.main.MainActivity
 import xyz.janficko.apphub.util.extNavigateToActivity
 import java.util.concurrent.TimeUnit
 import kotlin.contracts.ExperimentalContracts
+import android.content.Intent
+import android.net.Uri
+import androidx.appcompat.app.AlertDialog
+import xyz.janficko.apphub.R
 
 @ExperimentalContracts
 class SplashActivity : AppCompatActivity() {
 
     private val WRITE_EXTERNAL_STORAGE_PERMISSION = 100
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onResume() {
+        super.onResume()
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            requestPermission()
-        } else {
-            startApp()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !packageManager.canRequestPackageInstalls()) {
+            val builder = AlertDialog.Builder(this)
+                .setTitle(R.string.install_permission)
+                .setMessage(R.string.install_permission_description)
+                .setPositiveButton(R.string.open) { dialog, _ ->
+                    startActivity(
+                        Intent(
+                            android.provider.Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,
+                            Uri.parse("package:${applicationContext.packageName}")
+                        )
+                    )
+
+                    dialog.dismiss()
+                }
+            builder.create().show()
+
+
+
+        }
+        else {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                requestPermission()
+            } else {
+                startApp()
+            }
         }
     }
 
