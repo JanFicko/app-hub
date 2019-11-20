@@ -4,7 +4,7 @@ let DOMAIN_NAME = "localhost:" + SERVER_PORT;
 
 let JWT_SECRET = "THIS IS USED TO SIGN AND VERIFY JWT TOKENS, REPLACE IT WITH YOUR OWN SECRET, IT CAN BE ANY STRING";
 
-let MONGODB_IP = "database";
+let MONGODB_IP = "localhost";
 let MONGODB_PORT = "27017";
 let MONGODB_DATABASE_NAME = "apphub";
 
@@ -16,7 +16,7 @@ let ANDROID_GROUP = "groups/8/";
 let IOS_GROUP = "groups/9/";
 
 let VERSION_REGEX = "^v[0-9]+.[0-9]+.[0-9]+$";
-let NO_VERSION_TEXT = "No version";
+let NO_VERSION_TEXT = "NO_VERSION";
 
 let LOGIN_TOKEN_VALIDITY = "24h";
 

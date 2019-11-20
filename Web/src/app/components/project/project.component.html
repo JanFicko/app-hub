@@ -10,16 +10,24 @@
 
   <div class="col-xl-4 col-lg-6 col-md-12">
 
-
-
-
     <div *ngIf="project.jobs.length !== 0">
-      <ul class="list-group" *ngFor="let job of project.jobs">
+      <ul class="list-group" *ngFor="let job of project.jobs; let i = index">
+        <div *ngIf="i == 0">Latest version</div>
+        <div *ngIf="i > 0">Older versions</div>
         <li class="list-group-item">
-
           <div class="row">
             <div class="col-md-8">
-              <span>{{ job.title }}  <span class="badge badge-dark">{{ job.finishTime | date: 'dd.MM.yyyy HH:mm:ss' }}</span></span>
+              <span>
+
+                <div *ngIf="job.title == 'NO_VERSION'; else loggedOut">
+                  No version
+                </div>
+                <ng-template #loggedOut>
+                  {{ job.title }}
+                </ng-template>
+
+                <span class="badge badge-dark">{{ job.finishTime | date: 'dd.MM.yyyy HH:mm:ss' }}</span>
+              </span>
             </div>
             <div class="col-md-4 d-flex justify-content-end">
               <a class="btn-link-dark" href="" *ngIf="this.userService.getLoggedInUser().isAdmin" (click)="setJobId(job.jobId)" data-toggle="modal" data-target="#editJobModal" style="margin-right: 20px"><i class="fas fa-edit"></i></a>

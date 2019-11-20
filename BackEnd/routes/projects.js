@@ -64,8 +64,6 @@ router.route("/jobs").post(async (req, res, next) => {
     if (!projectId || !userId) {
         res.status(400).send({ code: -1, description: "Data not received" });
     } else {
-
-        console.log(config.GITLAB_IP + 'projects/' + projectId + '/jobs');
         rp({
             uri: config.GITLAB_IP + 'projects/' + projectId + '/jobs',
             qs: {
@@ -134,6 +132,7 @@ router.route("/androidArtifacts").post(async (req, res, next) => {
     const { jobId } = req.body;
 
     const project = await ProjectController.getAndroidArtifacts(jobId);
+    //const projectName = project.path.split(/[/]+/).pop();
 
     const zipFilePath = './public/' + jobId + '.zip';
     const outputPath = './public/' + jobId;
@@ -142,7 +141,7 @@ router.route("/androidArtifacts").post(async (req, res, next) => {
 
         if (!fs.existsSync(zipFilePath)) {
             rp({
-                uri: config.GITLAB_IP.replace(config.GITLAB_IP_SUFFIX, "") + project.platform + "/" + project.path + "/-/jobs/" + jobId + '/artifacts/download',
+                uri: config.GITLAB_IP.replace(config.GITLAB_IP_SUFFIX, "") + project.path + "/-/jobs/" + jobId + '/artifacts/download',
                 qs: {
                     scope: 'success'
                 },
@@ -152,13 +151,12 @@ router.route("/androidArtifacts").post(async (req, res, next) => {
                     'Content-Type': 'application/zip'
                 }
             }).then(async (bodyResponse) => {
-
                 let writeStream = fs.createWriteStream(zipFilePath);
                 writeStream.write(bodyResponse, 'binary');
                 writeStream.on('finish', () => {
 
                     const zip = new AdmZip(zipFilePath);
-                    zip.extractAllTo(/*target path*/"./public/", /*overwrite*/true);
+                    zip.extractAllTo(/*target path*/'./public/', /*overwrite*/true);
                     fs.rename('./public/app/build/outputs/apk/', './public/' + jobId, function (err) {
                         if (err == null) {
 
@@ -168,7 +166,7 @@ router.route("/androidArtifacts").post(async (req, res, next) => {
 
                                     fs.readdir(outputPath, function(err, directories) {
                                         for (let i = 0; i < directories.length; i++) {
-                                            directories[i] = directories[i] + "/" + JSON.parse(fs.readFileSync(outputPath + '/' + directories[i] +'/output.json', 'utf8'))[0].apkInfo.outputFile;
+                                            directories[i] = directories[i] + "/" + JSON.parse(fs.readFileSync(outputPath + '/' + directories[i] +'/output.json', 'utf8'))[0].apkData.outputFile;
                                         }
                                         res.status(200).send({ code: 0, outputs: directories});
                                     });
@@ -183,12 +181,12 @@ router.route("/androidArtifacts").post(async (req, res, next) => {
                 });
 
                 writeStream.on('error', (err) => {
-                    console.log(err);
                     res.status(200).send({ code: -1, description: err.message });
                 });
 
                 writeStream.end();
             }).catch(function (err) {
+                console.log(err);
                 res.status(200).send({ code: -1, description: "Artifact doesn't exist" });
             });
         } else {
@@ -196,13 +194,13 @@ router.route("/androidArtifacts").post(async (req, res, next) => {
 
                 fs.readdir(outputPath, function(err, directories) {
                     for (let i = 0; i < directories.length; i++) {
-                        directories[i] = directories[i] + "/" + JSON.parse(fs.readFileSync(outputPath + '/' + directories[i] +'/output.json', 'utf8'))[0].apkInfo.outputFile;
+                        directories[i] = directories[i] + "/" + JSON.parse(fs.readFileSync(outputPath + '/' + directories[i] +'/output.json', 'utf8'))[0].apkData.outputFile;
                     }
                     res.status(200).send({ code: 0, outputs: directories});
                 });
             } else {
                 const zip = new AdmZip(zipFilePath);
-                zip.extractAllTo(/*target path*/"./public/", /*overwrite*/true);
+                zip.extractAllTo(/*target path*/'./public/', /*overwrite*/true);
 
                 fs.rename('./public/app/build/outputs/apk/', './public/' + jobId, function (err) {
 
@@ -213,7 +211,7 @@ router.route("/androidArtifacts").post(async (req, res, next) => {
                             if (err == null) {
                                 fs.readdir(outputPath, function(err, directories) {
                                     for (let i = 0; i < directories.length; i++) {
-                                        directories[i] = directories[i] + "/" + JSON.parse(fs.readFileSync(outputPath + '/' + directories[i] +'/output.json', 'utf8'))[0].apkInfo.outputFile;
+                                        directories[i] = directories[i] + "/" + JSON.parse(fs.readFileSync(outputPath + '/' + directories[i] +'/output.json', 'utf8'))[0].apkData.outputFile;
                                     }
                                     res.status(200).send({ code: 0, outputs: directories});
                                 });
@@ -249,6 +247,7 @@ router.route("/download/:jobId/:userId/:output").get(async (req, res, next) => {
     } else {
         const project = await ProjectController.downloadArtifact(req.ip, req.params.jobId, req.params.userId);
 
+        // Fixme
         const filePath = './public/' + req.params.jobId + '.zip';
 
         if (project.code !== -1) {
@@ -285,14 +284,14 @@ router.route("/download/:jobId/:userId/:output").get(async (req, res, next) => {
 
                                                 const output = JSON.parse(fs.readFileSync('./public/' + req.params.jobId + '/' + apkOutput +'/output.json', 'utf8'));
 
-                                                ProjectController.updateJob(req.params.jobId,'v' + output[0].apkInfo.versionName, null);
+                                                ProjectController.updateJob(req.params.jobId,'v' + output[0].apkData.versionName, null);
 
-                                                const apkFile = './public/'+ req.params.jobId + '/' + apkOutput + '/' + output[0].apkInfo.outputFile;
+                                                const apkFile = './public/'+ req.params.jobId + '/' + apkOutput + '/' + output[0].apkData.outputFile;
 
                                                 if (fs.existsSync(apkFile)) {
                                                     UserController.log(
                                                         req.params.userId,
-                                                        req.params.jobId + '/' + output[0].apkInfo.outputFile,
+                                                        req.params.jobId + '/' + output[0].apkData.outputFile,
                                                         'Download',
                                                         req.ip,
                                                         deviceInfo
@@ -403,12 +402,12 @@ router.route("/download/:jobId/:userId/:output").get(async (req, res, next) => {
                         }
 
                         const output = JSON.parse(fs.readFileSync('./public/'+ req.params.jobId + '/' + apkOutput + '/output.json', 'utf8'));
-                        const apkFile = './public/'+ req.params.jobId + '/' + apkOutput + '/' + output[0].apkInfo.outputFile;
+                        const apkFile = './public/'+ req.params.jobId + '/' + apkOutput + '/' + output[0].apkData.outputFile;
 
                         if (fs.existsSync(apkFile)) {
                             UserController.log(
                                 req.params.userId,
-                                req.params.jobId + '/' + output[0].apkInfo.outputFile,
+                                req.params.jobId + '/' + output[0].apkData.outputFile,
                                 'Download',
                                 req.ip,
                                 deviceInfo
