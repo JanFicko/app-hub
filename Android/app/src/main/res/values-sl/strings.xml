@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="developer">Razvil Jan Ficko | v%1$s (%2$d)</string>
+    <string name="developer">Razvil %1$s | v%2$s (%3$d)</string>
 
     <string name="install_permission">Posebno dovoljenje</string>
     <string name="install_permission_description">Za prenos naložitvenih Android datotek ta aplikacija potrebuje posebno dovoljenje. \n\nS pritiskom na spodnji gumb se bodo odprle nastavitve.</string>
@@ -12,6 +12,7 @@
     <string name="version_number">#%d</string>
     <string name="update_time">Čas posodobitve:</string>
     <string name="open">Odpri</string>
+    <string name="no_version">Brez različice</string>
 
     <string name="error_no_projects">Ni projektov za prikaz</string>
     <string name="error_no_versions">Ta aplikacija še nima verzij</string>

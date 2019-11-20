@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.item_job.*
 import org.koin.androidx.viewmodel.ext.sharedViewModel
 import org.koin.androidx.viewmodel.ext.viewModel
 import xyz.janficko.apphub.R
+import xyz.janficko.apphub.common.Constants
 import xyz.janficko.apphub.common.ErrorCodes
 import xyz.janficko.apphub.model.Project
 import xyz.janficko.apphub.ui.base.BaseViewModelFragment
@@ -84,7 +85,13 @@ class JobFragment :
             sharedviewmodel.projectName = project.name
             sharedviewmodel.jobId = copiedJobs[0].jobId
 
-            tv_app_version.text = copiedJobs[0].title
+            val title = copiedJobs[0].title
+            if (title == Constants.NO_VERSION) {
+                tv_app_version.text = getString(R.string.no_version)
+            }
+            else {
+                tv_app_version.text = title
+            }
 
             copiedJobs[0].changeLog?.let {
                 if (!it.isBlank()) {

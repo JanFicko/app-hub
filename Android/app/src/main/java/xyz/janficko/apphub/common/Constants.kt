@@ -17,4 +17,6 @@ object Constants {
     const val DEVICE_INFO_HEADER = "DeviceInfo"
     const val AUTHORIZATION_HEADER = "Authorization"
 
+    const val NO_VERSION = "NO_VERSION"
+
 }

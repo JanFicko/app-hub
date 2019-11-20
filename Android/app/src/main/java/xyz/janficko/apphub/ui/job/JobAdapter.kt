@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_job.view.*
 import xyz.janficko.apphub.R
+import xyz.janficko.apphub.common.Constants
 import xyz.janficko.apphub.model.Job
 
 class JobAdapter(private val jobs: List<Job>, private val callback : (Job) -> Unit) :
@@ -26,7 +27,14 @@ class JobAdapter(private val jobs: List<Job>, private val callback : (Job) -> Un
     inner class BuildAdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(job: Job) = with(itemView) {
-            tv_app_version.text = job.title
+
+            val title = job.title
+            if (title == Constants.NO_VERSION) {
+                tv_app_version.text = context.getString(R.string.no_version)
+            }
+            else {
+                tv_app_version.text = title
+            }
 
             job.changeLog?.let {
                 if (!it.isBlank()) {

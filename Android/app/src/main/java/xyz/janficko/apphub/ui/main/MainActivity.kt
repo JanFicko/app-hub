@@ -50,7 +50,11 @@ class MainActivity : BaseViewModelActivity<MainState, MainViewModel>(), View.OnC
                 openLogin()
             }
             R.id.iv_info -> {
-                content_container.snack(getString(R.string.developer, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE))
+                content_container.snack(getString(R.string.developer,
+                    BuildConfig.AUTHOR,
+                    BuildConfig.VERSION_NAME,
+                    BuildConfig.VERSION_CODE
+                ))
             }
         }
     }

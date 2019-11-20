@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">App Hub</string>
-    <string name="developer">Developed by Jan Ficko | v%1$s (%2$d)</string>
+    <string name="developer">Developed by %1$s | v%2$s (%3$d)</string>
 
     <string name="install_permission">Special permission</string>
     <string name="install_permission_description">You need special permission to download Android files for this app. \n\nBy pressing the button below, settings will open.</string>
@@ -13,6 +13,7 @@
     <string name="version_number">#%d</string>
     <string name="update_time">Update time:</string>
     <string name="open">Open</string>
+    <string name="no_version">No version</string>
 
     <string name="error_no_projects">No projects to show</string>
     <string name="error_no_versions">This app doesn\'t have a version yet</string>
