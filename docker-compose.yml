@@ -1,12 +1,10 @@
- # Specify docker-compose version
 version: '3'
- 
-# Define the services/containers to be run
+
 services:
- client: # Name of the first service
+ client:
    container_name: apphub_web
    restart: on-failure
-   build: 
+   build:
      context: ./Web
      dockerfile: DOCKERFILE
    ports:
@@ -14,21 +12,24 @@ services:
    depends_on:
      - server
      - database
+   network_mode: bridge
    links:
      - server
- server: # Name of the second service
+ server:
    container_name: apphub_server
    restart: on-failure
-   build: 
+   build:
      context: ./BackEnd
      dockerfile: DOCKERFILE
    ports:
      - "3000:3000"
+   network_mode: bridge
    links:
      - database
- database: # Name of the third service
+ database:
    container_name: apphub_database
    restart: on-failure
    image: mongo
    ports:
      - "27017:27017"
+   network_mode: bridge
