@@ -9,9 +9,6 @@ services:
      dockerfile: DOCKERFILE
    ports:
      - "80:80"
-   depends_on:
-     - server
-     - database
    network_mode: bridge
    links:
      - server
