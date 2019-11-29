@@ -1,7 +1,7 @@
 version: '3'
 
 services:
- client:
+ web:
    container_name: apphub_web
    restart: on-failure
    build:
@@ -11,9 +11,9 @@ services:
      - "80:80"
    network_mode: bridge
    links:
-     - server
- server:
-   container_name: apphub_server
+     - "backend:backend"
+ backend:
+   container_name: apphub_backend
    restart: on-failure
    build:
      context: ./BackEnd
@@ -22,7 +22,7 @@ services:
      - "3000:3000"
    network_mode: bridge
    links:
-     - database
+     - "database:database"
  database:
    container_name: apphub_database
    restart: on-failure

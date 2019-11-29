@@ -13,7 +13,7 @@
     <div *ngIf="project.jobs.length !== 0">
       <ul class="list-group" *ngFor="let job of project.jobs; let i = index">
         <div *ngIf="i == 0">Latest version</div>
-        <div *ngIf="i > 0">Older versions</div>
+        <div *ngIf="i > 0 && i == 1">Older versions</div>
         <li class="list-group-item">
           <div class="row">
             <div class="col-md-8">

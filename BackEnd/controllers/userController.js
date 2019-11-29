@@ -161,6 +161,44 @@ class UserController {
             });
     }
 
+    static newToken(email, refreshToken, ip, device) {
+        return User.findOne({ email: email }).select('+password')
+            .then(async (user) => {
+                if ()
+
+
+
+                const token = jwt.sign({ sub: user._id }, config.JWT_SECRET, { expiresIn: config.LOGIN_TOKEN_VALIDITY });
+                const isMatch = await user.comparePassword(password);
+
+                user.tokens.push({
+                    token: token
+                });
+                user.userActivity.push({
+                    ip: ip,
+                    activity: "login",
+                    activityType: isMatch,
+                    device: device
+                });
+                user.save();
+
+                user = user.toObject();
+                delete user['password'];
+
+                if (isMatch) {
+                    if (!user.isBanned) {
+                        return { code: 0, token: token, user: user }
+                    } else {
+                        return { code: -3, description: "Rejected access" }
+                    }
+                } else {
+                    return { code: -2, description: "Wrong password" }
+                }
+            }).catch((err) => {
+                return { code: -1, description: err.errmsg }
+            });
+    }
+
 }
 
 module.exports = UserController;
