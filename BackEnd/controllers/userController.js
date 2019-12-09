@@ -164,9 +164,6 @@ class UserController {
     static newToken(email, refreshToken, ip, device) {
         return User.findOne({ email: email }).select('+password')
             .then(async (user) => {
-                if ()
-
-
 
                 const token = jwt.sign({ sub: user._id }, config.JWT_SECRET, { expiresIn: config.LOGIN_TOKEN_VALIDITY });
                 const isMatch = await user.comparePassword(password);
