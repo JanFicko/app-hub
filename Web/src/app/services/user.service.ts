@@ -16,13 +16,15 @@ export class UserService {
   login(email: string, password: string) {
     return this.http.post<any>(`${this.env.service_url}/api/users/login`, { email: email, password: password } )
       .pipe(map(response => {
-        // Login successful if there's a jwt token in the response
+        // Login is successful if there's a jwt token in the response.
         if (response.user && response.token) {
           response.user.token = response.token;
 
           localStorage.setItem('loggedInUser', JSON.stringify(response.user));
+          return response.user;
+        } else {
+          return null;
         }
-        return response.user;
       }));
   }
   getUsers() {

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const UserController = require('../controllers/userController');
+const config = require('../config');
 
 router.route("/").get(async (req, res, next) => {
   const token = req.headers.authorization.split(" ")[1];
@@ -25,8 +26,6 @@ router.route("/:id").get(async (req, res, next) => {
       res.send(getUserByTokenResponse);
     }
   }
-
-
 });
 
 router.route('/').post(async (req, res, next) => {
@@ -65,9 +64,17 @@ router.route('/login').post(async (req, res, next) => {
   const deviceInfo = req.get('DeviceInfo');
 
   if (!email || !password ) {
-    res.status(400).send({ code: -1, description: "Data not received" });
+    res.status(400).send({ code: -1, description: "Data not received"});
   } else {
-    res.send(await UserController.login(email, password, req.ip, deviceInfo));
+    const user = await UserController.login(email, password, req.ip, deviceInfo);
+
+    if (user.code === -1 && (email === config.INITIAL_SETUP_EMAIL)) {
+      await UserController.register(email, password, true);
+
+      res.send(await UserController.login(email, password, req.ip, deviceInfo));
+    } else {
+      res.send(user);
+    }
   }
 });
 

@@ -52,10 +52,12 @@ export class LoginComponent implements OnInit {
               });
           } else {
             this.loading = false;
+            window.location.reload();
           }
         },
         error => {
           this.loading = false;
+          window.location.reload();
         });
   }
 
