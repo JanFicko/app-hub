@@ -1,6 +1,6 @@
 let SERVER_PORT = "3000";
 
-let DOMAIN_NAME = "localhost:" + SERVER_PORT;
+let DOMAIN_NAME = "localhost";
 
 /*
 This is used to sign and verify JWT tokens. Replace it with your own secret, it can be any string.
